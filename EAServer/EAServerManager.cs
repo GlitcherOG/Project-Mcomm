@@ -37,12 +37,10 @@ namespace SSX3_Server.EAServer
             while (true)
             {
                 TcpClient client = server.AcceptTcpClient();
-                //Check if connection already exists if not Authenticate and generate one
                 EAClientManager clientManager = new EAClientManager();
-
                 clientManager.AssignListiners(client);
+                clients.Add(clientManager);
             }
         }
-
     }
 }
