@@ -18,12 +18,15 @@ namespace SSX3_Server.EAServer
         public int ListenerPort = 10901;
         public int BuddyPort = 10899;
 
+        int IDCount = 0;
+
         public List<EAClientManager> clients = new List<EAClientManager>();
         
         public void InitaliseServer()
         {
             Console.WriteLine("Initalising Server...");
             Instance = this;
+            clients = new List<EAClientManager>();
             Console.WriteLine("Initalised Server, Waiting For Clients...");
             NewClientListening();
         }
@@ -38,9 +41,43 @@ namespace SSX3_Server.EAServer
             {
                 TcpClient client = server.AcceptTcpClient();
                 EAClientManager clientManager = new EAClientManager();
-                clientManager.AssignListiners(client);
+                clientManager.AssignListiners(client, IDCount);
+                IDCount++;
                 clients.Add(clientManager);
             }
+        }
+
+        public string GenerateSESS()
+        {
+            int Generation = 0;
+
+            //while If Exists Increment
+
+            return Generation.ToString();
+        }
+
+        public string GenerateMASK()
+        {
+            int Generation = 0;
+
+            //while If Exists Increment
+
+            return Generation.ToString();
+        }
+
+        public void DestroyClient(int ID)
+        {
+            for (int i = 0; i < clients.Count; i++)
+            {
+                if (clients[i].ID==ID)
+                {
+                    clients[i] = null;
+                    clients.RemoveAt(i);
+                    break;
+                }
+            }
+
+            GC.Collect();
         }
     }
 }

@@ -17,5 +17,9 @@ namespace SSX3_Server
             return Encoding.ASCII.GetString(tempByte);
         }
 
+        public static int ReadInt8(byte[] bytes, int Offset)
+        {
+            return bytes[Offset];
+        }
     }
 }

@@ -9,28 +9,56 @@ namespace SSX3_Server.EAClient.Messages
 {
     public class EAMessage
     {
-        public string MessageType;
-        public int Size;
+        public string MessageType = "";
+        public int Size = -1;
 
-        public void PraseData(byte[] Data)
+        public static EAMessage PraseData(byte[] Data)
         {
+            string MessageType = ByteUtil.ReadString(Data, 0, 10).Trim('\0');
+            int Size = ByteUtil.ReadInt8(Data, 11);
+            EAMessage message = new EAMessage();
+            if (MessageType== "@dir")
+            {
+                string FullString = ByteUtil.ReadString(Data, 12, Size - 13);
+                string[] strings = FullString.Split('\n');
 
+                _DirMessage DirMessage = new _DirMessage();
+
+                DirMessage.MessageType = MessageType;
+                DirMessage.Size = Size;
+                DirMessage.stringDatas = new List<StringData>();
+
+                for (int i = 0; i < strings.Length-1; i++)
+                {
+                    string[] LineSplit = strings[i].Split("=");
+
+                    StringData NewStringData = new StringData();
+
+                    NewStringData.Type = LineSplit[0];
+
+                    NewStringData.Value = LineSplit[1];
+
+                    DirMessage.stringDatas.Add(NewStringData);
+                }
+                Encoding encorder = new UTF8Encoding();
+                Console.WriteLine(encorder.GetString(Data));
+                message = DirMessage;
+            }
+            else
+            {
+                Console.WriteLine("Unknown Message Type: ");
+                Encoding encorder = new UTF8Encoding();
+                Console.WriteLine(encorder.GetString(Data)); //now , we write the message as string
+                Console.WriteLine(BitConverter.ToString(Data).Replace("-", ""));
+            }
+
+            return message;
         }
 
-        public struct @DIRIn
+        public struct StringData
         {
-            public string PROD;
-            public string VERS;
-            public string LANG;
-            public string SLUS;
-        }
-
-        public struct @DIROut
-        {
-            public string ADDR;
-            public string PORT;
-            public string SLESS;
-            public string MASK;
+            public string Type;
+            public string Value;
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using SSX3_Server.EAClient.Messages;
+using SSX3_Server.EAServer;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -10,13 +12,15 @@ namespace SSX3_Server.EAClient
 {
     public class EAClientManager
     {
-        TcpClient MainClient = null;
+        public int ID;
+
+        public TcpClient MainClient = null;
         NetworkStream MainNS = null;
 
-        TcpClient BuddyClient = null;
+        public TcpClient BuddyClient = null;
         NetworkStream BuddyNS = null;
 
-        public void AssignListiners(TcpClient tcpClient)
+        public void AssignListiners(TcpClient tcpClient, int ID)
         {
             NetworkStream tcpNS = tcpClient.GetStream();
 
@@ -25,16 +29,48 @@ namespace SSX3_Server.EAClient
             //tcpClient.ReceiveTimeout = 20;
 
             //Read Incomming Message
-            byte[] msg = new byte[1024];     //the messages arrive as byte array
+            byte[] msg = new byte[256];     //the messages arrive as byte array
             tcpNS.Read(msg, 0, msg.Length);
 
-            string Test = ByteUtil.ReadString(msg, 0, 4);
+            EAMessage ConnectionMessage = EAMessage.PraseData(msg);
 
-            //Assign Listiner?
+            if(ConnectionMessage.MessageType!="@dir")
+            {
+                //Abort Connection
+                tcpNS.Dispose();
+                tcpNS.Close();
+                tcpClient.Dispose();
+                tcpClient.Close();
+
+                EAServerManager.Instance.DestroyClient(ID);
+
+                return;
+            }
+
+            //Assign Listiner
+            TcpListener server = new TcpListener((tcpClient.Client.RemoteEndPoint as IPEndPoint).Address, EAServerManager.Instance.ListenerPort);
+            server.Start();
+
+            //Send Connection Details Back
+
+            //ADDR
+            //PORT
+            //SESS
+            //MASK
+
+            //Pending Check
+
+            MainClient = server.AcceptTcpClient();
+            MainNS = MainClient.GetStream();
+            server.Stop();
 
             //Close Connection
+            tcpNS.Dispose();
+            tcpNS.Close();
+            tcpClient.Dispose();
+            tcpClient.Close();
 
-            //MainListen();
+            MainListen();
         }
 
         public void MainListen()
