@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 using SSX3_Server.EAClient;
+using SSX3_Server.EAClient.Messages;
 
 namespace SSX3_Server.EAServer
 {
@@ -14,6 +16,7 @@ namespace SSX3_Server.EAServer
     {
         public static EAServerManager Instance;
 
+        public string ListerIP = "192.168.86.189";
         public int GamePort = 11000;
         public int ListenerPort = 10901;
         public int BuddyPort = 10899;
@@ -40,16 +43,68 @@ namespace SSX3_Server.EAServer
             while (true)
             {
                 TcpClient client = server.AcceptTcpClient();
-                EAClientManager clientManager = new EAClientManager();
-                clientManager.AssignListiners(client, IDCount);
-                IDCount++;
-                clients.Add(clientManager);
+
+                NetworkStream tcpNS = client.GetStream();
+
+                Console.WriteLine("Connection From: " + client.Client.RemoteEndPoint.ToString());
+
+                //tcpClient.ReceiveTimeout = 20;
+
+                //Read Incomming Message
+                byte[] msg = new byte[256];     //the messages arrive as byte array
+                tcpNS.Read(msg, 0, msg.Length);
+
+                EAMessage ConnectionMessage = EAMessage.PraseData(msg);
+
+                if (ConnectionMessage.MessageType == "@dir")
+                {
+                    //Assign Listiner
+                    TcpListener server1 = new TcpListener((client.Client.RemoteEndPoint as IPEndPoint).Address, ListenerPort);
+                    server1.Start();
+
+                    //Send Connection Details Back
+                    _DirMessage ReturnMessage = new _DirMessage();
+
+                    ReturnMessage.AddStringData("ADDR", ListerIP);
+                    ReturnMessage.AddStringData("PORT", ListenerPort.ToString());
+
+                    string SESS = GenerateSESS();
+                    string MASK = GenerateMASK();
+
+                    ReturnMessage.AddStringData("SESS", SESS);
+                    ReturnMessage.AddStringData("ADDR", MASK);
+
+                    msg = _DirMessage.GenerateData(ReturnMessage);
+                    tcpNS.Read(msg, 0, msg.Length);
+
+                    //Pending Connection Check
+
+                    TcpClient MainClient = server1.AcceptTcpClient();
+                    EAClientManager clientManager = new EAClientManager();
+                    clientManager.AssignListiners(MainClient, IDCount);
+                    IDCount++;
+                    clients.Add(clientManager);
+
+                    tcpNS.Dispose();
+                    tcpNS.Close();
+                    client.Dispose();
+                    client.Close();
+                }
+                else
+                {
+                    //Abort Connection
+                    tcpNS.Dispose();
+                    tcpNS.Close();
+                    client.Dispose();
+                    client.Close();
+                }
             }
         }
 
         public string GenerateSESS()
         {
-            int Generation = 0;
+            Random rnd = new Random();
+            string Generation = rnd.Next(1000, 9999).ToString()+ rnd.Next(1000, 9999).ToString()+ rnd.Next(10, 99).ToString();
 
             //while If Exists Increment
 
@@ -58,7 +113,8 @@ namespace SSX3_Server.EAServer
 
         public string GenerateMASK()
         {
-            int Generation = 0;
+            Random rnd = new Random();
+            string Generation = rnd.Next(1000, 9999).ToString() + "f3f70ecb1757cd7001b9a7a" + rnd.Next(1000, 9999).ToString();
 
             //while If Exists Increment
 

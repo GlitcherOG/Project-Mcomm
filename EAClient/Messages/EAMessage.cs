@@ -55,6 +55,21 @@ namespace SSX3_Server.EAClient.Messages
             return message;
         }
 
+        public static byte[] GenerateData(EAMessage message)
+        {
+            MemoryStream data = new MemoryStream();
+
+            //Write MessageType
+            //Space for Size
+
+            //If Message Type cast to that type
+
+
+            byte[] buffer = new byte[data.Length];
+            data.Read(buffer, 0, (int)data.Length);
+            return data.ToArray();
+        }
+
         public struct StringData
         {
             public string Type;

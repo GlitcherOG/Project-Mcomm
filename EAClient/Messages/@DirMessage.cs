@@ -10,5 +10,14 @@ namespace SSX3_Server.EAClient.Messages
     {
         public List<StringData> stringDatas = new List<StringData>();
 
+        public void AddStringData(string Type, string Data)
+        {
+            StringData stringData = new StringData();
+
+            stringData.Type = Type;
+            stringData.Value = Data;
+
+            stringDatas.Add(stringData);
+        }
     }
 }

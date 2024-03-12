@@ -22,53 +22,8 @@ namespace SSX3_Server.EAClient
 
         public void AssignListiners(TcpClient tcpClient, int ID)
         {
-            NetworkStream tcpNS = tcpClient.GetStream();
-
-            Console.WriteLine("Connection From: " + tcpClient.Client.RemoteEndPoint.ToString());
-
-            //tcpClient.ReceiveTimeout = 20;
-
-            //Read Incomming Message
-            byte[] msg = new byte[256];     //the messages arrive as byte array
-            tcpNS.Read(msg, 0, msg.Length);
-
-            EAMessage ConnectionMessage = EAMessage.PraseData(msg);
-
-            if(ConnectionMessage.MessageType!="@dir")
-            {
-                //Abort Connection
-                tcpNS.Dispose();
-                tcpNS.Close();
-                tcpClient.Dispose();
-                tcpClient.Close();
-
-                EAServerManager.Instance.DestroyClient(ID);
-
-                return;
-            }
-
-            //Assign Listiner
-            TcpListener server = new TcpListener((tcpClient.Client.RemoteEndPoint as IPEndPoint).Address, EAServerManager.Instance.ListenerPort);
-            server.Start();
-
-            //Send Connection Details Back
-
-            //ADDR
-            //PORT
-            //SESS
-            //MASK
-
-            //Pending Check
-
-            MainClient = server.AcceptTcpClient();
+            MainClient = tcpClient;
             MainNS = MainClient.GetStream();
-            server.Stop();
-
-            //Close Connection
-            tcpNS.Dispose();
-            tcpNS.Close();
-            tcpClient.Dispose();
-            tcpClient.Close();
 
             MainListen();
         }
