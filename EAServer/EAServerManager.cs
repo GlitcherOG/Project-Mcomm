@@ -51,7 +51,7 @@ namespace SSX3_Server.EAServer
                 //tcpClient.ReceiveTimeout = 20;
 
                 //Read Incomming Message
-                byte[] msg = new byte[256];     //the messages arrive as byte array
+                byte[] msg = new byte[266];     //the messages arrive as byte array
                 tcpNS.Read(msg, 0, msg.Length);
 
                 EAMessage ConnectionMessage = EAMessage.PraseData(msg);
@@ -81,7 +81,7 @@ namespace SSX3_Server.EAServer
 
                     TcpClient MainClient = server1.AcceptTcpClient();
                     EAClientManager clientManager = new EAClientManager();
-                    clientManager.AssignListiners(MainClient, IDCount);
+                    clientManager.AssignListiners(MainClient, IDCount, SESS, MASK);
                     IDCount++;
                     clients.Add(clientManager);
 

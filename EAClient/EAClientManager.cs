@@ -13,6 +13,9 @@ namespace SSX3_Server.EAClient
     public class EAClientManager
     {
         public int ID;
+        public string SESS;
+        public string MASK;
+
 
         public TcpClient MainClient = null;
         NetworkStream MainNS = null;
@@ -20,8 +23,11 @@ namespace SSX3_Server.EAClient
         public TcpClient BuddyClient = null;
         NetworkStream BuddyNS = null;
 
-        public void AssignListiners(TcpClient tcpClient, int ID)
+        public void AssignListiners(TcpClient tcpClient, int InID, string SESSin, string MASKin)
         {
+            ID = InID;
+            SESS = SESSin;
+            MASK = MASKin;
             MainClient = tcpClient;
             MainNS = MainClient.GetStream();
 
@@ -32,7 +38,7 @@ namespace SSX3_Server.EAClient
         {
             while (MainClient.Connected)  //while the client is connected, we look for incoming messages
             {
-                byte[] msg = new byte[1024];     //the messages arrive as byte array
+                byte[] msg = new byte[266];     //the messages arrive as byte array
                 MainNS.Read(msg, 0, msg.Length);   //the same networkstream reads the message sent by the client
                 Encoding encorder = new UTF8Encoding();
                 if (msg[0] != 0)
