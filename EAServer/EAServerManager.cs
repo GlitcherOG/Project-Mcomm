@@ -65,6 +65,8 @@ namespace SSX3_Server.EAServer
                     //Send Connection Details Back
                     _DirMessage ReturnMessage = new _DirMessage();
 
+                    ReturnMessage.MessageType = "@dir";
+
                     ReturnMessage.AddStringData("ADDR", ListerIP);
                     ReturnMessage.AddStringData("PORT", ListenerPort.ToString());
 
@@ -75,7 +77,7 @@ namespace SSX3_Server.EAServer
                     ReturnMessage.AddStringData("ADDR", MASK);
 
                     msg = _DirMessage.GenerateData(ReturnMessage);
-                    tcpNS.Read(msg, 0, msg.Length);
+                    tcpNS.Write(msg, 0, msg.Length);
 
                     //Pending Connection Check
 

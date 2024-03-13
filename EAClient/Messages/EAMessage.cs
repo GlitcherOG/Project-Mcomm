@@ -59,11 +59,22 @@ namespace SSX3_Server.EAClient.Messages
         {
             MemoryStream data = new MemoryStream();
 
-            //Write MessageType
-            //Space for Size
+            StreamUtil.WriteString(data, message.MessageType, 10);
+            data.Position += 1;
 
-            //If Message Type cast to that type
+            if(message.MessageType=="@dir")
+            {
+                _DirMessage _DirMessage = (_DirMessage)message;
 
+                for (int i = 0; i < _DirMessage.stringDatas.Count; i++)
+                {
+                    StreamUtil.WriteString(data, _DirMessage.stringDatas[i].Type + "=" + _DirMessage.stringDatas[i].Value+"\n");
+                }
+            }
+
+            data.Position = 10;
+            StreamUtil.WriteUInt8(data, (int)data.Length);
+            data.Position = 0;
 
             byte[] buffer = new byte[data.Length];
             data.Read(buffer, 0, (int)data.Length);
