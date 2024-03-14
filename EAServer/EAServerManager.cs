@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using SSX3_Server.EAClient;
 using SSX3_Server.EAClient.Messages;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace SSX3_Server.EAServer
 {
@@ -36,12 +37,12 @@ namespace SSX3_Server.EAServer
 
         public void NewClientListening()
         {
-            TcpListener server = new TcpListener(IPAddress.Any, 11000);
-
-            server.Start();
-
             while (true)
             {
+                TcpListener server = new TcpListener(IPAddress.Any, 11000);
+
+                server.Start();
+
                 TcpClient client = server.AcceptTcpClient();
 
                 NetworkStream tcpNS = client.GetStream();
@@ -74,16 +75,22 @@ namespace SSX3_Server.EAServer
                     string MASK = GenerateMASK();
 
                     ReturnMessage.AddStringData("SESS", SESS);
-                    ReturnMessage.AddStringData("ADDR", MASK);
+                    ReturnMessage.AddStringData("MASK", MASK);
 
                     msg = _DirMessage.GenerateData(ReturnMessage);
+                    Encoding encorder = new UTF8Encoding();
+                    Console.WriteLine(encorder.GetString(msg)); //now , we write the message as string
                     tcpNS.Write(msg, 0, msg.Length);
 
-                    //Pending Connection Check
+                    //Add Pending Connection Check
 
                     TcpClient MainClient = server1.AcceptTcpClient();
+
+                    //Rewrork Threading
                     EAClientManager clientManager = new EAClientManager();
-                    clientManager.AssignListiners(MainClient, IDCount, SESS, MASK);
+                    var t = new Thread(() => clientManager.AssignListiners(MainClient, IDCount, SESS, MASK));
+                    t.Start();
+                    //clientManager.AssignListiners(MainClient, IDCount, SESS, MASK);
                     IDCount++;
                     clients.Add(clientManager);
 
@@ -91,6 +98,8 @@ namespace SSX3_Server.EAServer
                     tcpNS.Close();
                     client.Dispose();
                     client.Close();
+                    server.Stop();
+                    server1.Stop();
                 }
                 else
                 {
@@ -99,6 +108,7 @@ namespace SSX3_Server.EAServer
                     tcpNS.Close();
                     client.Dispose();
                     client.Close();
+                    server.Stop();
                 }
             }
         }

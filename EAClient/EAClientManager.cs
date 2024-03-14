@@ -44,7 +44,6 @@ namespace SSX3_Server.EAClient
                 if (msg[0] != 0)
                 {
                     Console.WriteLine(encorder.GetString(msg)); //now , we write the message as string
-                    Console.WriteLine(BitConverter.ToString(msg).Replace("-", ""));
                 }
             }
         }

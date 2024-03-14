@@ -17,7 +17,7 @@ namespace SSX3_Server.EAClient.Messages
             string MessageType = ByteUtil.ReadString(Data, 0, 10).Trim('\0');
             int Size = ByteUtil.ReadInt8(Data, 11);
             EAMessage message = new EAMessage();
-            if (MessageType== "@dir")
+            if (MessageType == "@dir")
             {
                 string FullString = ByteUtil.ReadString(Data, 12, Size - 13);
                 string[] strings = FullString.Split('\n');
@@ -28,7 +28,7 @@ namespace SSX3_Server.EAClient.Messages
                 DirMessage.Size = Size;
                 DirMessage.stringDatas = new List<StringData>();
 
-                for (int i = 0; i < strings.Length-1; i++)
+                for (int i = 0; i < strings.Length - 1; i++)
                 {
                     string[] LineSplit = strings[i].Split("=");
 
@@ -43,6 +43,10 @@ namespace SSX3_Server.EAClient.Messages
                 Encoding encorder = new UTF8Encoding();
                 Console.WriteLine(encorder.GetString(Data));
                 message = DirMessage;
+            }
+            else if (MessageType == "addr")
+            {
+
             }
             else
             {
@@ -60,7 +64,7 @@ namespace SSX3_Server.EAClient.Messages
             MemoryStream data = new MemoryStream();
 
             StreamUtil.WriteString(data, message.MessageType, 10);
-            data.Position += 1;
+            data.Position += 2;
 
             if(message.MessageType=="@dir")
             {
@@ -71,8 +75,8 @@ namespace SSX3_Server.EAClient.Messages
                     StreamUtil.WriteString(data, _DirMessage.stringDatas[i].Type + "=" + _DirMessage.stringDatas[i].Value+"\n");
                 }
             }
-
-            data.Position = 10;
+            StreamUtil.WriteUInt8(data, 0);
+            data.Position = 11;
             StreamUtil.WriteUInt8(data, (int)data.Length);
             data.Position = 0;
 
