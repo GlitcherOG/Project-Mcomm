@@ -12,21 +12,21 @@ namespace SSX3_Server.EAClient.Messages
         public string MessageType = "";
         public int Size = -1;
 
+        public List<StringData> stringDatas = new List<StringData>();
+
         public static EAMessage PraseData(byte[] Data)
         {
             string MessageType = ByteUtil.ReadString(Data, 0, 10).Trim('\0');
             int Size = ByteUtil.ReadInt8(Data, 11);
             EAMessage message = new EAMessage();
-            if (MessageType == "@dir")
+            if (MessageType == "@dir" || MessageType == "addr" || MessageType == "skey" || MessageType == "auth" || MessageType == "acct")
             {
                 string FullString = ByteUtil.ReadString(Data, 12, Size - 13);
                 string[] strings = FullString.Split('\n');
 
-                _DirMessage DirMessage = new _DirMessage();
-
-                DirMessage.MessageType = MessageType;
-                DirMessage.Size = Size;
-                DirMessage.stringDatas = new List<StringData>();
+                message.MessageType = MessageType;
+                message.Size = Size;
+                message.stringDatas = new List<StringData>();
 
                 for (int i = 0; i < strings.Length - 1; i++)
                 {
@@ -38,15 +38,10 @@ namespace SSX3_Server.EAClient.Messages
 
                     NewStringData.Value = LineSplit[1];
 
-                    DirMessage.stringDatas.Add(NewStringData);
+                    message.stringDatas.Add(NewStringData);
                 }
                 Encoding encorder = new UTF8Encoding();
                 Console.WriteLine(encorder.GetString(Data));
-                message = DirMessage;
-            }
-            else if (MessageType == "addr")
-            {
-
             }
             else
             {
@@ -66,15 +61,14 @@ namespace SSX3_Server.EAClient.Messages
             StreamUtil.WriteString(data, message.MessageType, 10);
             data.Position += 2;
 
-            if(message.MessageType=="@dir")
+            if(message.MessageType=="@dir" || message.MessageType == "addr" || message.MessageType == "skey")
             {
-                _DirMessage _DirMessage = (_DirMessage)message;
-
-                for (int i = 0; i < _DirMessage.stringDatas.Count; i++)
+                for (int i = 0; i < message.stringDatas.Count; i++)
                 {
-                    StreamUtil.WriteString(data, _DirMessage.stringDatas[i].Type + "=" + _DirMessage.stringDatas[i].Value+"\n");
+                    StreamUtil.WriteString(data, message.stringDatas[i].Type + "=" + message.stringDatas[i].Value+"\n");
                 }
             }
+
             StreamUtil.WriteUInt8(data, 0);
             data.Position = 11;
             StreamUtil.WriteUInt8(data, (int)data.Length);
@@ -89,6 +83,16 @@ namespace SSX3_Server.EAClient.Messages
         {
             public string Type;
             public string Value;
+        }
+
+        public void AddStringData(string Type, string Data)
+        {
+            StringData stringData = new StringData();
+
+            stringData.Type = Type;
+            stringData.Value = Data;
+
+            stringDatas.Add(stringData);
         }
     }
 }

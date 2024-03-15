@@ -6,6 +6,7 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using SSX3_Server.EAClient;
 using SSX3_Server.EAClient.Messages;
@@ -25,12 +26,14 @@ namespace SSX3_Server.EAServer
         int IDCount = 0;
 
         public List<EAClientManager> clients = new List<EAClientManager>();
+        public List<Thread> threads = new List<Thread>();
         
         public void InitaliseServer()
         {
             Console.WriteLine("Initalising Server...");
             Instance = this;
             clients = new List<EAClientManager>();
+            threads = new List<Thread>();
             Console.WriteLine("Initalised Server, Waiting For Clients...");
             NewClientListening();
         }
@@ -64,7 +67,7 @@ namespace SSX3_Server.EAServer
                     server1.Start();
 
                     //Send Connection Details Back
-                    _DirMessage ReturnMessage = new _DirMessage();
+                    EAMessage ReturnMessage = new EAMessage();
 
                     ReturnMessage.MessageType = "@dir";
 
@@ -77,7 +80,7 @@ namespace SSX3_Server.EAServer
                     ReturnMessage.AddStringData("SESS", SESS);
                     ReturnMessage.AddStringData("MASK", MASK);
 
-                    msg = _DirMessage.GenerateData(ReturnMessage);
+                    msg = EAMessage.GenerateData(ReturnMessage);
                     Encoding encorder = new UTF8Encoding();
                     Console.WriteLine(encorder.GetString(msg)); //now , we write the message as string
                     tcpNS.Write(msg, 0, msg.Length);
@@ -90,6 +93,8 @@ namespace SSX3_Server.EAServer
                     EAClientManager clientManager = new EAClientManager();
                     var t = new Thread(() => clientManager.AssignListiners(MainClient, IDCount, SESS, MASK));
                     t.Start();
+                    threads.Add(t);
+
                     //clientManager.AssignListiners(MainClient, IDCount, SESS, MASK);
                     IDCount++;
                     clients.Add(clientManager);
