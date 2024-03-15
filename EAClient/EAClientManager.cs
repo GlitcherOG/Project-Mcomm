@@ -1,14 +1,11 @@
 ﻿using SSX3_Server.EAClient.Messages;
 using SSX3_Server.EAServer;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel.Design;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace SSX3_Server.EAClient
 {
@@ -25,11 +22,20 @@ namespace SSX3_Server.EAClient
 
         public string NAME;
         public string PASS;
+        public string SPAM;
+        public string MAIL;
+        public string GEND;
+        public string BORN;
+        public string DEFPER;
+        public string ALTS;
+        public string MINAGE;
+
         public string TOS;
         public string MID;
         public string PID;
         public string HWIDFLAG;
         public string HWMASK;
+
         public string PROD;
         public string VERS;
         public string LANG;
@@ -38,8 +44,13 @@ namespace SSX3_Server.EAClient
         public TcpClient MainClient = null;
         NetworkStream MainNS = null;
 
-        public TcpClient BuddyClient = null;
-        NetworkStream BuddyNS = null;
+        //public TcpClient BuddyClient = null;
+        //NetworkStream BuddyNS = null;
+
+        //10 seconds to start till proper connection establised
+        //ping every 1 min if failed ping close connection
+        int TimeoutSeconds=10;
+        DateTime LastMessage;
 
         public void AssignListiners(TcpClient tcpClient, int InID, string SESSin, string MASKin)
         {
@@ -48,6 +59,7 @@ namespace SSX3_Server.EAClient
             MASK = MASKin;
             MainClient = tcpClient;
             MainNS = MainClient.GetStream();
+            LastMessage = DateTime.Now;
 
             MainListen();
         }
@@ -60,11 +72,19 @@ namespace SSX3_Server.EAClient
                 MainNS.Read(msg, 0, msg.Length);   //the same networkstream reads the message sent by the client
                 if (msg[0] != 0)
                 {
+                    LastMessage = DateTime.Now;
                     ProcessMessage(msg);
+                }
+
+                if((DateTime.Now - LastMessage).TotalSeconds>= TimeoutSeconds)
+                {
+                    //Ping Server If no response break
+                    break;
                 }
             }
 
             //Disconnect and Destroy
+            EAServerManager.Instance.DestroyClient(ID);
         }
 
         public void ProcessMessage(byte[] array)
@@ -93,17 +113,21 @@ namespace SSX3_Server.EAClient
             }
             else if (msg.MessageType == "auth")
             {
-                EAMessage msg2 = new EAMessage();
-
-                msg2.MessageType = "auth";
-
                 //Apply AUTH Data
 
                 //Confirm Auth Data with saves
+                var UserData = GetUserData(msg.stringDatas[0].Value);
+                if (UserData!=null)
+                {
+                    EAMessage msg2 = new EAMessage();
 
-                //msg2.AddStringData()
-                
-                //SendMessageBack(msg2);
+                    msg2.MessageType = "auth";
+
+                    //msg2.AddStringData()
+
+                    //SendMessageBack(msg2);
+
+                }
             }
             else if (msg.MessageType == "acct")
             {
@@ -119,6 +143,16 @@ namespace SSX3_Server.EAClient
         {
             byte[] bytes = EAMessage.GenerateData(msg);
             MainNS.Write(bytes, 0, bytes.Length);
+        }
+
+        public EAUserData GetUserData(string Name)
+        {
+            if(Path.Exists(AppContext.BaseDirectory + "\\Users\\" + Name.ToLower() + ".json"))
+            {
+                return EAUserData.Load(AppContext.BaseDirectory + "\\Users\\" + Name.ToLower() + ".json");
+            }
+
+            return null;
         }
     }
 }

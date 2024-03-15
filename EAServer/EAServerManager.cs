@@ -10,6 +10,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using SSX3_Server.EAClient;
 using SSX3_Server.EAClient.Messages;
+using static System.Net.Mime.MediaTypeNames;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace SSX3_Server.EAServer
@@ -34,6 +35,7 @@ namespace SSX3_Server.EAServer
             Instance = this;
             clients = new List<EAClientManager>();
             threads = new List<Thread>();
+            Directory.CreateDirectory(AppContext.BaseDirectory + "\\Users");
             Console.WriteLine("Initalised Server, Waiting For Clients...");
             NewClientListening();
         }
@@ -146,6 +148,7 @@ namespace SSX3_Server.EAServer
                 {
                     clients[i] = null;
                     clients.RemoveAt(i);
+                    threads.RemoveAt(i);
                     break;
                 }
             }
