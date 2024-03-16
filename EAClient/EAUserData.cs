@@ -23,6 +23,10 @@ namespace SSX3_Server.EAClient
         public string Vers = "";
         public string GameReg = "";
 
+        public string Persona = "";
+
+        public string SelectPersona = "";
+
         public string Since;
         public string Last;
         public string Bypass;
@@ -54,6 +58,24 @@ namespace SSX3_Server.EAClient
             }
         }
 
-
+        public void AddUserData(EAClient.EAClientManager manager)
+        {
+            Name = manager.NAME;
+            Pass = manager.PASS;
+            Spam = manager.SPAM;
+            Mail = manager.MAIL;
+            Gend = manager.GEND;
+            Born = manager.BORN;
+            Defper = manager.DEFPER;
+            Alts = manager.ALTS;
+            Minage = manager.MINAGE;
+            Lang = manager.LANG;
+            Prod = manager.PROD;
+            Vers = manager.VERS;
+            GameReg = manager.SLUS;
+            Persona = manager.PERSONA;
+            Since = manager.SINCE;
+            Last = manager.LAST;
+        }
     }
 }

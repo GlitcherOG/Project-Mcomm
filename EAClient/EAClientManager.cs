@@ -93,8 +93,8 @@ namespace SSX3_Server.EAClient
             }
 
             //Disconnect and Destroy
-            MainClient.Close();
             MainNS.Close();
+            MainClient.Close();
             EAServerManager.Instance.DestroyClient(ID);
         }
 
@@ -146,17 +146,38 @@ namespace SSX3_Server.EAClient
 
                     if (TempData.Name == msg.stringDatas[0].Value /*&& TempData.Pass == msg.stringDatas[1].Value*/)
                     {
+                        NAME = TempData.Name;
+                        PASS = TempData.Pass;
+                        SPAM = TempData.Spam;
+                        MAIL = TempData.Mail;
+                        GEND = TempData.Gend;
+                        BORN = TempData.Born;
+                        DEFPER = TempData.Defper;
+                        ALTS = TempData.Alts;
+                        MINAGE = TempData.Minage;
+                        LANG = TempData.Lang;
+                        PROD = TempData.Prod;
+                        VERS = TempData.Vers;
+                        SLUS = TempData.GameReg;
+
+                        PERSONA = TempData.Persona;
+
+                        LAST = DateTime.Now.ToString("yyyy.MM.dd hh:mm:ss");
+                        TempData.Last = LAST;
+
+                        TempData.CreateJson(AppContext.BaseDirectory + "\\Users\\" + NAME.ToLower() + ".json");
+
                         msg2.AddStringData("TOS", "1");
                         msg2.AddStringData("NAME", msg.stringDatas[0].Value.ToLower());
-                        msg2.AddStringData("MAIL", TempData.Mail + "");
-                        msg2.AddStringData("PERSONAS", TempData.Name);
+                        msg2.AddStringData("MAIL", TempData.Mail);
+                        msg2.AddStringData("PERSONAS", TempData.Persona);
                         msg2.AddStringData("BORN", TempData.Born);
                         msg2.AddStringData("GEND", TempData.Gend);
                         msg2.AddStringData("FROM", "US");
                         msg2.AddStringData("LANG", "en");
                         msg2.AddStringData("SPAM", TempData.Spam);
                         msg2.AddStringData("SINCE", TempData.Since);
-
+                        //TimeoutSeconds = 60;
                         SendMessageBack(msg2);
                     }
                     else
@@ -196,6 +217,7 @@ namespace SSX3_Server.EAClient
                     Temp.Prod = msg.stringDatas[10].Value;
                     Temp.Vers = msg.stringDatas[11].Value;
                     Temp.GameReg = msg.stringDatas[12].Value;
+                    Temp.Persona = msg.stringDatas[0].Value;
 
                     Temp.CreateJson(AppContext.BaseDirectory + "\\Users\\" + msg.stringDatas[0].Value.ToLower() + ".json");
                 }
@@ -217,6 +239,56 @@ namespace SSX3_Server.EAClient
             else if(msg.MessageType== "cper")
             {
                 //Create Persona
+
+                if (PERSONA=="")
+                {
+                    PERSONA = msg.stringDatas[0].Value;
+                }
+                else
+                {
+                    PERSONA = PERSONA+"," +msg.stringDatas[0].Value;
+                }
+
+                EAUserData eAMessage = new EAUserData();
+                eAMessage.AddUserData(this);
+                eAMessage.CreateJson(AppContext.BaseDirectory + "\\Users\\" + NAME.ToLower() + ".json");
+
+                EAMessage msg2 = new EAMessage();
+
+                msg2.MessageType = "cper";
+
+                msg2.AddStringData("PERS", msg.stringDatas[0].Value);
+
+                SendMessageBack(msg2);
+            }
+            else if (msg.MessageType == "dper")
+            {
+                //Create Persona
+
+                string[] strings = PERSONA.Split(',');
+                PERSONA = "";
+                for (int i = 0; i < strings.Length; i++)
+                {
+                    if (msg.stringDatas[0].Value != strings[i])
+                    {
+                        if(PERSONA=="")
+                        {
+                            PERSONA = strings[i];
+                        }
+                        else
+                        {
+                            PERSONA += PERSONA + "," + strings[i];
+                        }
+                    }
+                }
+
+                EAMessage msg2 = new EAMessage();
+
+                msg2.MessageType = "dper";
+
+                msg2.AddStringData("PERS", msg.stringDatas[0].Value);
+
+                SendMessageBack(msg2);
             }
             else if (msg.MessageType == "pers")
             {
