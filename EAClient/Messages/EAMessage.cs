@@ -86,7 +86,7 @@ namespace SSX3_Server.EAClient.Messages
             StreamUtil.WriteString(data, message.MessageType, 10);
             data.Position += 2;
 
-            if(message.MessageType=="@dir" || message.MessageType == "addr" || message.MessageType == "skey" || message.MessageType == "acct")
+            if(message.MessageType=="@dir" || message.MessageType == "addr" || message.MessageType == "skey" || message.MessageType == "acct" || message.MessageType == "auth")
             {
                 for (int i = 0; i < message.stringDatas.Count; i++)
                 {

@@ -23,6 +23,10 @@ namespace SSX3_Server.EAClient
         public string Vers = "";
         public string GameReg = "";
 
+        public string Since;
+        public string Last;
+        public string Bypass;
+
         public void CreateJson(string path, bool Inline = false)
         {
             var TempFormating = Formatting.None;

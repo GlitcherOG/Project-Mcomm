@@ -6,6 +6,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace SSX3_Server.EAClient
 {
@@ -29,6 +30,8 @@ namespace SSX3_Server.EAClient
         public string DEFPER;
         public string ALTS;
         public string MINAGE;
+
+        public string PERSONA;
 
         public string TOS;
         public string MID;
@@ -90,6 +93,8 @@ namespace SSX3_Server.EAClient
             }
 
             //Disconnect and Destroy
+            MainClient.Close();
+            MainNS.Close();
             EAServerManager.Instance.DestroyClient(ID);
         }
 
@@ -137,9 +142,27 @@ namespace SSX3_Server.EAClient
 
                     msg2.MessageType = "auth";
 
-                    //msg2.AddStringData()
+                    var TempData = GetUserData(msg.stringDatas[0].Value);
 
-                    //SendMessageBack(msg2);
+                    if (TempData.Name == msg.stringDatas[0].Value /*&& TempData.Pass == msg.stringDatas[1].Value*/)
+                    {
+                        msg2.AddStringData("TOS", "1");
+                        msg2.AddStringData("NAME", msg.stringDatas[0].Value.ToLower());
+                        msg2.AddStringData("MAIL", TempData.Mail + "");
+                        msg2.AddStringData("PERSONAS", TempData.Name);
+                        msg2.AddStringData("BORN", TempData.Born);
+                        msg2.AddStringData("GEND", TempData.Gend);
+                        msg2.AddStringData("FROM", "US");
+                        msg2.AddStringData("LANG", "en");
+                        msg2.AddStringData("SPAM", TempData.Spam);
+                        msg2.AddStringData("SINCE", TempData.Since);
+
+                        SendMessageBack(msg2);
+                    }
+                    else
+                    {
+
+                    }
 
                 }
             }
@@ -157,13 +180,32 @@ namespace SSX3_Server.EAClient
                 {
                     msg2.MessageType = "authimst";
                 }
+                else
+                {
+                    Temp = new EAUserData();
+                    Temp.Name = msg.stringDatas[0].Value;
+                    Temp.Pass = msg.stringDatas[1].Value;
+                    Temp.Spam = msg.stringDatas[2].Value;
+                    Temp.Mail = msg.stringDatas[3].Value;
+                    Temp.Gend = msg.stringDatas[4].Value;
+                    Temp.Born = msg.stringDatas[5].Value;
+                    Temp.Defper = msg.stringDatas[6].Value;
+                    Temp.Alts = msg.stringDatas[7].Value;
+                    Temp.Minage = msg.stringDatas[8].Value;
+                    Temp.Lang = msg.stringDatas[9].Value;
+                    Temp.Prod = msg.stringDatas[10].Value;
+                    Temp.Vers = msg.stringDatas[11].Value;
+                    Temp.GameReg = msg.stringDatas[12].Value;
 
-                //Create and send back data
+                    Temp.CreateJson(AppContext.BaseDirectory + "\\Users\\" + msg.stringDatas[0].Value.ToLower() + ".json");
+                }
+
+                //Create save and send back data
 
                 msg2.AddStringData("TOS", "1");
-                msg2.AddStringData("NAME", msg.stringDatas[0].Value.ToLower()+ "");
+                msg2.AddStringData("NAME", msg.stringDatas[0].Value.ToLower());
                 msg2.AddStringData("AGE", "21");
-                msg2.AddStringData("PERSONAS", msg.stringDatas[0].Value.ToLower() + "");
+                msg2.AddStringData("PERSONAS", "");
 
                 string ClientTime = DateTime.Now.ToString("yyyy.MM.dd hh:mm:ss");
 
@@ -171,6 +213,14 @@ namespace SSX3_Server.EAClient
                 msg2.AddStringData("LAST", ClientTime);
 
                 SendMessageBack(msg2);
+            }
+            else if(msg.MessageType== "cper")
+            {
+                //Create Persona
+            }
+            else if (msg.MessageType == "pers")
+            {
+                //Select Persona
             }
         }
 
