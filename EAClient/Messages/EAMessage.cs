@@ -4,6 +4,7 @@ using System.Diagnostics.SymbolStore;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace SSX3_Server.EAClient.Messages
 {
@@ -43,6 +44,30 @@ namespace SSX3_Server.EAClient.Messages
                 Encoding encorder = new UTF8Encoding();
                 Console.WriteLine(encorder.GetString(Data));
             }
+            else if(MessageType == "sele")
+            {
+                string FullString = ByteUtil.ReadString(Data, 12, Size - 13);
+                string[] strings = FullString.Split(' ');
+
+                message.MessageType = MessageType;
+                message.Size = Size;
+                message.stringDatas = new List<StringData>();
+
+                for (int i = 0; i < strings.Length - 1; i++)
+                {
+                    string[] LineSplit = strings[i].Split("=");
+
+                    StringData NewStringData = new StringData();
+
+                    NewStringData.Type = LineSplit[0];
+
+                    NewStringData.Value = LineSplit[1];
+
+                    message.stringDatas.Add(NewStringData);
+                }
+                Encoding encorder = new UTF8Encoding();
+                Console.WriteLine(encorder.GetString(Data));
+            }
             else
             {
                 Console.WriteLine("Unknown Message Type: ");
@@ -61,7 +86,7 @@ namespace SSX3_Server.EAClient.Messages
             StreamUtil.WriteString(data, message.MessageType, 10);
             data.Position += 2;
 
-            if(message.MessageType=="@dir" || message.MessageType == "addr" || message.MessageType == "skey")
+            if(message.MessageType=="@dir" || message.MessageType == "addr" || message.MessageType == "skey" || message.MessageType == "acct")
             {
                 for (int i = 0; i < message.stringDatas.Count; i++)
                 {
@@ -76,7 +101,12 @@ namespace SSX3_Server.EAClient.Messages
 
             byte[] buffer = new byte[data.Length];
             data.Read(buffer, 0, (int)data.Length);
-            return data.ToArray();
+
+            Encoding encorder = new UTF8Encoding();
+            Console.WriteLine(encorder.GetString(buffer)); //now , we write the message as string
+            //Console.WriteLine(BitConverter.ToString(buffer).Replace("-", ""));
+
+            return buffer.ToArray();
         }
 
         public struct StringData

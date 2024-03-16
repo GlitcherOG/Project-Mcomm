@@ -41,15 +41,18 @@ namespace SSX3_Server.EAClient
         public string LANG;
         public string SLUS;
 
+        public string SINCE;
+        public string LAST;
+
         public TcpClient MainClient = null;
         NetworkStream MainNS = null;
 
-        //public TcpClient BuddyClient = null;
-        //NetworkStream BuddyNS = null;
+        public TcpClient BuddyClient = null;
+        NetworkStream BuddyNS = null;
 
         //10 seconds to start till proper connection establised
         //ping every 1 min if failed ping close connection
-        int TimeoutSeconds=10;
+        int TimeoutSeconds=30;
         DateTime LastMessage;
 
         public void AssignListiners(TcpClient tcpClient, int InID, string SESSin, string MASKin)
@@ -58,7 +61,9 @@ namespace SSX3_Server.EAClient
             SESS = SESSin;
             MASK = MASKin;
             MainClient = tcpClient;
+            //MainClient.SendBufferSize = 270;
             MainNS = MainClient.GetStream();
+
             LastMessage = DateTime.Now;
 
             MainListen();
@@ -79,6 +84,7 @@ namespace SSX3_Server.EAClient
                 if((DateTime.Now - LastMessage).TotalSeconds>= TimeoutSeconds)
                 {
                     //Ping Server If no response break
+                    Console.WriteLine("Disconnecting...");
                     break;
                 }
             }
@@ -111,6 +117,14 @@ namespace SSX3_Server.EAClient
 
                 SendMessageBack(msg2);
             }
+            else if (msg.MessageType == "sele")
+            {
+                EAMessage msg2 = new EAMessage();
+
+                msg2.MessageType = "sele";
+
+                SendMessageBack(msg2);
+            }
             else if (msg.MessageType == "auth")
             {
                 //Apply AUTH Data
@@ -131,11 +145,32 @@ namespace SSX3_Server.EAClient
             }
             else if (msg.MessageType == "acct")
             {
+                //Set Data Into Client
+
                 EAMessage msg2 = new EAMessage();
 
-                //Check if user exists if so send back this
+                msg2.MessageType = "acct";
 
-                //if not create and send back data
+                //Check if user exists if so send back this
+                var Temp = GetUserData(msg.stringDatas[0].Value);
+                if(Temp!=null)
+                {
+                    msg2.MessageType = "authimst";
+                }
+
+                //Create and send back data
+
+                msg2.AddStringData("TOS", "1");
+                msg2.AddStringData("NAME", msg.stringDatas[0].Value.ToLower()+ "");
+                msg2.AddStringData("AGE", "21");
+                msg2.AddStringData("PERSONAS", msg.stringDatas[0].Value.ToLower() + "");
+
+                string ClientTime = DateTime.Now.ToString("yyyy.MM.dd hh:mm:ss");
+
+                msg2.AddStringData("SINCE", ClientTime);
+                msg2.AddStringData("LAST", ClientTime);
+
+                SendMessageBack(msg2);
             }
         }
 

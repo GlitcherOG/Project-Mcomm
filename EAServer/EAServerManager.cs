@@ -83,8 +83,8 @@ namespace SSX3_Server.EAServer
                     ReturnMessage.AddStringData("MASK", MASK);
 
                     msg = EAMessage.GenerateData(ReturnMessage);
-                    Encoding encorder = new UTF8Encoding();
-                    Console.WriteLine(encorder.GetString(msg)); //now , we write the message as string
+                    //Encoding encorder = new UTF8Encoding();
+                    //Console.WriteLine(encorder.GetString(msg)); //now , we write the message as string
                     tcpNS.Write(msg, 0, msg.Length);
 
                     //Add Pending Connection Check
