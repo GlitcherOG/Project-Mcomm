@@ -26,6 +26,8 @@ namespace SSX3_Server.EAServer
 
         int IDCount = 0;
 
+        public string News="WIP Server";
+
         public List<EAClientManager> clients = new List<EAClientManager>();
         public List<Thread> threads = new List<Thread>();
         

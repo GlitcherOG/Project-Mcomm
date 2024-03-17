@@ -20,7 +20,7 @@ namespace SSX3_Server.EAClient.Messages
             string MessageType = ByteUtil.ReadString(Data, 0, 10).Trim('\0');
             int Size = ByteUtil.ReadInt8(Data, 11);
             EAMessage message = new EAMessage();
-            if (MessageType == "@dir" || MessageType == "addr" || MessageType == "skey" || MessageType == "auth" || MessageType == "acct" || MessageType == "cper" || MessageType == "dper")
+            if (MessageType == "@dir" || MessageType == "addr" || MessageType == "skey" || MessageType == "auth" || MessageType == "acct" || MessageType == "cper" || MessageType == "dper" || MessageType == "pers" || MessageType == "onln" || MessageType == "news")
             {
                 string FullString = ByteUtil.ReadString(Data, 12, Size - 13);
                 string[] strings = FullString.Split('\n');
@@ -86,12 +86,20 @@ namespace SSX3_Server.EAClient.Messages
             StreamUtil.WriteString(data, message.MessageType, 10);
             data.Position += 2;
 
-            if(message.MessageType=="@dir" || message.MessageType == "addr" || message.MessageType == "skey" || message.MessageType == "acct" || message.MessageType == "auth" || message.MessageType == "cper" || message.MessageType == "dper")
+            if(message.MessageType=="@dir" || message.MessageType == "addr" || message.MessageType == "skey" || message.MessageType == "acct" || message.MessageType == "auth" || message.MessageType == "cper" || message.MessageType == "dper" || message.MessageType == "pers" || message.MessageType == "onln")
             {
                 for (int i = 0; i < message.stringDatas.Count; i++)
                 {
                     StreamUtil.WriteString(data, message.stringDatas[i].Type + "=" + message.stringDatas[i].Value+"\n");
                 }
+            }
+            if(message.MessageType == "news")
+            {
+                data.Position = 0;
+                StreamUtil.WriteString(data, message.MessageType + message.stringDatas[0].Type, 10);
+                data.Position += 2;
+
+                StreamUtil.WriteString(data, message.stringDatas[0].Value + "\n");
             }
 
             StreamUtil.WriteUInt8(data, 0);

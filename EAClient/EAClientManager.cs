@@ -31,7 +31,8 @@ namespace SSX3_Server.EAClient
         public string ALTS;
         public string MINAGE;
 
-        public string PERSONA;
+        public List<EAUserPersona> Personas;
+        public int PersonaID;
 
         public string TOS;
         public string MID;
@@ -76,19 +77,31 @@ namespace SSX3_Server.EAClient
         {
             while (MainClient.Connected)  //while the client is connected, we look for incoming messages
             {
-                byte[] msg = new byte[270];     //the messages arrive as byte array
-                MainNS.Read(msg, 0, msg.Length);   //the same networkstream reads the message sent by the client
-                if (msg[0] != 0)
+                try
                 {
-                    LastMessage = DateTime.Now;
-                    ProcessMessage(msg);
-                }
+                    byte[] msg = new byte[270];     //the messages arrive as byte array
+                    MainNS.Read(msg, 0, msg.Length);   //the same networkstream reads the message sent by the client
+                    if (msg[0] != 0)
+                    {
+                        LastMessage = DateTime.Now;
+                        ProcessMessage(msg);
+                    }
 
-                if((DateTime.Now - LastMessage).TotalSeconds>= TimeoutSeconds)
+                    if ((DateTime.Now - LastMessage).TotalSeconds >= TimeoutSeconds)
+                    {
+                        //Ping Server If no response break
+                        Console.WriteLine("Disconnecting...");
+                        break;
+                    }
+                }
+                catch
                 {
-                    //Ping Server If no response break
-                    Console.WriteLine("Disconnecting...");
-                    break;
+                    //Unknown Connection Error
+                    //Most Likely Game has crashed
+                    Console.WriteLine("Connection Crashed, Disconnecting...");
+                    MainNS.Close();
+                    MainClient.Close();
+                    EAServerManager.Instance.DestroyClient(ID);
                 }
             }
 
@@ -160,7 +173,7 @@ namespace SSX3_Server.EAClient
                         VERS = TempData.Vers;
                         SLUS = TempData.GameReg;
 
-                        PERSONA = TempData.Persona;
+                        Personas = TempData.Personas;
 
                         LAST = DateTime.Now.ToString("yyyy.MM.dd hh:mm:ss");
                         TempData.Last = LAST;
@@ -170,14 +183,14 @@ namespace SSX3_Server.EAClient
                         msg2.AddStringData("TOS", "1");
                         msg2.AddStringData("NAME", msg.stringDatas[0].Value.ToLower());
                         msg2.AddStringData("MAIL", TempData.Mail);
-                        msg2.AddStringData("PERSONAS", TempData.Persona);
+                        msg2.AddStringData("PERSONAS", GetPersonaList());
                         msg2.AddStringData("BORN", TempData.Born);
                         msg2.AddStringData("GEND", TempData.Gend);
                         msg2.AddStringData("FROM", "US");
                         msg2.AddStringData("LANG", "en");
                         msg2.AddStringData("SPAM", TempData.Spam);
                         msg2.AddStringData("SINCE", TempData.Since);
-                        //TimeoutSeconds = 60;
+                        TimeoutSeconds = 60;
                         SendMessageBack(msg2);
                     }
                     else
@@ -197,7 +210,8 @@ namespace SSX3_Server.EAClient
 
                 //Check if user exists if so send back this
                 var Temp = GetUserData(msg.stringDatas[0].Value);
-                if(Temp!=null)
+                string ClientTime = DateTime.Now.ToString("yyyy.MM.dd hh:mm:ss");
+                if (Temp!=null)
                 {
                     msg2.MessageType = "authimst";
                 }
@@ -217,7 +231,10 @@ namespace SSX3_Server.EAClient
                     Temp.Prod = msg.stringDatas[10].Value;
                     Temp.Vers = msg.stringDatas[11].Value;
                     Temp.GameReg = msg.stringDatas[12].Value;
-                    Temp.Persona = msg.stringDatas[0].Value;
+                    //Temp.Persona = msg.stringDatas[0].Value;
+
+                    Temp.Since = ClientTime;
+                    Temp.Last = ClientTime;
 
                     Temp.CreateJson(AppContext.BaseDirectory + "\\Users\\" + msg.stringDatas[0].Value.ToLower() + ".json");
                 }
@@ -228,9 +245,6 @@ namespace SSX3_Server.EAClient
                 msg2.AddStringData("NAME", msg.stringDatas[0].Value.ToLower());
                 msg2.AddStringData("AGE", "21");
                 msg2.AddStringData("PERSONAS", "");
-
-                string ClientTime = DateTime.Now.ToString("yyyy.MM.dd hh:mm:ss");
-
                 msg2.AddStringData("SINCE", ClientTime);
                 msg2.AddStringData("LAST", ClientTime);
 
@@ -240,18 +254,18 @@ namespace SSX3_Server.EAClient
             {
                 //Create Persona
 
-                if (PERSONA=="")
-                {
-                    PERSONA = msg.stringDatas[0].Value;
-                }
-                else
-                {
-                    PERSONA = PERSONA+"," +msg.stringDatas[0].Value;
-                }
+                EAUserPersona NewPersona = new EAUserPersona();
 
-                EAUserData eAMessage = new EAUserData();
-                eAMessage.AddUserData(this);
-                eAMessage.CreateJson(AppContext.BaseDirectory + "\\Users\\" + NAME.ToLower() + ".json");
+                NewPersona.Name = msg.stringDatas[0].Value;
+
+                string ClientTime = DateTime.Now.ToString("yyyy.MM.dd hh:mm:ss");
+
+                NewPersona.Since = ClientTime;
+                NewPersona.Last = ClientTime;
+
+                Personas.Add(NewPersona);
+
+                SaveEAUserData();
 
                 EAMessage msg2 = new EAMessage();
 
@@ -265,20 +279,11 @@ namespace SSX3_Server.EAClient
             {
                 //Create Persona
 
-                string[] strings = PERSONA.Split(',');
-                PERSONA = "";
-                for (int i = 0; i < strings.Length; i++)
+                for (int i = 0; i < Personas.Count; i++)
                 {
-                    if (msg.stringDatas[0].Value != strings[i])
+                    if (msg.stringDatas[0].Value != Personas[i].Name)
                     {
-                        if(PERSONA=="")
-                        {
-                            PERSONA = strings[i];
-                        }
-                        else
-                        {
-                            PERSONA += PERSONA + "," + strings[i];
-                        }
+                        Personas.RemoveAt(i);
                     }
                 }
 
@@ -293,6 +298,47 @@ namespace SSX3_Server.EAClient
             else if (msg.MessageType == "pers")
             {
                 //Select Persona
+                for (int i = 0; i < Personas.Count; i++)
+                {
+                    if (msg.stringDatas[0].Value != Personas[i].Name)
+                    {
+                        PersonaID = i;
+
+                    }
+                }
+
+                Personas[PersonaID].Last = DateTime.Now.ToString("yyyy.MM.dd hh:mm:ss");
+
+                EAMessage msg2 = new EAMessage();
+
+                msg2.MessageType = "pers";
+
+                msg2.AddStringData("A", "24.141.39.62");
+                msg2.AddStringData("LA", "24.141.39.62");
+                msg2.AddStringData("LOC", "enUS");
+                msg2.AddStringData("MA", "24.141.39.62");
+                msg2.AddStringData("NAME", NAME);
+                msg2.AddStringData("PERS", Personas[PersonaID].Name);
+                msg2.AddStringData("LAST", LAST);
+                msg2.AddStringData("PLAST", Personas[PersonaID].Last);
+                msg2.AddStringData("SINCE", SINCE);
+                //msg2.AddStringData("PSINCE", Personas[PersonaID].Since);
+                msg2.AddStringData("LKEY", "3fcf27540c92935b0a66fd3b0000283c");
+                SendMessageBack(msg2);
+            }
+            else if (msg.MessageType == "onln")
+            {
+                SendMessageBack(msg);
+            }
+            else if (msg.MessageType == "news")
+            {
+                EAMessage msg2 = new EAMessage();
+
+                msg2.MessageType = "news";
+
+                msg2.AddStringData("new" + msg.stringDatas[0].Value, EAServerManager.Instance.News);
+
+                SendMessageBack(msg2);
             }
         }
 
@@ -310,6 +356,32 @@ namespace SSX3_Server.EAClient
             }
 
             return null;
+        }
+
+        public string GetPersonaList()
+        {
+            string StringPersonas = "";
+
+            for (int i = 0; i < Personas.Count; i++)
+            {
+                if(i==0)
+                {
+                    StringPersonas = Personas[i].Name;
+                }
+                else
+                {
+                    StringPersonas = StringPersonas + "," + Personas[i].Name;
+                }
+            }
+
+            return StringPersonas;
+        }
+
+        public void SaveEAUserData()
+        {
+            EAUserData eAMessage = new EAUserData();
+            eAMessage.AddUserData(this);
+            eAMessage.CreateJson(AppContext.BaseDirectory + "\\Users\\" + NAME.ToLower() + ".json");
         }
     }
 }
