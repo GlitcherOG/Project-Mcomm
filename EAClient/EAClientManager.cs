@@ -1,6 +1,7 @@
 ﻿using SSX3_Server.EAClient.Messages;
 using SSX3_Server.EAServer;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
@@ -11,8 +12,6 @@ using System.Xml.Linq;
 namespace SSX3_Server.EAClient
 {
     //TODO
-    //MOVE PERSONAS TO A SERPATE FILE
-    //FIX PERSONA CREATION FOR DUPILICATE AND INVALID
     //MOVE MESSAGES TO BE PHRASED BETTER
     //FIX PNG MESSAGES
     //FIND OUT MORE MESSAGES
@@ -38,8 +37,8 @@ namespace SSX3_Server.EAClient
         public string ALTS;
         public string MINAGE;
 
-        public List<EAUserPersona> Personas;
-        public int PersonaID;
+        public List<string> PersonaList;
+        public EAUserPersona LoadedPersona = new EAUserPersona();
 
         public string TOS;
         public string MID;
@@ -101,7 +100,7 @@ namespace SSX3_Server.EAClient
                         }
                     }
 
-                    if((DateTime.Now - LastPing).TotalSeconds >= 10)
+                    if((DateTime.Now - LastPing).TotalSeconds >= 15)
                     {
                         LastPing = DateTime.Now;
                         EAMessage msg2 = new EAMessage();
@@ -112,7 +111,6 @@ namespace SSX3_Server.EAClient
                     if ((DateTime.Now - LastMessage).TotalSeconds >= TimeoutSeconds)
                     {
                         //Ping Server If no response break
-                        Console.WriteLine("Disconnecting...");
                         break;
                     }
                 }
@@ -121,6 +119,8 @@ namespace SSX3_Server.EAClient
                     //Unknown Connection Error
                     //Most Likely Game has crashed
                     Console.WriteLine("Connection Crashed, Disconnecting...");
+                    SaveEAUserData();
+                    SaveEAUserPersona();
                     MainNS.Close();
                     MainClient.Close();
                     EAServerManager.Instance.DestroyClient(ID);
@@ -195,7 +195,7 @@ namespace SSX3_Server.EAClient
                         VERS = TempData.Vers;
                         SLUS = TempData.GameReg;
 
-                        Personas = TempData.Personas;
+                        PersonaList = TempData.PersonaList;
 
                         LAST = DateTime.Now.ToString("yyyy.MM.dd hh:mm:ss");
                         TempData.Last = LAST;
@@ -227,7 +227,6 @@ namespace SSX3_Server.EAClient
                 //acct - Standard Response
                 //acctdupl - Duplicate Account
                 //acctimst - Invalid Account
-
 
                 //Set Data Into Client
 
@@ -261,7 +260,7 @@ namespace SSX3_Server.EAClient
                     Temp.Prod = msg.stringDatas[10].Value;
                     Temp.Vers = msg.stringDatas[11].Value;
                     Temp.GameReg = msg.stringDatas[12].Value;
-                    //Temp.Persona = msg.stringDatas[0].Value;
+                    Temp.PersonaList = new List<string>();
 
                     Temp.Since = ClientTime;
                     Temp.Last = ClientTime;
@@ -282,10 +281,22 @@ namespace SSX3_Server.EAClient
             }
             else if(msg.MessageType== "cper")
             {
+                //Check Persona Exits
+                EAMessage msg2 = new EAMessage();
+
+                var TempPersona = GetUserPersona(msg.stringDatas[0].Value);
+                if (TempPersona!=null)
+                {
+                    msg2.MessageType = "cperdupl";
+                    SendMessageBack(msg2);
+                    return;
+                }
+
                 //Create Persona
 
                 EAUserPersona NewPersona = new EAUserPersona();
 
+                NewPersona.Owner = NAME;
                 NewPersona.Name = msg.stringDatas[0].Value;
 
                 string ClientTime = DateTime.Now.ToString("yyyy.MM.dd hh:mm:ss");
@@ -293,11 +304,11 @@ namespace SSX3_Server.EAClient
                 NewPersona.Since = ClientTime;
                 NewPersona.Last = ClientTime;
 
-                Personas.Add(NewPersona);
+                NewPersona.CreateJson(AppContext.BaseDirectory + "\\Personas\\" + NewPersona.Name.ToLower() + ".json");
+
+                PersonaList.Add(NewPersona.Name);
 
                 SaveEAUserData();
-
-                EAMessage msg2 = new EAMessage();
 
                 msg2.MessageType = "cper";
 
@@ -308,16 +319,26 @@ namespace SSX3_Server.EAClient
             else if (msg.MessageType == "dper")
             {
                 //Create Persona
+                bool Removed = false;
 
-                for (int i = 0; i < Personas.Count; i++)
+                for (int i = 0; i < PersonaList.Count; i++)
                 {
-                    if (msg.stringDatas[0].Value != Personas[i].Name)
+                    if (msg.stringDatas[0].Value == PersonaList[i])
                     {
-                        Personas.RemoveAt(i);
+                        PersonaList.RemoveAt(i);
+                        File.Delete(AppContext.BaseDirectory + "\\Personas\\" + msg.stringDatas[0].Value.ToLower() + ".json");
+                        Removed = true;
                     }
                 }
-
+                SaveEAUserData();
                 EAMessage msg2 = new EAMessage();
+
+                if (Removed==false)
+                {
+                    msg2.MessageType = "dperimst";
+                    SendMessageBack(msg2);
+                }
+
 
                 msg2.MessageType = "dper";
 
@@ -327,19 +348,30 @@ namespace SSX3_Server.EAClient
             }
             else if (msg.MessageType == "pers")
             {
-                //Select Persona
-                for (int i = 0; i < Personas.Count; i++)
-                {
-                    if (msg.stringDatas[0].Value != Personas[i].Name)
-                    {
-                        PersonaID = i;
+                EAMessage msg2 = new EAMessage();
 
+                LoadedPersona = GetUserPersona(msg.stringDatas[0].Value);
+                bool CheckFailed = false;
+                if (LoadedPersona != null)
+                {
+                    if(LoadedPersona.Owner!=NAME)
+                    {
+                        CheckFailed = true;
                     }
                 }
+                else
+                {
+                    CheckFailed = true;
+                }
 
-                Personas[PersonaID].Last = DateTime.Now.ToString("yyyy.MM.dd hh:mm:ss");
+                if(CheckFailed)
+                {
+                    msg2.MessageType = "persimst";
+                    SendMessageBack(msg2);
+                    return;
+                }
 
-                EAMessage msg2 = new EAMessage();
+                LoadedPersona.Last = DateTime.Now.ToString("yyyy.MM.dd hh:mm:ss");
 
                 msg2.MessageType = "pers";
 
@@ -348,9 +380,9 @@ namespace SSX3_Server.EAClient
                 msg2.AddStringData("LOC", "enUS");
                 msg2.AddStringData("MA", "24.141.39.62");
                 msg2.AddStringData("NAME", NAME);
-                msg2.AddStringData("PERS", Personas[PersonaID].Name);
+                msg2.AddStringData("PERS", LoadedPersona.Name);
                 msg2.AddStringData("LAST", LAST);
-                msg2.AddStringData("PLAST", Personas[PersonaID].Last);
+                msg2.AddStringData("PLAST", LoadedPersona.Last);
                 msg2.AddStringData("SINCE", SINCE);
                 //msg2.AddStringData("PSINCE", Personas[PersonaID].Since);
                 msg2.AddStringData("LKEY", "3fcf27540c92935b0a66fd3b0000283c");
@@ -388,19 +420,29 @@ namespace SSX3_Server.EAClient
             return null;
         }
 
+        public EAUserPersona GetUserPersona(string Name)
+        {
+            if (Path.Exists(AppContext.BaseDirectory + "\\Personas\\" + Name.ToLower() + ".json"))
+            {
+                return EAUserPersona.Load(AppContext.BaseDirectory + "\\Personas\\" + Name.ToLower() + ".json");
+            }
+
+            return null;
+        }
+
         public string GetPersonaList()
         {
             string StringPersonas = "";
 
-            for (int i = 0; i < Personas.Count; i++)
+            for (int i = 0; i < PersonaList.Count; i++)
             {
                 if(i==0)
                 {
-                    StringPersonas = Personas[i].Name;
+                    StringPersonas = PersonaList[i];
                 }
                 else
                 {
-                    StringPersonas = StringPersonas + "," + Personas[i].Name;
+                    StringPersonas = StringPersonas + "," + PersonaList[i];
                 }
             }
 
@@ -409,9 +451,20 @@ namespace SSX3_Server.EAClient
 
         public void SaveEAUserData()
         {
-            EAUserData eAMessage = new EAUserData();
-            eAMessage.AddUserData(this);
-            eAMessage.CreateJson(AppContext.BaseDirectory + "\\Users\\" + NAME.ToLower() + ".json");
+            if (NAME != "")
+            {
+                EAUserData eAMessage = new EAUserData();
+                eAMessage.AddUserData(this);
+                eAMessage.CreateJson(AppContext.BaseDirectory + "\\Users\\" + NAME.ToLower() + ".json");
+            }
+        }
+
+        public void SaveEAUserPersona()
+        {
+            if (LoadedPersona.Name != "")
+            {
+                LoadedPersona.CreateJson(AppContext.BaseDirectory + "\\Users\\" + NAME.ToLower() + ".json");
+            }
         }
     }
 }

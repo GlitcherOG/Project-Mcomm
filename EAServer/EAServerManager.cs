@@ -36,6 +36,7 @@ namespace SSX3_Server.EAServer
             clients = new List<EAClientManager>();
             threads = new List<Thread>();
             Directory.CreateDirectory(AppContext.BaseDirectory + "\\Users");
+            Directory.CreateDirectory(AppContext.BaseDirectory + "\\Personas");
             Console.WriteLine("Initalised Server, Waiting For Clients...");
             NewClientListening();
         }

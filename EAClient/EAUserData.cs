@@ -23,7 +23,7 @@ namespace SSX3_Server.EAClient
         public string Vers = "";
         public string GameReg = "";
 
-        public List<EAUserPersona> Personas = new List<EAUserPersona>();
+        public List<string> PersonaList = new List<string>();
 
         public string Since;
         public string Last;
@@ -71,9 +71,10 @@ namespace SSX3_Server.EAClient
             Prod = manager.PROD;
             Vers = manager.VERS;
             GameReg = manager.SLUS;
-            Personas = manager.Personas;
             Since = manager.SINCE;
             Last = manager.LAST;
+
+            PersonaList = manager.PersonaList;
         }
     }
 }
