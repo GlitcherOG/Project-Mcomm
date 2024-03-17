@@ -2,6 +2,7 @@
 using SSX3_Server.EAServer;
 using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Drawing;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
@@ -195,12 +196,13 @@ namespace SSX3_Server.EAClient
                         VERS = TempData.Vers;
                         SLUS = TempData.GameReg;
 
+                        SINCE = TempData.Since;
+
                         PersonaList = TempData.PersonaList;
 
                         LAST = DateTime.Now.ToString("yyyy.MM.dd hh:mm:ss");
-                        TempData.Last = LAST;
 
-                        TempData.CreateJson(AppContext.BaseDirectory + "\\Users\\" + NAME.ToLower() + ".json");
+                        SaveEAUserData();
 
                         msg2.AddStringData("TOS", "1");
                         msg2.AddStringData("NAME", msg.stringDatas[0].Value.ToLower());
@@ -471,7 +473,7 @@ namespace SSX3_Server.EAClient
         {
             if (LoadedPersona.Name != "")
             {
-                LoadedPersona.CreateJson(AppContext.BaseDirectory + "\\Users\\" + NAME.ToLower() + ".json");
+                LoadedPersona.CreateJson(AppContext.BaseDirectory + "\\Personas\\" + NAME.ToLower() + ".json");
             }
         }
     }

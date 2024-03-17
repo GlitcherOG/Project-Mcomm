@@ -8,6 +8,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using SSX3_Server.DiscordBot;
 using SSX3_Server.EAClient;
 using SSX3_Server.EAClient.Messages;
 
@@ -16,6 +17,7 @@ namespace SSX3_Server.EAServer
     public class EAServerManager
     {
         public static EAServerManager Instance;
+        public MainBot MainBot;
 
         public string ListerIP = "192.168.86.189";
         public int GamePort = 11000;
@@ -35,6 +37,8 @@ namespace SSX3_Server.EAServer
             Instance = this;
             clients = new List<EAClientManager>();
             threads = new List<Thread>();
+            MainBot = new MainBot();
+            Task.Run(() => MainBot.Main());
             Directory.CreateDirectory(AppContext.BaseDirectory + "\\Users");
             Directory.CreateDirectory(AppContext.BaseDirectory + "\\Personas");
             Console.WriteLine("Initalised Server, Waiting For Clients...");
