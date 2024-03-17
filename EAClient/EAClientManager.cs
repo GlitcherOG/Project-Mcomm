@@ -10,6 +10,13 @@ using System.Xml.Linq;
 
 namespace SSX3_Server.EAClient
 {
+    //TODO
+    //MOVE PERSONAS TO A SERPATE FILE
+    //FIX PERSONA CREATION FOR DUPILICATE AND INVALID
+    //MOVE MESSAGES TO BE PHRASED BETTER
+    //FIX PNG MESSAGES
+    //FIND OUT MORE MESSAGES
+
     public class EAClientManager
     {
         public int ID;
