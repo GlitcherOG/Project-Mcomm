@@ -217,9 +217,16 @@ namespace SSX3_Server.EAClient
                     }
                     else
                     {
-
+                        msg2.MessageType = "authimst";
+                        SendMessageBack(msg2);
                     }
 
+                }
+                else
+                {
+                    EAMessage msg2 = new EAMessage();
+                    msg2.MessageType = "authimst";
+                    SendMessageBack(msg2);
                 }
             }
             else if (msg.MessageType == "acct")
@@ -288,6 +295,7 @@ namespace SSX3_Server.EAClient
                 if (TempPersona!=null)
                 {
                     msg2.MessageType = "cperdupl";
+                    msg2.AddStringData("PERS", "1,2,3,4");
                     SendMessageBack(msg2);
                     return;
                 }
