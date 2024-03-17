@@ -11,7 +11,8 @@ namespace SSX3_Server.EAClient.Messages
     public class EAMessage
     {
         public string MessageType = "";
-        public int Size = -1;
+        public string SubMessage = "";
+        public int Size = -1; //Big Int32?
 
         public List<StringData> stringDatas = new List<StringData>();
 
@@ -20,7 +21,8 @@ namespace SSX3_Server.EAClient.Messages
             string MessageType = ByteUtil.ReadString(Data, 0, 10).Trim('\0');
             int Size = ByteUtil.ReadInt8(Data, 11);
             EAMessage message = new EAMessage();
-            if (MessageType == "@dir" || MessageType == "addr" || MessageType == "skey" || MessageType == "auth" || MessageType == "acct" || MessageType == "cper" || MessageType == "dper" || MessageType == "pers" || MessageType == "onln" || MessageType == "news")
+            if (MessageType == "@dir" || MessageType == "addr" || MessageType == "skey" || MessageType == "auth" || MessageType == "acct" || MessageType == "cper" 
+                || MessageType == "dper" || MessageType == "pers" || MessageType == "onln" || MessageType == "news" || MessageType == "~png")
             {
                 string FullString = ByteUtil.ReadString(Data, 12, Size - 13);
                 string[] strings = FullString.Split('\n');
@@ -86,7 +88,7 @@ namespace SSX3_Server.EAClient.Messages
             StreamUtil.WriteString(data, message.MessageType, 10);
             data.Position += 2;
 
-            if(message.MessageType=="@dir" || message.MessageType == "addr" || message.MessageType == "skey" || message.MessageType == "acct" || message.MessageType == "auth" || message.MessageType == "cper" || message.MessageType == "dper" || message.MessageType == "pers" || message.MessageType == "onln")
+            if(message.MessageType=="@dir" || message.MessageType == "addr" || message.MessageType == "skey" || message.MessageType == "acct" || message.MessageType == "auth" || message.MessageType == "cper" || message.MessageType == "dper" || message.MessageType == "pers" || message.MessageType == "onln" || message.MessageType == "~png")
             {
                 for (int i = 0; i < message.stringDatas.Count; i++)
                 {

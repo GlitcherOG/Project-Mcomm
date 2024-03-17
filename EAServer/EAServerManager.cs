@@ -10,8 +10,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using SSX3_Server.EAClient;
 using SSX3_Server.EAClient.Messages;
-using static System.Net.Mime.MediaTypeNames;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace SSX3_Server.EAServer
 {

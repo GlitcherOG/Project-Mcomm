@@ -59,6 +59,8 @@ namespace SSX3_Server.EAClient
         int TimeoutSeconds=30;
         DateTime LastMessage;
 
+        DateTime LastPing;
+
         public void AssignListiners(TcpClient tcpClient, int InID, string SESSin, string MASKin)
         {
             ID = InID;
@@ -69,6 +71,7 @@ namespace SSX3_Server.EAClient
             MainNS = MainClient.GetStream();
 
             LastMessage = DateTime.Now;
+            LastPing = DateTime.Now;
 
             MainListen();
         }
@@ -79,12 +82,24 @@ namespace SSX3_Server.EAClient
             {
                 try
                 {
-                    byte[] msg = new byte[270];     //the messages arrive as byte array
-                    MainNS.Read(msg, 0, msg.Length);   //the same networkstream reads the message sent by the client
-                    if (msg[0] != 0)
+                    if (MainClient.Available > 0)
                     {
-                        LastMessage = DateTime.Now;
-                        ProcessMessage(msg);
+                        byte[] msg = new byte[270];     //the messages arrive as byte array
+                        MainNS.Read(msg, 0, msg.Length);   //the same networkstream reads the message sent by the client
+                        if (msg[0] != 0)
+                        {
+                            LastMessage = DateTime.Now;
+                            LastPing = DateTime.Now;
+                            ProcessMessage(msg);
+                        }
+                    }
+
+                    if((DateTime.Now - LastPing).TotalSeconds >= 10)
+                    {
+                        LastPing = DateTime.Now;
+                        EAMessage msg2 = new EAMessage();
+                        msg2.MessageType = "~png";
+                        SendMessageBack(msg2);
                     }
 
                     if ((DateTime.Now - LastMessage).TotalSeconds >= TimeoutSeconds)
@@ -202,6 +217,11 @@ namespace SSX3_Server.EAClient
             }
             else if (msg.MessageType == "acct")
             {
+                //acct - Standard Response
+                //acctdupl - Duplicate Account
+                //acctimst - Invalid Account
+
+
                 //Set Data Into Client
 
                 EAMessage msg2 = new EAMessage();
@@ -213,7 +233,10 @@ namespace SSX3_Server.EAClient
                 string ClientTime = DateTime.Now.ToString("yyyy.MM.dd hh:mm:ss");
                 if (Temp!=null)
                 {
-                    msg2.MessageType = "authimst";
+                    msg2.MessageType = "acctdupl";
+
+                    SendMessageBack(msg2);
+                    return;
                 }
                 else
                 {
