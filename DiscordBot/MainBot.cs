@@ -10,6 +10,7 @@ using DSharpPlus.EventArgs;
 using DSharpPlus.CommandsNext.Attributes;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using SSX3_Server.EAServer;
+using DSharpPlus.Entities;
 
 namespace SSX3_Server.DiscordBot
 {
@@ -57,9 +58,63 @@ namespace SSX3_Server.DiscordBot
     public class MainCommands : BaseCommandModule
     {
         [Command("online")]
-        public async Task GreetCommand(CommandContext ctx)
+        public async Task OnlineCommand(CommandContext ctx)
         {
             await ctx.RespondAsync("There are " + EAServerManager.Instance.clients.Count + " Clients Online.");
+        }
+
+        [Command("users")]
+        public async Task UsersCommand(CommandContext ctx)
+        {
+            List<string> strings = new List<string>();
+
+            for (int i = 0; i < EAServerManager.Instance.clients.Count; i++)
+            {
+                if (EAServerManager.Instance.clients[i].NAME!="")
+                {
+                    strings.Add(EAServerManager.Instance.clients[i].NAME);
+                }
+            }
+
+            DiscordEmbedBuilder embed = new DiscordEmbedBuilder();
+
+            embed.Title = "Online Player's";
+
+            for (int i = 0; i < strings.Count; i++)
+            {
+                embed.Description += strings[i] + "\n";
+            }
+
+            embed.WithThumbnail("https://media.discordapp.net/attachments/1218902383568883794/1219202018816692255/Bot.png");
+
+            await ctx.RespondAsync(embed);
+        }
+
+        [Command("Persona")]
+        public async Task PersonaCommand(CommandContext ctx)
+        {
+            List<string> strings = new List<string>();
+
+            for (int i = 0; i < EAServerManager.Instance.clients.Count; i++)
+            {
+                if (EAServerManager.Instance.clients[i].LoadedPersona.Name != "")
+                {
+                    strings.Add(EAServerManager.Instance.clients[i].LoadedPersona.Name);
+                }
+            }
+
+            DiscordEmbedBuilder embed = new DiscordEmbedBuilder();
+
+            embed.Title = "Online Persona's";
+
+            for (int i = 0; i < strings.Count; i++)
+            {
+                embed.Description += strings[i] + "\n";
+            }
+
+            embed.WithThumbnail("https://media.discordapp.net/attachments/1218902383568883794/1219202018816692255/Bot.png");
+
+            await ctx.RespondAsync(embed);
         }
     }
 }
