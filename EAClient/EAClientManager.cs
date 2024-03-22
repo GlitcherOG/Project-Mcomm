@@ -77,6 +77,8 @@ namespace SSX3_Server.EAClient
             //MainClient.SendBufferSize = 270;
             MainNS = MainClient.GetStream();
 
+            //TcpListener tcpListener = new TcpListener();
+
             LastMessage = DateTime.Now;
             LastPing = DateTime.Now;
 
@@ -101,13 +103,13 @@ namespace SSX3_Server.EAClient
                         }
                     }
 
-                    if((DateTime.Now - LastPing).TotalSeconds >= 15)
-                    {
-                        LastPing = DateTime.Now;
-                        EAMessage msg2 = new EAMessage();
-                        msg2.MessageType = "~png";
-                        SendMessageBack(msg2);
-                    }
+                    //if((DateTime.Now - LastPing).TotalSeconds >= 15)
+                    //{
+                    //    LastPing = DateTime.Now;
+                    //    EAMessage msg2 = new EAMessage();
+                    //    msg2.MessageType = "~png";
+                    //    SendMessageBack(msg2);
+                    //}
 
                     if ((DateTime.Now - LastMessage).TotalSeconds >= TimeoutSeconds)
                     {
@@ -163,6 +165,12 @@ namespace SSX3_Server.EAClient
                 EAMessage msg2 = new EAMessage();
 
                 msg2.MessageType = "sele";
+
+                msg2.AddStringData("ROOMS", EAServerManager.Instance.rooms.Count.ToString());
+                msg2.AddStringData("USERS", EAServerManager.Instance.clients.Count.ToString());
+                msg2.AddStringData("RANKS", "0");
+                msg2.AddStringData("MESGS", "0");
+                msg2.AddStringData("GAMES", "0");
 
                 SendMessageBack(msg2);
             }
@@ -297,7 +305,7 @@ namespace SSX3_Server.EAClient
                 if (TempPersona!=null)
                 {
                     msg2.MessageType = "cperdupl";
-                    msg2.AddStringData("PERS", "1,2,3,4");
+                    //msg2.AddStringData("P1", "1");
                     SendMessageBack(msg2);
                     return;
                 }
@@ -409,6 +417,26 @@ namespace SSX3_Server.EAClient
                 msg2.MessageType = "news";
 
                 msg2.AddStringData("new" + msg.stringDatas[0].Value, EAServerManager.Instance.News);
+
+                SendMessageBack(msg2);
+            }
+            else if (msg.MessageType == "room")
+            {
+                EAMessage msg2 = new EAMessage();
+
+                msg2.MessageType = "room";
+
+                msg2.AddStringData("NAME", msg.stringDatas[0].Value);
+
+                SendMessageBack(msg2);
+            }
+            else if(msg.MessageType=="snap")
+            {
+                EAMessage msg2 = new EAMessage();
+
+                msg2.MessageType = "snap";
+
+                msg2.AddStringData("RANK", "1234.1234");
 
                 SendMessageBack(msg2);
             }

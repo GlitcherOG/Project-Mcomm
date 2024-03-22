@@ -22,7 +22,8 @@ namespace SSX3_Server.EAClient.Messages
             int Size = ByteUtil.ReadInt8(Data, 11);
             EAMessage message = new EAMessage();
             if (MessageType == "@dir" || MessageType == "addr" || MessageType == "skey" || MessageType == "auth" || MessageType == "acct" || MessageType == "cper" 
-                || MessageType == "dper" || MessageType == "pers" || MessageType == "onln" || MessageType == "news" || MessageType == "~png")
+                || MessageType == "dper" || MessageType == "pers" || MessageType == "onln" || MessageType == "news" || MessageType == "~png" || MessageType == "room"
+                || MessageType == "snap")
             {
                 string FullString = ByteUtil.ReadString(Data, 12, Size - 13);
                 string[] strings = FullString.Split('\n');
@@ -88,14 +89,22 @@ namespace SSX3_Server.EAClient.Messages
             StreamUtil.WriteString(data, message.MessageType, 10);
             data.Position += 2;
 
-            if(message.MessageType=="@dir" || message.MessageType == "addr" || message.MessageType == "skey" || message.MessageType == "acct" || message.MessageType == "auth" || message.MessageType == "cper" || message.MessageType == "dper" || message.MessageType == "pers" || message.MessageType == "onln" || message.MessageType == "~png")
+            if(message.MessageType=="@dir" || message.MessageType == "addr" || message.MessageType == "skey" || message.MessageType == "acct" || message.MessageType == "auth" || message.MessageType == "cper" || 
+                message.MessageType == "dper" || message.MessageType == "pers" || message.MessageType == "onln" || message.MessageType == "~png" | message.MessageType == "room" || message.MessageType == "snap")
             {
                 for (int i = 0; i < message.stringDatas.Count; i++)
                 {
                     StreamUtil.WriteString(data, message.stringDatas[i].Type + "=" + message.stringDatas[i].Value+"\n");
                 }
             }
-            if(message.MessageType == "news")
+            if (message.MessageType == "sele")
+            {
+                for (int i = 0; i < message.stringDatas.Count; i++)
+                {
+                    StreamUtil.WriteString(data, message.stringDatas[i].Type + "=" + message.stringDatas[i].Value + " ");
+                }
+            }
+            if (message.MessageType == "news")
             {
                 data.Position = 0;
                 StreamUtil.WriteString(data, message.MessageType + message.stringDatas[0].Type, 10);
