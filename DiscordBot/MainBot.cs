@@ -8,7 +8,6 @@ using DSharpPlus.CommandsNext;
 using DSharpPlus;
 using DSharpPlus.EventArgs;
 using DSharpPlus.CommandsNext.Attributes;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 using SSX3_Server.EAServer;
 using DSharpPlus.Entities;
 
@@ -54,7 +53,6 @@ namespace SSX3_Server.DiscordBot
             return Task.CompletedTask;
         }
     }
-
     public class MainCommands : BaseCommandModule
     {
         [Command("online")]
@@ -115,6 +113,46 @@ namespace SSX3_Server.DiscordBot
             embed.WithThumbnail("https://media.discordapp.net/attachments/1218902383568883794/1219202018816692255/Bot.png");
 
             await ctx.RespondAsync(embed);
+        }
+
+        [Command("kickuser")]
+        public async Task kickuserCommand(CommandContext ctx, string args)
+        {
+            int ClientID = -1;
+            for (int i = 0; i < EAServerManager.Instance.clients.Count; i++)
+            {
+                if (EAServerManager.Instance.clients[i].NAME == ctx.RawArgumentString)
+                {
+                    ClientID = EAServerManager.Instance.clients[i].ID;
+                    EAServerManager.Instance.DestroyClient(ClientID, true);
+                    await ctx.RespondAsync("Kicking User" + ctx.RawArgumentString);
+                }
+            }
+
+            if(ClientID==-1)
+            {
+                await ctx.RespondAsync("Unable to Find User");
+            }
+        }
+
+        [Command("kickpersona")]
+        public async Task kickpersonaCommand(CommandContext ctx)
+        {
+            int ClientID = -1;
+            for (int i = 0; i < EAServerManager.Instance.clients.Count; i++)
+            {
+                if (EAServerManager.Instance.clients[i].LoadedPersona.Name == ctx.RawArgumentString)
+                {
+                    ClientID = EAServerManager.Instance.clients[i].ID;
+                    EAServerManager.Instance.DestroyClient(ClientID, true);
+                    await ctx.RespondAsync("Kicking Persona" + ctx.RawArgumentString);
+                }
+            }
+
+            if (ClientID == -1)
+            {
+                await ctx.RespondAsync("Unable to Find User");
+            }
         }
     }
 }

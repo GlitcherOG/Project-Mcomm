@@ -19,7 +19,7 @@ namespace SSX3_Server.EAServer
         public static EAServerManager Instance;
         public MainBot MainBot;
 
-        public string ListerIP = "192.168.86.189";
+        public string ListerIP = "192.168.0.12";
         public int GamePort = 11000;
         public int ListenerPort = 10901;
         public int BuddyPort = 10899;
@@ -146,12 +146,17 @@ namespace SSX3_Server.EAServer
             return Generation.ToString();
         }
 
-        public void DestroyClient(int ID)
+        public void DestroyClient(int ID, bool StopTCP = false)
         {
             for (int i = 0; i < clients.Count; i++)
             {
                 if (clients[i].ID==ID)
                 {
+                    if(StopTCP)
+                    {
+                        clients[i].CloseConnection();
+                    }
+
                     clients[i] = null;
                     clients.RemoveAt(i);
                     threads.RemoveAt(i);

@@ -103,13 +103,13 @@ namespace SSX3_Server.EAClient
                         }
                     }
 
-                    //if((DateTime.Now - LastPing).TotalSeconds >= 15)
-                    //{
-                    //    LastPing = DateTime.Now;
-                    //    EAMessage msg2 = new EAMessage();
-                    //    msg2.MessageType = "~png";
-                    //    SendMessageBack(msg2);
-                    //}
+                    if ((DateTime.Now - LastPing).TotalSeconds >= 15)
+                    {
+                        LastPing = DateTime.Now;
+                        EAMessage msg2 = new EAMessage();
+                        msg2.MessageType = "~png";
+                        SendMessageBack(msg2);
+                    }
 
                     if ((DateTime.Now - LastMessage).TotalSeconds >= TimeoutSeconds)
                     {
@@ -124,15 +124,13 @@ namespace SSX3_Server.EAClient
                     Console.WriteLine("Connection Crashed, Disconnecting...");
                     SaveEAUserData();
                     SaveEAUserPersona();
-                    MainNS.Close();
-                    MainClient.Close();
+                    CloseConnection();
                     EAServerManager.Instance.DestroyClient(ID);
                 }
             }
 
             //Disconnect and Destroy
-            MainNS.Close();
-            MainClient.Close();
+            CloseConnection();
             EAServerManager.Instance.DestroyClient(ID);
         }
 
@@ -503,6 +501,12 @@ namespace SSX3_Server.EAClient
             {
                 LoadedPersona.CreateJson(AppContext.BaseDirectory + "\\Personas\\" + NAME.ToLower() + ".json");
             }
+        }
+
+        public void CloseConnection()
+        {
+            MainNS.Close();
+            MainClient.Close();
         }
     }
 }
