@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
@@ -19,7 +20,7 @@ namespace SSX3_Server.EAServer
         public static EAServerManager Instance;
         public MainBot MainBot;
 
-        public string ListerIP = "192.168.0.12";
+        public string ListerIP = "192.168.86.189";
         public int GamePort = 11000;
         public int ListenerPort = 10901;
         public int BuddyPort = 10899;
@@ -63,32 +64,29 @@ namespace SSX3_Server.EAServer
                 //tcpClient.ReceiveTimeout = 20;
 
                 //Read Incomming Message
-                byte[] msg = new byte[266];     //the messages arrive as byte array
+                byte[] msg = new byte[255];     //the messages arrive as byte array
                 tcpNS.Read(msg, 0, msg.Length);
 
-                EAMessage ConnectionMessage = EAMessage.PraseData(msg);
-
-                if (ConnectionMessage.MessageType == "@dir")
+                if (EAMessage.MessageCommandType(msg)=="@dir")
                 {
+                    _DirMessageIn ConnectionMessage = new _DirMessageIn();
+
+                    ConnectionMessage.PraseData(msg);
+
                     //Assign Listiner
                     TcpListener server1 = new TcpListener((client.Client.RemoteEndPoint as IPEndPoint).Address, ListenerPort);
                     server1.Start();
 
                     //Send Connection Details Back
-                    EAMessage ReturnMessage = new EAMessage();
+                    _DirMessageOut ReturnMessage = new _DirMessageOut();
 
-                    ReturnMessage.MessageType = "@dir";
+                    ReturnMessage.ADDR = ListerIP;
+                    ReturnMessage.PORT = ListenerPort.ToString();
 
-                    ReturnMessage.AddStringData("ADDR", ListerIP);
-                    ReturnMessage.AddStringData("PORT", ListenerPort.ToString());
+                    ReturnMessage.SESS = GenerateSESS();
+                    ReturnMessage.MASK = GenerateMASK();
 
-                    string SESS = GenerateSESS();
-                    string MASK = GenerateMASK();
-
-                    ReturnMessage.AddStringData("SESS", SESS);
-                    ReturnMessage.AddStringData("MASK", MASK);
-
-                    msg = EAMessage.GenerateData(ReturnMessage);
+                    msg = ReturnMessage.GenerateData();
                     //Encoding encorder = new UTF8Encoding();
                     //Console.WriteLine(encorder.GetString(msg)); //now , we write the message as string
                     tcpNS.Write(msg, 0, msg.Length);
@@ -99,7 +97,7 @@ namespace SSX3_Server.EAServer
 
                     //Rewrork Threading
                     EAClientManager clientManager = new EAClientManager();
-                    var t = new Thread(() => clientManager.AssignListiners(MainClient, IDCount, SESS, MASK));
+                    var t = new Thread(() => clientManager.AssignListiners(MainClient, IDCount, ReturnMessage.SESS, ReturnMessage.MASK));
                     t.Start();
                     threads.Add(t);
 

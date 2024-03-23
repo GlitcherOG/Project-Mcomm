@@ -10,112 +10,108 @@ namespace SSX3_Server.EAClient.Messages
 {
     public class EAMessage
     {
-        public string MessageType = "";
-        public string SubMessage = "";
+        public virtual string MessageType { get { return "Null"; } }
+        public string SubMessage;
         public int Size = -1; //Big Int32?
 
         public List<StringData> stringDatas = new List<StringData>();
 
-        public static EAMessage PraseData(byte[] Data)
+        public virtual void PraseData(byte[] Data)
         {
-            string MessageType = ByteUtil.ReadString(Data, 0, 10).Trim('\0');
-            int Size = ByteUtil.ReadInt8(Data, 11);
-            EAMessage message = new EAMessage();
-            if (MessageType == "@dir" || MessageType == "addr" || MessageType == "skey" || MessageType == "auth" || MessageType == "acct" || MessageType == "cper" 
-                || MessageType == "dper" || MessageType == "pers" || MessageType == "onln" || MessageType == "news" || MessageType == "~png" || MessageType == "room"
-                || MessageType == "snap")
+            SubMessage = ByteUtil.ReadString(Data, 4, 4).Trim('\0');
+            Size = ByteUtil.ReadInt32(Data, 8);
+            string FullString = ByteUtil.ReadString(Data, 12, Size - 13);
+            string[] strings = FullString.Split('\n');
+
+            stringDatas = new List<StringData>();
+
+            for (int i = 0; i < strings.Length - 1; i++)
             {
-                string FullString = ByteUtil.ReadString(Data, 12, Size - 13);
-                string[] strings = FullString.Split('\n');
+                string[] LineSplit = strings[i].Split("=");
 
-                message.MessageType = MessageType;
-                message.Size = Size;
-                message.stringDatas = new List<StringData>();
+                StringData NewStringData = new StringData();
 
-                for (int i = 0; i < strings.Length - 1; i++)
-                {
-                    string[] LineSplit = strings[i].Split("=");
+                NewStringData.Type = LineSplit[0];
 
-                    StringData NewStringData = new StringData();
+                NewStringData.Value = LineSplit[1];
 
-                    NewStringData.Type = LineSplit[0];
-
-                    NewStringData.Value = LineSplit[1];
-
-                    message.stringDatas.Add(NewStringData);
-                }
-                Encoding encorder = new UTF8Encoding();
-                Console.WriteLine(encorder.GetString(Data));
+                stringDatas.Add(NewStringData);
             }
-            else if(MessageType == "sele")
-            {
-                string FullString = ByteUtil.ReadString(Data, 12, Size - 13);
-                string[] strings = FullString.Split(' ');
+            Encoding encorder = new UTF8Encoding();
+            Console.WriteLine(encorder.GetString(Data));
 
-                message.MessageType = MessageType;
-                message.Size = Size;
-                message.stringDatas = new List<StringData>();
 
-                for (int i = 0; i < strings.Length - 1; i++)
-                {
-                    string[] LineSplit = strings[i].Split("=");
 
-                    StringData NewStringData = new StringData();
+            //else if(MessageType == "sele")
+            //{
+            //    string FullString = ByteUtil.ReadString(Data, 12, Size - 13);
+            //    string[] strings = FullString.Split(' ');
 
-                    NewStringData.Type = LineSplit[0];
+            //    MessageType = MessageType;
+            //    Size = Size;
+            //    stringDatas = new List<StringData>();
 
-                    NewStringData.Value = LineSplit[1];
+            //    for (int i = 0; i < strings.Length - 1; i++)
+            //    {
+            //        string[] LineSplit = strings[i].Split("=");
 
-                    message.stringDatas.Add(NewStringData);
-                }
-                Encoding encorder = new UTF8Encoding();
-                Console.WriteLine(encorder.GetString(Data));
-            }
-            else
-            {
-                Console.WriteLine("Unknown Message Type: ");
-                Encoding encorder = new UTF8Encoding();
-                Console.WriteLine(encorder.GetString(Data)); //now , we write the message as string
-                Console.WriteLine(BitConverter.ToString(Data).Replace("-", ""));
-            }
+            //        StringData NewStringData = new StringData();
 
-            return message;
+            //        NewStringData.Type = LineSplit[0];
+
+            //        NewStringData.Value = LineSplit[1];
+
+            //        stringDatas.Add(NewStringData);
+            //    }
+            //    Encoding encorder = new UTF8Encoding();
+            //    Console.WriteLine(encorder.GetString(Data));
+            //}
+            //else
+            //{
+            //    Console.WriteLine("Unknown Message Type: ");
+            //    Encoding encorder = new UTF8Encoding();
+            //    Console.WriteLine(encorder.GetString(Data)); //now , we write the message as string
+            //    Console.WriteLine(BitConverter.ToString(Data).Replace("-", ""));
+            //}
+
+            AssignValues();
         }
 
-        public static byte[] GenerateData(EAMessage message)
+        public virtual byte[] GenerateData(bool Override = false)
         {
+            if (!Override)
+            {
+                stringDatas = new List<StringData>();
+            }
+            AssignValuesToString();
             MemoryStream data = new MemoryStream();
 
-            StreamUtil.WriteString(data, message.MessageType, 10);
-            data.Position += 2;
+            StreamUtil.WriteString(data, MessageType, 4);
+            StreamUtil.WriteString(data, SubMessage, 4);
+            data.Position += 4;
+            for (int i = 0; i < stringDatas.Count; i++)
+            {
+                StreamUtil.WriteString(data, stringDatas[i].Type + "=" + stringDatas[i].Value + "\n");
+            }
+            //if (message.MessageType == "sele")
+            //{
+            //    for (int i = 0; i < message.stringDatas.Count; i++)
+            //    {
+            //        StreamUtil.WriteString(data, message.stringDatas[i].Type + "=" + message.stringDatas[i].Value + " ");
+            //    }
+            //}
+            //if (message.MessageType == "news")
+            //{
+            //    data.Position = 0;
+            //    StreamUtil.WriteString(data, message.MessageType + message.stringDatas[0].Type, 10);
+            //    data.Position += 2;
 
-            if(message.MessageType=="@dir" || message.MessageType == "addr" || message.MessageType == "skey" || message.MessageType == "acct" || message.MessageType == "auth" || message.MessageType == "cper" || 
-                message.MessageType == "dper" || message.MessageType == "pers" || message.MessageType == "onln" || message.MessageType == "~png" | message.MessageType == "room" || message.MessageType == "snap")
-            {
-                for (int i = 0; i < message.stringDatas.Count; i++)
-                {
-                    StreamUtil.WriteString(data, message.stringDatas[i].Type + "=" + message.stringDatas[i].Value+"\n");
-                }
-            }
-            if (message.MessageType == "sele")
-            {
-                for (int i = 0; i < message.stringDatas.Count; i++)
-                {
-                    StreamUtil.WriteString(data, message.stringDatas[i].Type + "=" + message.stringDatas[i].Value + " ");
-                }
-            }
-            if (message.MessageType == "news")
-            {
-                data.Position = 0;
-                StreamUtil.WriteString(data, message.MessageType + message.stringDatas[0].Type, 10);
-                data.Position += 2;
-
-                StreamUtil.WriteString(data, message.stringDatas[0].Value + "\n");
-            }
+            //    StreamUtil.WriteString(data, message.stringDatas[0].Value + "\n");
+            //}
 
             StreamUtil.WriteUInt8(data, 0);
-            data.Position = 11;
-            StreamUtil.WriteUInt8(data, (int)data.Length);
+            data.Position = 8;
+            StreamUtil.WriteInt32(data, (int)data.Length, true);
             data.Position = 0;
 
             byte[] buffer = new byte[data.Length];
@@ -126,6 +122,21 @@ namespace SSX3_Server.EAClient.Messages
             //Console.WriteLine(BitConverter.ToString(buffer).Replace("-", ""));
 
             return buffer.ToArray();
+        }
+
+        public static string MessageCommandType(byte[] Data)
+        {
+            return ByteUtil.ReadString(Data, 0, 4).Trim('\0');
+        }
+
+        public virtual void AssignValues()
+        {
+
+        }
+
+        public virtual void AssignValuesToString()
+        {
+
         }
 
         public struct StringData
