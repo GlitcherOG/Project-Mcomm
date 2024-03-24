@@ -4,14 +4,15 @@ using System.Diagnostics.SymbolStore;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace SSX3_Server.EAClient.Messages
 {
     public class EAMessage
     {
-        public virtual string MessageType { get { return "Null"; } }
-        public string SubMessage;
+        public virtual string MessageType { get { return MessageType; } set { MessageType = value; } }
+        public string SubMessage = "";
         public int Size = -1; //Big Int32?
 
         public List<StringData> stringDatas = new List<StringData>();

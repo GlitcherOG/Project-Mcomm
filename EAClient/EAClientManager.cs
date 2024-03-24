@@ -129,6 +129,7 @@ namespace SSX3_Server.EAClient
             }
 
             //Disconnect and Destroy
+            Console.WriteLine("Client Disconnecting...");
             CloseConnection();
             EAServerManager.Instance.DestroyClient(ID);
         }
@@ -172,198 +173,189 @@ namespace SSX3_Server.EAClient
             }
             else if (InMessageType == "auth")
             {
-                ////Apply AUTH Data
+                AuthMessageIn authMessageIn = new AuthMessageIn();
+                authMessageIn.PraseData(array);
+                //Apply AUTH Data
 
-                ////Confirm Auth Data with saves
-                //var UserData = GetUserData(msg.stringDatas[0].Value);
-                //if (UserData != null)
-                //{
-                //    EAMessage msg2 = new EAMessage();
+                //Confirm Auth Data with saves
+                var UserData = GetUserData(authMessageIn.NAME);
+                if (UserData != null)
+                {
+                    AuthMessageOut msg2 = new AuthMessageOut();
 
-                //    msg2.MessageType = "auth";
+                    if (UserData.Name == authMessageIn.NAME /*&& TempData.Pass == msg.stringDatas[1].Value*/)
+                    {
+                        NAME = UserData.Name;
+                        PASS = UserData.Pass;
+                        SPAM = UserData.Spam;
+                        MAIL = UserData.Mail;
+                        GEND = UserData.Gend;
+                        BORN = UserData.Born;
+                        DEFPER = UserData.Defper;
+                        ALTS = UserData.Alts;
+                        MINAGE = UserData.Minage;
+                        LANG = UserData.Lang;
+                        PROD = UserData.Prod;
+                        VERS = UserData.Vers;
+                        SLUS = UserData.GameReg;
 
-                //    var TempData = GetUserData(msg.stringDatas[0].Value);
+                        SINCE = UserData.Since;
 
-                //    if (TempData.Name == msg.stringDatas[0].Value /*&& TempData.Pass == msg.stringDatas[1].Value*/)
-                //    {
-                //        NAME = TempData.Name;
-                //        PASS = TempData.Pass;
-                //        SPAM = TempData.Spam;
-                //        MAIL = TempData.Mail;
-                //        GEND = TempData.Gend;
-                //        BORN = TempData.Born;
-                //        DEFPER = TempData.Defper;
-                //        ALTS = TempData.Alts;
-                //        MINAGE = TempData.Minage;
-                //        LANG = TempData.Lang;
-                //        PROD = TempData.Prod;
-                //        VERS = TempData.Vers;
-                //        SLUS = TempData.GameReg;
+                        PersonaList = UserData.PersonaList;
 
-                //        SINCE = TempData.Since;
+                        LAST = DateTime.Now.ToString("yyyy.MM.dd hh:mm:ss");
 
-                //        PersonaList = TempData.PersonaList;
+                        SaveEAUserData();
 
-                //        LAST = DateTime.Now.ToString("yyyy.MM.dd hh:mm:ss");
+                        msg2.TOS = "1";
+                        msg2.MAIL = UserData.Mail;
+                        msg2.PERSONAS = GetPersonaList();
+                        msg2.BORN = UserData.Born;
+                        msg2.GEND = UserData.Gend;
+                        msg2.FROM = "US";
+                        msg2.LANG = "en";
+                        msg2.SPAM = UserData.Spam;
+                        msg2.SINCE = UserData.Since;
 
-                //        SaveEAUserData();
+                        TimeoutSeconds = 60;
+                        SendMessageBack(msg2);
+                    }
+                    else
+                    {
+                        msg2.SubMessage = "imst";
+                        SendMessageBack(msg2);
+                    }
 
-                //        msg2.AddStringData("TOS", "1");
-                //        msg2.AddStringData("NAME", msg.stringDatas[0].Value.ToLower());
-                //        msg2.AddStringData("MAIL", TempData.Mail);
-                //        msg2.AddStringData("PERSONAS", GetPersonaList());
-                //        msg2.AddStringData("BORN", TempData.Born);
-                //        msg2.AddStringData("GEND", TempData.Gend);
-                //        msg2.AddStringData("FROM", "US");
-                //        msg2.AddStringData("LANG", "en");
-                //        msg2.AddStringData("SPAM", TempData.Spam);
-                //        msg2.AddStringData("SINCE", TempData.Since);
-                //        TimeoutSeconds = 60;
-                //        SendMessageBack(msg2);
-                //    }
-                //    else
-                //    {
-                //        msg2.MessageType = "authimst";
-                //        SendMessageBack(msg2);
-                //    }
+                }
+                else
+                {
+                    AuthMessageOut msg2 = new AuthMessageOut();
+                    msg2.SubMessage = "imst";
+                    SendMessageBack(msg2);
+                }
+            }
+            else if (InMessageType == "acct")
+            {
+                //acct - Standard Response
+                //acctdupl - Duplicate Account
+                //acctimst - Invalid Account
 
-                //}
-                //else
-                //{
-                //    EAMessage msg2 = new EAMessage();
-                //    msg2.MessageType = "authimst";
-                //    SendMessageBack(msg2);
-                //}
+                //Set Data Into Client
+
+                AcctMessageIn msg = new AcctMessageIn();
+                msg.PraseData(array);
+
+                AcctMessageOut msg2 = new AcctMessageOut();
+
+                //Check if user exists if so send back this
+                var Temp = GetUserData(msg.NAME);
+                string ClientTime = DateTime.Now.ToString("yyyy.MM.dd hh:mm:ss");
+                if (Temp != null)
+                {
+                    msg2.SubMessage = "dupl";
+
+                    SendMessageBack(msg2);
+                    return;
+                }
+                else
+                {
+                    Temp = new EAUserData();
+                    Temp.Name = msg.NAME;
+                    Temp.Pass = msg.PASS;
+                    Temp.Spam = msg.SPAM;
+                    Temp.Mail = msg.MAIL;
+                    Temp.Gend = msg.GEND;
+                    Temp.Born = msg.BORN;
+                    Temp.Defper = msg.DEFPER;
+                    Temp.Alts = msg.ALTS;
+                    Temp.Minage = msg.MINAGE;
+                    Temp.Lang = msg.LANG;
+                    Temp.Prod = msg.PROD;
+                    Temp.Vers = msg.VERS;
+                    Temp.GameReg = msg.SLUS;
+                    Temp.PersonaList = new List<string>();
+
+                    Temp.Since = ClientTime;
+                    Temp.Last = ClientTime;
+
+                    Temp.CreateJson(AppContext.BaseDirectory + "\\Users\\" + msg.NAME.ToLower() + ".json");
+                }
+
+                //Create save and send back data
+
+                msg2.TOS = "1";
+                msg2.NAME = msg.NAME;
+                msg2.AGE = "21";
+                msg2.PERSONAS = "";
+                msg2.SINCE = ClientTime;
+                msg2.LAST = ClientTime;
+
+                SendMessageBack(msg2);
+            }
+            else if (InMessageType == "cper")
+            {
+                CperMessageInOut msg = new CperMessageInOut();
+                msg.PraseData(array);
+
+                var TempPersona = GetUserPersona(msg.PERS);
+                if (TempPersona != null)
+                {
+                    msg.SubMessage = "dupl";
+                    SendMessageBack(msg);
+                    return;
+                }
+
+                //Create Persona
+
+                EAUserPersona NewPersona = new EAUserPersona();
+
+                NewPersona.Owner = NAME;
+                NewPersona.Name = msg.PERS;
+
+                string ClientTime = DateTime.Now.ToString("yyyy.MM.dd hh:mm:ss");
+
+                NewPersona.Since = ClientTime;
+                NewPersona.Last = ClientTime;
+
+                NewPersona.CreateJson(AppContext.BaseDirectory + "\\Personas\\" + NewPersona.Name.ToLower() + ".json");
+
+                PersonaList.Add(NewPersona.Name);
+
+                SaveEAUserData();
+
+                SendMessageBack(msg);
+            }
+            else if (InMessageType == "dper")
+            {
+                DperMessageInOut msg = new DperMessageInOut();
+                msg.PraseData(array);
+
+                //Create Persona
+                bool Removed = false;
+
+                for (int i = 0; i < PersonaList.Count; i++)
+                {
+                    if (msg.PERS == PersonaList[i])
+                    {
+                        PersonaList.RemoveAt(i);
+                        File.Delete(AppContext.BaseDirectory + "\\Personas\\" + msg.stringDatas[0].Value.ToLower() + ".json");
+                        Removed = true;
+                    }
+                }
+                SaveEAUserData();
+
+                if (Removed == false)
+                {
+                    msg.SubMessage = "imst";
+                    SendMessageBack(msg);
+                }
+
+                SendMessageBack(msg);
             }
             else
             {
                 Console.WriteLine("Unknown Message " + InMessageType);
             }
-            //else if (msg.MessageType == "acct")
-            //{
-            //    //acct - Standard Response
-            //    //acctdupl - Duplicate Account
-            //    //acctimst - Invalid Account
-
-            //    //Set Data Into Client
-
-            //    EAMessage msg2 = new EAMessage();
-
-            //    msg2.MessageType = "acct";
-
-            //    //Check if user exists if so send back this
-            //    var Temp = GetUserData(msg.stringDatas[0].Value);
-            //    string ClientTime = DateTime.Now.ToString("yyyy.MM.dd hh:mm:ss");
-            //    if (Temp!=null)
-            //    {
-            //        msg2.MessageType = "acctdupl";
-
-            //        SendMessageBack(msg2);
-            //        return;
-            //    }
-            //    else
-            //    {
-            //        Temp = new EAUserData();
-            //        Temp.Name = msg.stringDatas[0].Value;
-            //        Temp.Pass = msg.stringDatas[1].Value;
-            //        Temp.Spam = msg.stringDatas[2].Value;
-            //        Temp.Mail = msg.stringDatas[3].Value;
-            //        Temp.Gend = msg.stringDatas[4].Value;
-            //        Temp.Born = msg.stringDatas[5].Value;
-            //        Temp.Defper = msg.stringDatas[6].Value;
-            //        Temp.Alts = msg.stringDatas[7].Value;
-            //        Temp.Minage = msg.stringDatas[8].Value;
-            //        Temp.Lang = msg.stringDatas[9].Value;
-            //        Temp.Prod = msg.stringDatas[10].Value;
-            //        Temp.Vers = msg.stringDatas[11].Value;
-            //        Temp.GameReg = msg.stringDatas[12].Value;
-            //        Temp.PersonaList = new List<string>();
-
-            //        Temp.Since = ClientTime;
-            //        Temp.Last = ClientTime;
-
-            //        Temp.CreateJson(AppContext.BaseDirectory + "\\Users\\" + msg.stringDatas[0].Value.ToLower() + ".json");
-            //    }
-
-            //    //Create save and send back data
-
-            //    msg2.AddStringData("TOS", "1");
-            //    msg2.AddStringData("NAME", msg.stringDatas[0].Value.ToLower());
-            //    msg2.AddStringData("AGE", "21");
-            //    msg2.AddStringData("PERSONAS", "");
-            //    msg2.AddStringData("SINCE", ClientTime);
-            //    msg2.AddStringData("LAST", ClientTime);
-
-            //    SendMessageBack(msg2);
-            //}
-            //else if(msg.MessageType== "cper")
-            //{
-            //    //Check Persona Exits
-            //    EAMessage msg2 = new EAMessage();
-
-            //    var TempPersona = GetUserPersona(msg.stringDatas[0].Value);
-            //    if (TempPersona!=null)
-            //    {
-            //        msg2.MessageType = "cperdupl";
-            //        //msg2.AddStringData("P1", "1");
-            //        SendMessageBack(msg2);
-            //        return;
-            //    }
-
-            //    //Create Persona
-
-            //    EAUserPersona NewPersona = new EAUserPersona();
-
-            //    NewPersona.Owner = NAME;
-            //    NewPersona.Name = msg.stringDatas[0].Value;
-
-            //    string ClientTime = DateTime.Now.ToString("yyyy.MM.dd hh:mm:ss");
-
-            //    NewPersona.Since = ClientTime;
-            //    NewPersona.Last = ClientTime;
-
-            //    NewPersona.CreateJson(AppContext.BaseDirectory + "\\Personas\\" + NewPersona.Name.ToLower() + ".json");
-
-            //    PersonaList.Add(NewPersona.Name);
-
-            //    SaveEAUserData();
-
-            //    msg2.MessageType = "cper";
-
-            //    msg2.AddStringData("PERS", msg.stringDatas[0].Value);
-
-            //    SendMessageBack(msg2);
-            //}
-            //else if (msg.MessageType == "dper")
-            //{
-            //    //Create Persona
-            //    bool Removed = false;
-
-            //    for (int i = 0; i < PersonaList.Count; i++)
-            //    {
-            //        if (msg.stringDatas[0].Value == PersonaList[i])
-            //        {
-            //            PersonaList.RemoveAt(i);
-            //            File.Delete(AppContext.BaseDirectory + "\\Personas\\" + msg.stringDatas[0].Value.ToLower() + ".json");
-            //            Removed = true;
-            //        }
-            //    }
-            //    SaveEAUserData();
-            //    EAMessage msg2 = new EAMessage();
-
-            //    if (Removed==false)
-            //    {
-            //        msg2.MessageType = "dperimst";
-            //        SendMessageBack(msg2);
-            //    }
-
-
-            //    msg2.MessageType = "dper";
-
-            //    msg2.AddStringData("PERS", msg.stringDatas[0].Value);
-
-            //    SendMessageBack(msg2);
-            //}
             //else if (msg.MessageType == "pers")
             //{
             //    EAMessage msg2 = new EAMessage();
