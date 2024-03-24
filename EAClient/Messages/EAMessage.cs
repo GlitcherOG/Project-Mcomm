@@ -41,40 +41,6 @@ namespace SSX3_Server.EAClient.Messages
             Encoding encorder = new UTF8Encoding();
             Console.WriteLine(encorder.GetString(Data));
 
-
-
-            //else if(MessageType == "sele")
-            //{
-            //    string FullString = ByteUtil.ReadString(Data, 12, Size - 13);
-            //    string[] strings = FullString.Split(' ');
-
-            //    MessageType = MessageType;
-            //    Size = Size;
-            //    stringDatas = new List<StringData>();
-
-            //    for (int i = 0; i < strings.Length - 1; i++)
-            //    {
-            //        string[] LineSplit = strings[i].Split("=");
-
-            //        StringData NewStringData = new StringData();
-
-            //        NewStringData.Type = LineSplit[0];
-
-            //        NewStringData.Value = LineSplit[1];
-
-            //        stringDatas.Add(NewStringData);
-            //    }
-            //    Encoding encorder = new UTF8Encoding();
-            //    Console.WriteLine(encorder.GetString(Data));
-            //}
-            //else
-            //{
-            //    Console.WriteLine("Unknown Message Type: ");
-            //    Encoding encorder = new UTF8Encoding();
-            //    Console.WriteLine(encorder.GetString(Data)); //now , we write the message as string
-            //    Console.WriteLine(BitConverter.ToString(Data).Replace("-", ""));
-            //}
-
             AssignValues();
         }
 

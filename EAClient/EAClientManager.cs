@@ -352,66 +352,72 @@ namespace SSX3_Server.EAClient
 
                 SendMessageBack(msg);
             }
+            else if (InMessageType == "pers")
+            {
+                PersMessageIn msg = new PersMessageIn();
+                msg.PraseData(array);
+
+                LoadedPersona = GetUserPersona(msg.PERS);
+                bool CheckFailed = false;
+                if (LoadedPersona != null)
+                {
+                    if (LoadedPersona.Owner != NAME)
+                    {
+                        CheckFailed = true;
+                    }
+                }
+                else
+                {
+                    CheckFailed = true;
+                }
+
+                PersMessageOut msg2 = new PersMessageOut();
+
+                if (CheckFailed)
+                {
+                    msg2.SubMessage = "imst";
+                    SendMessageBack(msg2);
+                    return;
+                }
+
+                LoadedPersona.Last = DateTime.Now.ToString("yyyy.MM.dd hh:mm:ss");
+
+                msg2.A = "24.141.39.62";
+                msg2.LA = "24.141.39.62";
+                msg2.LOC = "enUS";
+                msg2.MA = "24.141.39.62";
+                msg2.NAME = NAME;
+                msg2.PERS = LoadedPersona.Name;
+                msg2.LAST = LAST;
+                msg2.PLAST = LoadedPersona.Last;
+                msg2.SINCE = SINCE;
+                msg2.LKEY = "3fcf27540c92935b0a66fd3b0000283c";
+
+                SendMessageBack(msg2);
+            }
+            else if (InMessageType == "onln")
+            {
+                OnlnMessageIn onlnMessageIn = new OnlnMessageIn();
+                onlnMessageIn.PraseData(array);
+                SendMessageBack(onlnMessageIn);
+            }
+            else if (InMessageType == "news")
+            {
+                NewsMessageIn msg = new NewsMessageIn();
+                msg.PraseData(array);
+
+                NewsMessageOut msg2 = new NewsMessageOut();
+
+                msg2.SubMessage = "new" + msg.NAME;
+
+                msg2.NEWS = EAServerManager.Instance.News;
+
+                SendMessageBack(msg2);
+            }
             else
             {
                 Console.WriteLine("Unknown Message " + InMessageType);
             }
-            //else if (msg.MessageType == "pers")
-            //{
-            //    EAMessage msg2 = new EAMessage();
-
-            //    LoadedPersona = GetUserPersona(msg.stringDatas[0].Value);
-            //    bool CheckFailed = false;
-            //    if (LoadedPersona != null)
-            //    {
-            //        if(LoadedPersona.Owner!=NAME)
-            //        {
-            //            CheckFailed = true;
-            //        }
-            //    }
-            //    else
-            //    {
-            //        CheckFailed = true;
-            //    }
-
-            //    if(CheckFailed)
-            //    {
-            //        msg2.MessageType = "persimst";
-            //        SendMessageBack(msg2);
-            //        return;
-            //    }
-
-            //    LoadedPersona.Last = DateTime.Now.ToString("yyyy.MM.dd hh:mm:ss");
-
-            //    msg2.MessageType = "pers";
-
-            //    msg2.AddStringData("A", "24.141.39.62");
-            //    msg2.AddStringData("LA", "24.141.39.62");
-            //    msg2.AddStringData("LOC", "enUS");
-            //    msg2.AddStringData("MA", "24.141.39.62");
-            //    msg2.AddStringData("NAME", NAME);
-            //    msg2.AddStringData("PERS", LoadedPersona.Name);
-            //    msg2.AddStringData("LAST", LAST);
-            //    msg2.AddStringData("PLAST", LoadedPersona.Last);
-            //    msg2.AddStringData("SINCE", SINCE);
-            //    //msg2.AddStringData("PSINCE", Personas[PersonaID].Since);
-            //    msg2.AddStringData("LKEY", "3fcf27540c92935b0a66fd3b0000283c");
-            //    SendMessageBack(msg2);
-            //}
-            //else if (msg.MessageType == "onln")
-            //{
-            //    SendMessageBack(msg);
-            //}
-            //else if (msg.MessageType == "news")
-            //{
-            //    EAMessage msg2 = new EAMessage();
-
-            //    msg2.MessageType = "news";
-
-            //    msg2.AddStringData("new" + msg.stringDatas[0].Value, EAServerManager.Instance.News);
-
-            //    SendMessageBack(msg2);
-            //}
             //else if (msg.MessageType == "room")
             //{
             //    EAMessage msg2 = new EAMessage();
