@@ -27,7 +27,11 @@ namespace SSX3_Server.EAClient
 
         public string Since;
         public string Last;
-        public string Bypass;
+
+        public bool Bypass;
+        public bool Banned;
+
+        public int DiscordID;
 
         public void CreateJson(string path, bool Inline = false)
         {

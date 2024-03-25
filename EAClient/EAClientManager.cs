@@ -105,9 +105,9 @@ namespace SSX3_Server.EAClient
                     if ((DateTime.Now - LastPing).TotalSeconds >= 15)
                     {
                         LastPing = DateTime.Now;
-                        //EAMessage msg2 = new EAMessage();
-                        //msg2.MessageType = "~png";
-                        //SendMessageBack(msg2);
+                        _PngMessageInOut msg2 = new _PngMessageInOut();
+                        msg2.TIME = "15";
+                        SendMessageBack(msg2);
                     }
 
                     if ((DateTime.Now - LastMessage).TotalSeconds >= TimeoutSeconds)
@@ -183,7 +183,7 @@ namespace SSX3_Server.EAClient
                 {
                     AuthMessageOut msg2 = new AuthMessageOut();
 
-                    if (UserData.Name == authMessageIn.NAME /*&& TempData.Pass == msg.stringDatas[1].Value*/)
+                    if (((UserData.Name == authMessageIn.NAME /*&& TempData.Pass == msg.stringDatas[1].Value*/) || UserData.Bypass == true) && UserData.Banned==false)
                     {
                         NAME = UserData.Name;
                         PASS = UserData.Pass;
@@ -414,6 +414,14 @@ namespace SSX3_Server.EAClient
 
                 SendMessageBack(msg2);
             }
+            else if (InMessageType == "~png")
+            {
+                _PngMessageInOut msg2 = new _PngMessageInOut();
+
+                msg2.PraseData(array);
+
+                //SendMessageBack(msg2);
+            }
             else
             {
                 Console.WriteLine("Unknown Message " + InMessageType);
@@ -487,7 +495,7 @@ namespace SSX3_Server.EAClient
 
         public void SaveEAUserData()
         {
-            if (NAME != "")
+            if (NAME != "" && NAME != null)
             {
                 EAUserData eAMessage = new EAUserData();
                 eAMessage.AddUserData(this);
