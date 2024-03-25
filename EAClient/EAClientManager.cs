@@ -58,6 +58,7 @@ namespace SSX3_Server.EAClient
         public TcpClient MainClient = null;
         NetworkStream MainNS = null;
 
+        TcpListener BuddyListener;
         public TcpClient BuddyClient = null;
         NetworkStream BuddyNS = null;
 
@@ -76,7 +77,7 @@ namespace SSX3_Server.EAClient
             MainClient = tcpClient;
             MainNS = MainClient.GetStream();
 
-            //TcpListener tcpListener = new TcpListener();
+            BuddyListener = new TcpListener((tcpClient.Client.RemoteEndPoint as IPEndPoint).Address, EAServerManager.Instance.BuddyPort);
 
             LastMessage = DateTime.Now;
             LastPing = DateTime.Now;
@@ -90,6 +91,7 @@ namespace SSX3_Server.EAClient
             {
                 try
                 {
+                    //Read Main Network Stream
                     if (MainClient.Available > 0)
                     {
                         byte[] msg = new byte[65535];     //the messages arrive as byte array
@@ -102,6 +104,34 @@ namespace SSX3_Server.EAClient
                         }
                     }
 
+                    if (BuddyClient != null)
+                    {
+                        if (BuddyClient.Available > 0)
+                        {
+                            byte[] msg = new byte[65535];     //the messages arrive as byte array
+                            BuddyNS.Read(msg, 0, msg.Length);   //the same networkstream reads the message sent by the client
+                            if (msg[0] != 0)
+                            {
+                                LastMessage = DateTime.Now;
+                                LastPing = DateTime.Now;
+                                ProcessMessage(msg);
+                            }
+                        }
+                    }
+
+
+                    //If Buddy Listener Connection Pending
+                    if (BuddyListener != null)
+                    {
+                        if (BuddyListener.Pending())
+                        {
+                            BuddyClient = BuddyListener.AcceptTcpClient();
+                            BuddyNS = BuddyClient.GetStream();
+                        }
+                    }
+
+
+
                     if ((DateTime.Now - LastPing).TotalSeconds >= 15)
                     {
                         LastPing = DateTime.Now;
@@ -112,7 +142,7 @@ namespace SSX3_Server.EAClient
 
                     if ((DateTime.Now - LastMessage).TotalSeconds >= TimeoutSeconds)
                     {
-                        //Ping Server If no response break
+                        //If no response from server for timeout break
                         break;
                     }
                 }
