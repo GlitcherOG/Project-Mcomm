@@ -77,7 +77,8 @@ namespace SSX3_Server.EAClient
             MainClient = tcpClient;
             MainNS = MainClient.GetStream();
 
-            BuddyListener = new TcpListener((tcpClient.Client.RemoteEndPoint as IPEndPoint).Address, EAServerManager.Instance.BuddyPort);
+            //BuddyListener = new TcpListener((tcpClient.Client.RemoteEndPoint as IPEndPoint).Address, EAServerManager.Instance.BuddyPort);
+            //BuddyListener.Start();
 
             LastMessage = DateTime.Now;
             LastPing = DateTime.Now;
@@ -127,6 +128,8 @@ namespace SSX3_Server.EAClient
                         {
                             BuddyClient = BuddyListener.AcceptTcpClient();
                             BuddyNS = BuddyClient.GetStream();
+                            BuddyListener.Stop();
+                            BuddyListener = null;
                         }
                     }
 
@@ -175,6 +178,10 @@ namespace SSX3_Server.EAClient
 
                 ADDR = addrMessageIn.ADDR;
                 PORT = addrMessageIn.PORT;
+
+                //addrMessageIn.ADDR = EAServerManager.Instance.ListerIP.ToString();
+                //addrMessageIn.PORT = EAServerManager.Instance.BuddyPort.ToString();
+                //SendMessageBack(addrMessageIn);
             }
             else if (InMessageType == "skey")
             {
