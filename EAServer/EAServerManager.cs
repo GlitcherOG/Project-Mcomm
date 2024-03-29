@@ -20,7 +20,7 @@ namespace SSX3_Server.EAServer
         public static EAServerManager Instance;
         public MainBot MainBot;
 
-        public string ListerIP = "192.168.86.189";
+        public string ListerIP = "192.168.0.12";
         public int GamePort = 11000;
         public int ListenerPort = 10901;
         public int BuddyPort = 10899;
@@ -121,6 +121,13 @@ namespace SSX3_Server.EAServer
                     client.Close();
                     server.Stop();
                 }
+            }
+        }
+        public void BroadcastMessage(EAMessage message)
+        {
+            for (int i = 0; i < clients.Count; i++)
+            {
+                clients[i].SendMessageBack(message);
             }
         }
 

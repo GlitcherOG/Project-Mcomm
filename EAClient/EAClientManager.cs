@@ -419,10 +419,10 @@ namespace SSX3_Server.EAClient
 
                 LoadedPersona.Last = DateTime.Now.ToString("yyyy.MM.dd hh:mm:ss");
 
-                msg2.A = "24.141.39.62";
-                msg2.LA = "24.141.39.62";
+                msg2.A = EAServerManager.Instance.ListerIP.ToString();
+                msg2.LA = EAServerManager.Instance.ListerIP.ToString();
                 msg2.LOC = "enUS";
-                msg2.MA = "24.141.39.62";
+                msg2.MA = EAServerManager.Instance.ListerIP.ToString();
                 msg2.NAME = NAME;
                 msg2.PERS = LoadedPersona.Name;
                 msg2.LAST = LAST;
@@ -456,8 +456,14 @@ namespace SSX3_Server.EAClient
                 _PngMessageInOut msg2 = new _PngMessageInOut();
 
                 msg2.PraseData(array);
+            }
+            else if (InMessageType == "user")
+            {
+                UserMessageIn msg = new UserMessageIn();
 
-                //SendMessageBack(msg2);
+                msg.PraseData(array);
+
+                SendMessageBack(msg);
             }
             else
             {
@@ -487,6 +493,8 @@ namespace SSX3_Server.EAClient
 
         public void SendMessageBack(EAMessage msg)
         {
+            LastMessage = DateTime.Now;
+            LastPing = DateTime.Now;
             byte[] bytes = msg.GenerateData();
             MainNS.Write(bytes, 0, bytes.Length);
         }
