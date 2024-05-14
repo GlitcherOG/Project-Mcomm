@@ -467,6 +467,7 @@ namespace SSX3_Server.EAClient
             else
             {
                 Console.WriteLine("Unknown Message " + InMessageType);
+                Console.WriteLine(System.Text.Encoding.UTF8.GetString(array));
             }
             //else if (msg.MessageType == "room")
             //{
