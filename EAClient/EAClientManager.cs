@@ -66,7 +66,6 @@ namespace SSX3_Server.EAClient
         //ping every 1 min if failed ping close connection
         int TimeoutSeconds=30;
         DateTime LastMessage;
-
         DateTime LastPing;
 
         public void AssignListiners(TcpClient tcpClient, int InID, string SESSin, string MASKin)

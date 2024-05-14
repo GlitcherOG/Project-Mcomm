@@ -88,7 +88,7 @@ namespace SSX3_Server.DiscordBot
             await ctx.RespondAsync(embed);
         }
 
-        [Command("Persona")]
+        [Command("persona")]
         public async Task PersonaCommand(CommandContext ctx)
         {
             List<string> strings = new List<string>();
