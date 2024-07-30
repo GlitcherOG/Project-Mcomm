@@ -20,13 +20,13 @@ namespace SSX3_Server.EAServer
         public static EAServerManager Instance;
         public MainBot MainBot;
 
-        public string ListerIP = "192.168.0.141";
-        public int GamePort = 11000;
-        public int ListenerPort = 10901;
-        public int BuddyPort = 10899;
+        public EAServerConfig config;
 
         int IDCount = 0;
 
+        /// <summary>
+        /// Port Below to Text File
+        /// </summary>
         public string News="WIP Server";
 
         public List<EAClientManager> clients = new List<EAClientManager>();
@@ -40,11 +40,36 @@ namespace SSX3_Server.EAServer
             clients = new List<EAClientManager>();
             threads = new List<Thread>();
             MainBot = new MainBot();
-            Task.Run(() => MainBot.Main());
-            Directory.CreateDirectory(AppContext.BaseDirectory + "\\Users");
-            Directory.CreateDirectory(AppContext.BaseDirectory + "\\Personas");
+            config = EAServerConfig.Load(AppContext.BaseDirectory + "\\ServerConfig.cfg");
+
+            GenerateRequiredFiles();
+
+            News = File.ReadAllText(AppContext.BaseDirectory + "\\News.txt");
+
+            if (config.DiscordBot)
+            {
+                Task.Run(() => MainBot.Main(config.DiscordBotToken));
+            }
+
             Console.WriteLine("Initalised Server, Waiting For Clients...");
             NewClientListening();
+        }
+
+        public void GenerateRequiredFiles()
+        {
+            Directory.CreateDirectory(AppContext.BaseDirectory + "\\Users");
+            Directory.CreateDirectory(AppContext.BaseDirectory + "\\Personas");
+
+            if (config == null)
+            {
+                config = new EAServerConfig();
+                config.CreateJson(AppContext.BaseDirectory + "\\ServerConfig.cfg");
+            }
+
+            if(!File.Exists(AppContext.BaseDirectory + "\\News.txt"))
+            {
+                File.WriteAllText(AppContext.BaseDirectory + "\\News.txt", "WIP Server");
+            }
         }
 
         public void NewClientListening()
@@ -74,14 +99,14 @@ namespace SSX3_Server.EAServer
                     ConnectionMessage.PraseData(msg);
 
                     //Assign Listiner
-                    TcpListener server1 = new TcpListener((client.Client.RemoteEndPoint as IPEndPoint).Address, ListenerPort);
+                    TcpListener server1 = new TcpListener((client.Client.RemoteEndPoint as IPEndPoint).Address, config.ListenerPort);
                     server1.Start();
 
                     //Send Connection Details Back
                     _DirMessageOut ReturnMessage = new _DirMessageOut();
 
-                    ReturnMessage.ADDR = ListerIP;
-                    ReturnMessage.PORT = ListenerPort.ToString();
+                    ReturnMessage.ADDR = config.ListerIP;
+                    ReturnMessage.PORT = config.ListenerPort.ToString();
 
                     ReturnMessage.SESS = GenerateSESS();
                     ReturnMessage.MASK = GenerateMASK();

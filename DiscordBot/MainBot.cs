@@ -25,7 +25,7 @@ namespace SSX3_Server.DiscordBot
 
         public DiscordClient Client { get; set; }
         public CommandsNextExtension Commands { get; set; }
-        public async Task Main()
+        public async Task Main(string Token)
         {
             var discordConfig = new DiscordConfiguration()
             {

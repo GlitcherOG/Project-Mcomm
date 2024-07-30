@@ -420,10 +420,10 @@ namespace SSX3_Server.EAClient
 
                 LoadedPersona.Last = DateTime.Now.ToString("yyyy.MM.dd hh:mm:ss");
 
-                msg2.A = EAServerManager.Instance.ListerIP.ToString();
-                msg2.LA = EAServerManager.Instance.ListerIP.ToString();
+                msg2.A = EAServerManager.Instance.config.ListerIP.ToString();
+                msg2.LA = EAServerManager.Instance.config.ListerIP.ToString();
                 msg2.LOC = "enUS";
-                msg2.MA = EAServerManager.Instance.ListerIP.ToString();
+                msg2.MA = EAServerManager.Instance.config.ListerIP.ToString();
                 msg2.NAME = NAME;
                 msg2.PERS = LoadedPersona.Name;
                 msg2.LAST = LAST;
