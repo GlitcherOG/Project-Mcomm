@@ -64,6 +64,7 @@ namespace SSX3_Server.EAClient
 
         //10 seconds to start till proper connection establised
         //ping every 1 min if failed ping close connection
+        public bool LoggedIn = false;
         int TimeoutSeconds=30;
         DateTime LastMessage;
         DateTime LastPing;
@@ -254,6 +255,7 @@ namespace SSX3_Server.EAClient
                         msg2.SINCE = UserData.Since;
 
                         TimeoutSeconds = 60;
+                        LoggedIn = true;
                         SendMessageBack(msg2);
                     }
                     else
