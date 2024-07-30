@@ -24,9 +24,6 @@ namespace SSX3_Server.EAServer
 
         int IDCount = 0;
 
-        /// <summary>
-        /// Port Below to Text File
-        /// </summary>
         public string News="WIP Server";
 
         public List<EAClientManager> clients = new List<EAClientManager>();
