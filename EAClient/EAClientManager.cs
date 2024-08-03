@@ -58,16 +58,19 @@ namespace SSX3_Server.EAClient
         public TcpClient MainClient = null;
         NetworkStream MainNS = null;
 
-        TcpListener BuddyListener;
-        public TcpClient BuddyClient = null;
-        NetworkStream BuddyNS = null;
-
         //10 seconds to start till proper connection establised
         //ping every 1 min if failed ping close connection
         public bool LoggedIn = false;
         int TimeoutSeconds=30;
-        DateTime LastMessage;
+
+        TcpListener BuddyListener;
+        public TcpClient BuddyClient = null;
+        NetworkStream BuddyNS = null;
+
+        DateTime LastSend;
+        DateTime LastRecive;
         DateTime LastPing;
+        public int Ping;
 
         public void AssignListiners(TcpClient tcpClient, int InID, string SESSin, string MASKin)
         {
@@ -77,10 +80,8 @@ namespace SSX3_Server.EAClient
             MainClient = tcpClient;
             MainNS = MainClient.GetStream();
 
-            //BuddyListener = new TcpListener((tcpClient.Client.RemoteEndPoint as IPEndPoint).Address, EAServerManager.Instance.BuddyPort);
-            //BuddyListener.Start();
-
-            LastMessage = DateTime.Now;
+            LastRecive = DateTime.Now;
+            LastSend = DateTime.Now;
             LastPing = DateTime.Now;
 
             MainListen();
@@ -99,7 +100,7 @@ namespace SSX3_Server.EAClient
                         MainNS.Read(msg, 0, msg.Length);   //the same networkstream reads the message sent by the client
                         if (msg[0] != 0)
                         {
-                            LastMessage = DateTime.Now;
+                            LastRecive = DateTime.Now;
                             LastPing = DateTime.Now;
                             ProcessMessage(msg);
                         }
@@ -113,7 +114,7 @@ namespace SSX3_Server.EAClient
                             BuddyNS.Read(msg, 0, msg.Length);   //the same networkstream reads the message sent by the client
                             if (msg[0] != 0)
                             {
-                                LastMessage = DateTime.Now;
+                                LastRecive = DateTime.Now;
                                 LastPing = DateTime.Now;
                                 ProcessMessage(msg);
                             }
@@ -133,17 +134,15 @@ namespace SSX3_Server.EAClient
                         }
                     }
 
-
-
-                    if ((DateTime.Now - LastPing).TotalSeconds >= 15)
+                    if ((DateTime.Now - LastPing).TotalSeconds >= 20)
                     {
                         LastPing = DateTime.Now;
                         _PngMessageInOut msg2 = new _PngMessageInOut();
-                        msg2.TIME = "15";
+                        msg2.TIME = "20";
                         SendMessageBack(msg2);
                     }
 
-                    if ((DateTime.Now - LastMessage).TotalSeconds >= TimeoutSeconds)
+                    if ((DateTime.Now - LastRecive).TotalSeconds >= TimeoutSeconds)
                     {
                         //If no response from server for timeout break
                         break;
@@ -179,9 +178,6 @@ namespace SSX3_Server.EAClient
                 ADDR = addrMessageIn.ADDR;
                 PORT = addrMessageIn.PORT;
 
-                //addrMessageIn.ADDR = EAServerManager.Instance.ListerIP.ToString();
-                //addrMessageIn.PORT = EAServerManager.Instance.BuddyPort.ToString();
-                //SendMessageBack(addrMessageIn);
             }
             else if (InMessageType == "skey")
             {
@@ -464,7 +460,14 @@ namespace SSX3_Server.EAClient
 
                 msg.PraseData(array);
 
-                SendMessageBack(msg);
+                UserMessageOut userMessageOut = new UserMessageOut();
+
+                userMessageOut.PERS = msg.PERS;
+                userMessageOut.MESG = msg.PERS;
+                userMessageOut.ADDR = ADDR;
+
+
+                SendMessageBack(userMessageOut);
             }
             else
             {
@@ -495,8 +498,7 @@ namespace SSX3_Server.EAClient
 
         public void SendMessageBack(EAMessage msg)
         {
-            LastMessage = DateTime.Now;
-            LastPing = DateTime.Now;
+            LastSend = DateTime.Now;
             byte[] bytes = msg.GenerateData();
             MainNS.Write(bytes, 0, bytes.Length);
         }

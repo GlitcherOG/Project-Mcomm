@@ -11,6 +11,19 @@ namespace SSX3_Server.EAClient.Messages
         public override string MessageType { get { return "user"; } }
 
         public string PERS;
+        public string LAST  = "2004.6.1 15:57:52";
+        public string EXPR  = "1072566000";
+        public string STAT = "";
+        public string CHEAT = "3";
+        public string ACK_REP = "186";
+        public string REP = "186";
+        public string PLAST = "2004.6.1 15:57:46";
+        public string PSINCE = "2003.11.25 07:56:09";
+        public string DCNT = "0";
+        public string ADDR;
+        public string SERV = "192.168.0.141";
+        public string RANK = "99999";
+        public string MESG;
 
         public override void AssignValues()
         {
@@ -20,6 +33,19 @@ namespace SSX3_Server.EAClient.Messages
         public override void AssignValuesToString()
         {
             AddStringData("PERS", PERS);
+            AddStringData("LAST", LAST);
+            AddStringData("EXPR", EXPR);
+            AddStringData("STAT", STAT);
+            AddStringData("CHEAT", CHEAT);
+            AddStringData("ACK_REP", ACK_REP);
+            AddStringData("REP", REP);
+            AddStringData("PLAST", PLAST);
+            AddStringData("PSINCE", PSINCE);
+            AddStringData("DCNT", DCNT);
+            AddStringData("ADDR", ADDR);
+            AddStringData("SERV", SERV);
+            AddStringData("RANK", RANK);
+            AddStringData("MESG", MESG);
         }
     }
 }
