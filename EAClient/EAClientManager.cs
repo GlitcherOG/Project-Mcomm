@@ -253,6 +253,9 @@ namespace SSX3_Server.EAClient
                         TimeoutSeconds = 60;
                         LoggedIn = true;
                         SendMessageBack(msg2);
+
+                        //_RomMessage _RomMessage = new _RomMessage();
+                        //SendMessageBack(_RomMessage);
                     }
                     else
                     {
