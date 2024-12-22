@@ -436,7 +436,11 @@ namespace SSX3_Server.EAClient
             {
                 OnlnMessageIn onlnMessageIn = new OnlnMessageIn();
                 onlnMessageIn.PraseData(array);
+
                 SendMessageBack(onlnMessageIn);
+
+                _RomMessage Test = new _RomMessage();
+                SendMessageBack(Test);
             }
             else if (InMessageType == "news")
             {
@@ -471,6 +475,23 @@ namespace SSX3_Server.EAClient
 
 
                 SendMessageBack(userMessageOut);
+            }
+            else if (InMessageType == "quik")
+            {
+                QuikMessageIn msg = new QuikMessageIn();
+
+                msg.PraseData(array);
+
+                if(msg.KIND== "DeathRace")
+                {
+                    //quick match search
+                }
+                else if(msg.KIND=="*")
+                {
+                    //stop quick match search
+                }
+
+                SendMessageBack(msg);
             }
             else
             {
