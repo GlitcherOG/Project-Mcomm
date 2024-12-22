@@ -15,7 +15,7 @@ namespace SSX3_Server.EAClient.Messages
         public string H { get; set; } = "FreeSO"; //Host?
         public string F { get; set; } = "CK"; //?
 
-        public string T = "1"; //Count
+        public string T = "0"; //Count
 
         public string L = "50"; // Unknown
         public string P { get; set; } = "0";

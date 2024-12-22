@@ -254,8 +254,32 @@ namespace SSX3_Server.EAClient
                         LoggedIn = true;
                         SendMessageBack(msg2);
 
-                        //_RomMessage _RomMessage = new _RomMessage();
-                        //SendMessageBack(_RomMessage);
+                        _RomMessage _RomMessage = new _RomMessage();
+                        SendMessageBack(_RomMessage);
+
+                        PlusWhoMessageOut plusWhoMessageOut = new PlusWhoMessageOut();
+
+                        plusWhoMessageOut.I = "1";
+                        plusWhoMessageOut.N = LoadedPersona.Name;
+                        plusWhoMessageOut.M = NAME;
+                        plusWhoMessageOut.A = ADDR;
+                        plusWhoMessageOut.X = "";
+                        plusWhoMessageOut.R =_RomMessage.N;
+                        plusWhoMessageOut.RI = "1";
+
+                        SendMessageBack(plusWhoMessageOut);
+
+                        PlusUserMessageOut plusUserMessageOut = new PlusUserMessageOut();
+
+                        plusUserMessageOut.I = "1";
+                        plusUserMessageOut.N = LoadedPersona.Name;
+                        plusUserMessageOut.M = NAME;
+                        plusUserMessageOut.A = ADDR;
+                        plusUserMessageOut.X = "";
+                        plusUserMessageOut.G = "1";
+                        plusUserMessageOut.P = Ping.ToString();
+
+                        SendMessageBack(plusUserMessageOut);
                     }
                     else
                     {
@@ -490,6 +514,63 @@ namespace SSX3_Server.EAClient
 
                 SendMessageBack(msg);
             }
+            else if (InMessageType == "move")
+            {
+                MoveMessageIn msg = new MoveMessageIn();
+
+                msg.PraseData(array);
+
+                MoveMessageOut moveMessageOut = new MoveMessageOut();
+
+                moveMessageOut.IDENT = "1";
+                moveMessageOut.NAME = msg.NAME;
+                moveMessageOut.COUNT = "0";
+
+                SendMessageBack(moveMessageOut);
+
+                PlusWhoMessageOut plusWhoMessageOut = new PlusWhoMessageOut();
+
+                plusWhoMessageOut.I = "1";
+                plusWhoMessageOut.N = LoadedPersona.Name;
+                plusWhoMessageOut.M = NAME;
+                plusWhoMessageOut.A = ADDR;
+                plusWhoMessageOut.X = "";
+                plusWhoMessageOut.R = msg.NAME;
+                plusWhoMessageOut.RI = "1";
+
+                SendMessageBack(plusWhoMessageOut);
+
+                PlusUserMessageOut plusUserMessageOut = new PlusUserMessageOut();
+
+                plusUserMessageOut.I = "1";
+                plusUserMessageOut.N = LoadedPersona.Name;
+                plusUserMessageOut.M = NAME;
+                plusUserMessageOut.A = ADDR;
+                plusUserMessageOut.X = "";
+                plusUserMessageOut.G = "1";
+                plusUserMessageOut.P = Ping.ToString();
+
+                SendMessageBack(plusUserMessageOut);
+
+
+                plusUserMessageOut = new PlusUserMessageOut();
+
+                plusUserMessageOut.I = "1";
+                plusUserMessageOut.N = LoadedPersona.Name;
+                plusUserMessageOut.M = NAME;
+                plusUserMessageOut.A = ADDR;
+                plusUserMessageOut.X = "";
+                plusUserMessageOut.G = "1";
+                plusUserMessageOut.P = Ping.ToString();
+
+                SendMessageBack(plusUserMessageOut);
+
+                PlusPopMessageOut plusPopMessageOut = new PlusPopMessageOut();
+
+                plusPopMessageOut.Z = "1"+"/"+"1";
+
+                SendMessageBack(plusPopMessageOut);
+            }
             else if (InMessageType == "room")
             {
                 RoomMessageIn msg = new RoomMessageIn();
@@ -498,27 +579,59 @@ namespace SSX3_Server.EAClient
 
                 SendMessageBack(msg);
 
+                PlusWhoMessageOut plusWhoMessageOut = new PlusWhoMessageOut();
+
+                plusWhoMessageOut.I = "1";
+                plusWhoMessageOut.N = LoadedPersona.Name;
+                plusWhoMessageOut.M = NAME;
+                plusWhoMessageOut.A = ADDR;
+                plusWhoMessageOut.X = "";
+                plusWhoMessageOut.R = msg.NAME;
+                plusWhoMessageOut.RI = "1";
+
+                SendMessageBack(plusWhoMessageOut);
+
                 _RomMessage Test = new _RomMessage();
 
                 Test.H = LoadedPersona.Name;
 
                 SendMessageBack(Test);
+
+
+                MoveMessageOut moveMessageOut = new MoveMessageOut();
+
+                moveMessageOut.IDENT = "1";
+                moveMessageOut.NAME = msg.RoomType+"."+msg.NAME;
+                moveMessageOut.COUNT = "1";
+
+                SendMessageBack(moveMessageOut);
+            }
+            else if (InMessageType == "peek")
+            {
+                PeekMessageIn msg = new PeekMessageIn();
+
+                msg.PraseData(array);
+
+                for (int i = 0; i < 6; i++)
+                {
+                    PlusUserMessageOut plusUserMessageOut = new PlusUserMessageOut();
+
+                    plusUserMessageOut.I = i.ToString();
+                    plusUserMessageOut.N = "Gamer"+ i.ToString();
+                    plusUserMessageOut.M = "Gamer"+ i.ToString();
+                    plusUserMessageOut.A = ADDR;
+                    plusUserMessageOut.X = "";
+                    plusUserMessageOut.G = "1";
+                    plusUserMessageOut.P = Ping.ToString();
+
+                    SendMessageBack(plusUserMessageOut);
+                }
             }
             else
             {
                 Console.WriteLine("Unknown Message " + InMessageType);
                 Console.WriteLine(System.Text.Encoding.UTF8.GetString(array));
             }
-            //else if (msg.MessageType == "room")
-            //{
-            //    EAMessage msg2 = new EAMessage();
-
-            //    msg2.MessageType = "room";
-
-            //    msg2.AddStringData("NAME", msg.stringDatas[0].Value);
-
-            //    SendMessageBack(msg2);
-            //}
             //else if(msg.MessageType=="snap")
             //{
             //    EAMessage msg2 = new EAMessage();
