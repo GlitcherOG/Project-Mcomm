@@ -438,9 +438,6 @@ namespace SSX3_Server.EAClient
                 onlnMessageIn.PraseData(array);
 
                 SendMessageBack(onlnMessageIn);
-
-                _RomMessage Test = new _RomMessage();
-                SendMessageBack(Test);
             }
             else if (InMessageType == "news")
             {
@@ -492,6 +489,20 @@ namespace SSX3_Server.EAClient
                 }
 
                 SendMessageBack(msg);
+            }
+            else if (InMessageType == "room")
+            {
+                RoomMessageIn msg = new RoomMessageIn();
+
+                msg.PraseData(array);
+
+                SendMessageBack(msg);
+
+                _RomMessage Test = new _RomMessage();
+
+                Test.H = LoadedPersona.Name;
+
+                SendMessageBack(Test);
             }
             else
             {

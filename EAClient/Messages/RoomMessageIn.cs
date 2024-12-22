@@ -12,7 +12,7 @@ namespace SSX3_Server.EAClient.Messages
 
         public string RoomType;
         public string NAME;
-        public string PASS;
+        public string PASS = "";
 
         public override void AssignValues()
         {
@@ -20,13 +20,19 @@ namespace SSX3_Server.EAClient.Messages
             RoomType = Temp[0];
             NAME = Temp[1];
 
-            PASS = stringDatas[1].Value;
+            if (stringDatas.Count > 1)
+            {
+                PASS = stringDatas[1].Value;
+            }
         }
 
         public override void AssignValuesToString()
         {
-            AddStringData("NAME", NAME);
-            AddStringData("PASS", PASS);
+            AddStringData("NAME", RoomType + "."+NAME);
+            if (PASS != "")
+            {
+                AddStringData("PASS", PASS);
+            }
         }
     }
 }
