@@ -139,7 +139,17 @@ namespace SSX3_Server.EAClient
         {
             string InMessageType = EAMessage.MessageCommandType(array);
 
-            if(InMessageType == "addr")
+            //Type c;
+            //if (!EAMessage.InNameToClass.TryGetValue(InMessageType, out c))
+            //{
+            //    Console.WriteLine("Unexpected Message Type " + InMessageType + ":");
+            //    Console.WriteLine(System.Text.Encoding.UTF8.GetString(array));
+            //    return;
+            //}
+
+            //var msg = (EAMessage)Activator.CreateInstance(c);
+
+            if (InMessageType == "addr")
             {
                 AddrMessageIn addrMessageIn = new AddrMessageIn();
                 addrMessageIn.PraseData(array);
@@ -223,8 +233,7 @@ namespace SSX3_Server.EAClient
                         LoggedIn = true;
                         Broadcast(msg2);
 
-                        _RomMessage _RomMessage = new _RomMessage();
-                        Broadcast(_RomMessage);
+                        EAServerManager.Instance.SendRooms(this);
                     }
                     else
                     {
@@ -501,7 +510,7 @@ namespace SSX3_Server.EAClient
 
                 PlusPopMessageOut plusPopMessageOut = new PlusPopMessageOut();
 
-                plusPopMessageOut.Z = "4"+"/"+"1";
+                plusPopMessageOut.Z = "0"+"/"+"1";
 
                 Broadcast(plusPopMessageOut);
             }
@@ -530,7 +539,6 @@ namespace SSX3_Server.EAClient
                 Test.H = LoadedPersona.Name;
 
                 Broadcast(Test);
-
 
                 MoveMessageOut moveMessageOut = new MoveMessageOut();
 

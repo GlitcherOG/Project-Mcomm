@@ -23,6 +23,7 @@ namespace SSX3_Server.EAServer
         public EAServerConfig config;
 
         int IDCount = 0;
+        int RoomIDCount = 0;
 
         public string News="WIP Server";
 
@@ -47,6 +48,15 @@ namespace SSX3_Server.EAServer
             }
 
             Console.WriteLine("Initalised Server, Waiting For Clients...");
+
+            rooms.Add(new EAServerRoom() { roomId = 0, roomType = "Beginner", roomName = "Peak 1", isGlobal = true });
+            rooms.Add(new EAServerRoom() { roomId = 1, roomType = "Advanced", roomName = "Peak 2", isGlobal = true });
+            rooms.Add(new EAServerRoom() { roomId = 2, roomType = "Elite", roomName = "Peak 3", isGlobal = true });
+            rooms.Add(new EAServerRoom() { roomId = 3, roomType = "Intermediate", roomName = "Peak 4", isGlobal = true });
+
+            RoomIDCount = 4;
+
+            Console.WriteLine("Initalising Inital Rooms");
             NewClientListening();
         }
 
@@ -161,6 +171,14 @@ namespace SSX3_Server.EAServer
             //while If Exists Increment
 
             return Generation.ToString();
+        }
+
+        public void SendRooms(EAClientManager client)
+        {
+            for (int i = 0; i < rooms.Count; i++)
+            {
+                client.Broadcast(rooms[i].GeneratePlusRoomInfo());
+            }
         }
 
         public void DestroyClient(int ID, bool StopTCP = false)

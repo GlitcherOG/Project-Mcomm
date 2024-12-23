@@ -1,7 +1,9 @@
-﻿using System;
+﻿using SSX3_Server.EAServer;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.SymbolStore;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -9,8 +11,14 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace SSX3_Server.EAClient.Messages
 {
-    public class EAMessage
+    public abstract class EAMessage
     {
+        public static Dictionary<string, Type> InNameToClass { get; } =
+        new Dictionary<string, Type>()
+        {
+                { "~png", typeof(_PngMessageIn) },
+        };
+
         public virtual string MessageType { get { return MessageType; } set { MessageType = value; } }
         public string SubMessage = "";
         public int Size = -1; //Big Int32?
@@ -60,21 +68,6 @@ namespace SSX3_Server.EAClient.Messages
             {
                 StreamUtil.WriteString(data, stringDatas[i].Type + "=" + stringDatas[i].Value + "\n");
             }
-            //if (message.MessageType == "sele")
-            //{
-            //    for (int i = 0; i < message.stringDatas.Count; i++)
-            //    {
-            //        StreamUtil.WriteString(data, message.stringDatas[i].Type + "=" + message.stringDatas[i].Value + " ");
-            //    }
-            //}
-            //if (message.MessageType == "news")
-            //{
-            //    data.Position = 0;
-            //    StreamUtil.WriteString(data, message.MessageType + message.stringDatas[0].Type, 10);
-            //    data.Position += 2;
-
-            //    StreamUtil.WriteString(data, message.stringDatas[0].Value + "\n");
-            //}
 
             StreamUtil.WriteUInt8(data, 0);
             data.Position = 8;
@@ -102,6 +95,11 @@ namespace SSX3_Server.EAClient.Messages
         }
 
         public virtual void AssignValuesToString()
+        {
+
+        }
+
+        public virtual void ProcessCommand(EAClientManager client, EAServerRoom room = null)
         {
 
         }
