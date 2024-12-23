@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SSX3_Server.EAClient.Messages;
+using System.Net.NetworkInformation;
+using System.Xml.Linq;
 
 namespace SSX3_Server.EAServer
 {
@@ -30,5 +32,36 @@ namespace SSX3_Server.EAServer
 
             return _RomMessage;
         }
+
+        public void BoradcastBackUserList(EAClientManager client)
+        {
+            for (int i = 0; i < Clients.Count; i++)
+            {
+                client.Broadcast(Clients[i].GeneratePlusUser());
+            }
+            if(Clients.Count==0)
+            {
+                PlusUserMessageOut plusUserMessageOut = new PlusUserMessageOut();
+
+                plusUserMessageOut.I = "1";
+                plusUserMessageOut.N = "Empty";
+                plusUserMessageOut.M = "Empty";
+                plusUserMessageOut.A = EAServerManager.Instance.config.ListerIP;
+                plusUserMessageOut.X = "";
+                plusUserMessageOut.G = "0";
+                plusUserMessageOut.P = "0";
+
+                client.Broadcast(plusUserMessageOut);
+            }
+        }
+
+        public void BroadcastAllUsers(EAMessage message)
+        {
+            for (int i = 0; i < Clients.Count; i++)
+            {
+                Clients[i].Broadcast(message);
+            }
+        }
+
     }
 }

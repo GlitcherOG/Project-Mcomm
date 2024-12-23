@@ -554,20 +554,23 @@ namespace SSX3_Server.EAClient
 
                 msg.PraseData(array);
 
-                for (int i = 0; i < 6; i++)
-                {
-                    PlusUserMessageOut plusUserMessageOut = new PlusUserMessageOut();
+                var Room = EAServerManager.Instance.GetRoom(msg.NAME);
 
-                    plusUserMessageOut.I = i.ToString();
-                    plusUserMessageOut.N = "Gamer"+ i.ToString();
-                    plusUserMessageOut.M = "Gamer"+ i.ToString();
-                    plusUserMessageOut.A = ADDR;
-                    plusUserMessageOut.X = "";
-                    plusUserMessageOut.G = "1";
-                    plusUserMessageOut.P = Ping.ToString();
+                Room.BoradcastBackUserList(this);
+                //for (int i = 0; i < 6; i++)
+                //{
+                //    PlusUserMessageOut plusUserMessageOut = new PlusUserMessageOut();
 
-                    Broadcast(plusUserMessageOut);
-                }
+                //    plusUserMessageOut.I = i.ToString();
+                //    plusUserMessageOut.N = "Gamer"+ i.ToString();
+                //    plusUserMessageOut.M = "Gamer"+ i.ToString();
+                //    plusUserMessageOut.A = ADDR;
+                //    plusUserMessageOut.X = "";
+                //    plusUserMessageOut.G = "1";
+                //    plusUserMessageOut.P = Ping.ToString();
+
+                //    Broadcast(plusUserMessageOut);
+                //}
             }
             else
             {
@@ -591,6 +594,21 @@ namespace SSX3_Server.EAClient
             LastSend = DateTime.Now;
             byte[] bytes = msg.GenerateData();
             MainNS.Write(bytes, 0, bytes.Length);
+        }
+
+        public PlusUserMessageOut GeneratePlusUser()
+        {
+            PlusUserMessageOut plusUserMessageOut = new PlusUserMessageOut();
+
+            plusUserMessageOut.I = "1";
+            plusUserMessageOut.N = LoadedPersona.Name;
+            plusUserMessageOut.M = NAME;
+            plusUserMessageOut.A = EAServerManager.Instance.config.ListerIP;
+            plusUserMessageOut.X = "";
+            plusUserMessageOut.G = "0";
+            plusUserMessageOut.P = Ping.ToString();
+
+            return plusUserMessageOut;
         }
 
         public EAUserData GetUserData(string Name)
