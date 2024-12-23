@@ -28,14 +28,13 @@ namespace SSX3_Server.EAServer
 
         public List<EAClientManager> clients = new List<EAClientManager>();
         public List<EAServerRoom> rooms = new List<EAServerRoom>();
-        public List<Thread> threads = new List<Thread>();
+        //public List<Thread> threads = new List<Thread>();
         
         public void InitaliseServer()
         {
             Console.WriteLine("Initalising Server...");
             Instance = this;
             clients = new List<EAClientManager>();
-            threads = new List<Thread>();
             MainBot = new MainBot();
             config = EAServerConfig.Load(AppContext.BaseDirectory + "\\ServerConfig.cfg");
 
@@ -109,8 +108,6 @@ namespace SSX3_Server.EAServer
                     ReturnMessage.MASK = GenerateMASK();
 
                     msg = ReturnMessage.GenerateData();
-                    //Encoding encorder = new UTF8Encoding();
-                    //Console.WriteLine(encorder.GetString(msg)); //now , we write the message as string
                     tcpNS.Write(msg, 0, msg.Length);
 
                     //Add Pending Connection Check
@@ -118,14 +115,8 @@ namespace SSX3_Server.EAServer
                     TcpClient MainClient = server1.AcceptTcpClient();
 
                     //Rewrork Threading
-                    EAClientManager clientManager = new EAClientManager();
-                    var t = new Thread(() => clientManager.AssignListiners(MainClient, IDCount, ReturnMessage.SESS, ReturnMessage.MASK));
-                    t.Start();
-                    threads.Add(t);
-
-                    //clientManager.AssignListiners(MainClient, IDCount, SESS, MASK);
+                    clients.Add(new EAClientManager(MainClient, IDCount, ReturnMessage.SESS, ReturnMessage.MASK));
                     IDCount++;
-                    clients.Add(clientManager);
 
                     tcpNS.Dispose();
                     tcpNS.Close();
@@ -149,7 +140,7 @@ namespace SSX3_Server.EAServer
         {
             for (int i = 0; i < clients.Count; i++)
             {
-                clients[i].SendMessageBack(message);
+                clients[i].Broadcast(message);
             }
         }
 
@@ -183,10 +174,8 @@ namespace SSX3_Server.EAServer
                     {
                         clients[i].CloseConnection();
                     }
-
                     clients[i] = null;
                     clients.RemoveAt(i);
-                    threads.RemoveAt(i);
                     break;
                 }
             }

@@ -55,6 +55,7 @@ namespace SSX3_Server.EAClient
         public string SINCE;
         public string LAST;
 
+        public Thread LoopThread;
         public TcpClient MainClient = null;
         NetworkStream MainNS = null;
 
@@ -63,16 +64,12 @@ namespace SSX3_Server.EAClient
         public bool LoggedIn = false;
         int TimeoutSeconds=30;
 
-        TcpListener BuddyListener;
-        public TcpClient BuddyClient = null;
-        NetworkStream BuddyNS = null;
-
         DateTime LastSend;
         DateTime LastRecive;
         DateTime LastPing;
         public int Ping = 20;
 
-        public void AssignListiners(TcpClient tcpClient, int InID, string SESSin, string MASKin)
+        public EAClientManager(TcpClient tcpClient, int InID, string SESSin, string MASKin)
         {
             ID = InID;
             SESS = SESSin;
@@ -84,7 +81,8 @@ namespace SSX3_Server.EAClient
             LastSend = DateTime.Now;
             LastPing = DateTime.Now;
 
-            MainListen();
+            LoopThread = new Thread(MainListen);
+            LoopThread.Start();
         }
 
         public void MainListen()
@@ -106,40 +104,40 @@ namespace SSX3_Server.EAClient
                         }
                     }
 
-                    if (BuddyClient != null)
-                    {
-                        if (BuddyClient.Available > 0)
-                        {
-                            byte[] msg = new byte[65535];     //the messages arrive as byte array
-                            BuddyNS.Read(msg, 0, msg.Length);   //the same networkstream reads the message sent by the client
-                            if (msg[0] != 0)
-                            {
-                                LastRecive = DateTime.Now;
-                                LastPing = DateTime.Now;
-                                ProcessMessage(msg);
-                            }
-                        }
-                    }
+                    //if (BuddyClient != null)
+                    //{
+                    //    if (BuddyClient.Available > 0)
+                    //    {
+                    //        byte[] msg = new byte[65535];     //the messages arrive as byte array
+                    //        BuddyNS.Read(msg, 0, msg.Length);   //the same networkstream reads the message sent by the client
+                    //        if (msg[0] != 0)
+                    //        {
+                    //            LastRecive = DateTime.Now;
+                    //            LastPing = DateTime.Now;
+                    //            ProcessMessage(msg);
+                    //        }
+                    //    }
+                    //}
 
 
-                    //If Buddy Listener Connection Pending
-                    if (BuddyListener != null)
-                    {
-                        if (BuddyListener.Pending())
-                        {
-                            BuddyClient = BuddyListener.AcceptTcpClient();
-                            BuddyNS = BuddyClient.GetStream();
-                            BuddyListener.Stop();
-                            BuddyListener = null;
-                        }
-                    }
+                    ////If Buddy Listener Connection Pending
+                    //if (BuddyListener != null)
+                    //{
+                    //    if (BuddyListener.Pending())
+                    //    {
+                    //        BuddyClient = BuddyListener.AcceptTcpClient();
+                    //        BuddyNS = BuddyClient.GetStream();
+                    //        BuddyListener.Stop();
+                    //        BuddyListener = null;
+                    //    }
+                    //}
 
                     if ((DateTime.Now - LastPing).TotalSeconds >= 20)
                     {
                         LastPing = DateTime.Now;
                         _PngMessageInOut msg2 = new _PngMessageInOut();
                         msg2.TIME = "20";
-                        SendMessageBack(msg2);
+                        Broadcast(msg2);
                     }
 
                     if ((DateTime.Now - LastRecive).TotalSeconds >= TimeoutSeconds)
@@ -188,7 +186,7 @@ namespace SSX3_Server.EAClient
 
                 msg.SKEY = "$37940faf2a8d1381a3b7d0d2f570e6a7";
 
-                SendMessageBack(msg);
+                Broadcast(msg);
             }
             else if (InMessageType == "sele")
             {
@@ -202,7 +200,7 @@ namespace SSX3_Server.EAClient
                 msg.MESGS = "0";
                 msg.GAMES = "0";
 
-                SendMessageBack(msg);
+                Broadcast(msg);
             }
             else if (InMessageType == "auth")
             {
@@ -252,15 +250,15 @@ namespace SSX3_Server.EAClient
 
                         TimeoutSeconds = 60;
                         LoggedIn = true;
-                        SendMessageBack(msg2);
+                        Broadcast(msg2);
 
                         _RomMessage _RomMessage = new _RomMessage();
-                        SendMessageBack(_RomMessage);
+                        Broadcast(_RomMessage);
                     }
                     else
                     {
                         msg2.SubMessage = "imst";
-                        SendMessageBack(msg2);
+                        Broadcast(msg2);
                     }
 
                 }
@@ -268,7 +266,7 @@ namespace SSX3_Server.EAClient
                 {
                     AuthMessageOut msg2 = new AuthMessageOut();
                     msg2.SubMessage = "imst";
-                    SendMessageBack(msg2);
+                    Broadcast(msg2);
                 }
             }
             else if (InMessageType == "acct")
@@ -291,7 +289,7 @@ namespace SSX3_Server.EAClient
                 {
                     msg2.SubMessage = "dupl";
 
-                    SendMessageBack(msg2);
+                    Broadcast(msg2);
                     return;
                 }
                 else
@@ -327,7 +325,7 @@ namespace SSX3_Server.EAClient
                 msg2.SINCE = ClientTime;
                 msg2.LAST = ClientTime;
 
-                SendMessageBack(msg2);
+                Broadcast(msg2);
             }
             else if (InMessageType == "cper")
             {
@@ -338,7 +336,7 @@ namespace SSX3_Server.EAClient
                 if (TempPersona != null)
                 {
                     msg.SubMessage = "dupl";
-                    SendMessageBack(msg);
+                    Broadcast(msg);
                     return;
                 }
 
@@ -360,7 +358,7 @@ namespace SSX3_Server.EAClient
 
                 SaveEAUserData();
 
-                SendMessageBack(msg);
+                Broadcast(msg);
             }
             else if (InMessageType == "dper")
             {
@@ -384,10 +382,10 @@ namespace SSX3_Server.EAClient
                 if (Removed == false)
                 {
                     msg.SubMessage = "imst";
-                    SendMessageBack(msg);
+                    Broadcast(msg);
                 }
 
-                SendMessageBack(msg);
+                Broadcast(msg);
             }
             else if (InMessageType == "pers")
             {
@@ -413,7 +411,7 @@ namespace SSX3_Server.EAClient
                 if (CheckFailed)
                 {
                     msg2.SubMessage = "imst";
-                    SendMessageBack(msg2);
+                    Broadcast(msg2);
                     return;
                 }
 
@@ -430,14 +428,14 @@ namespace SSX3_Server.EAClient
                 msg2.SINCE = SINCE;
                 msg2.LKEY = "3fcf27540c92935b0a66fd3b0000283c";
 
-                SendMessageBack(msg2);
+                Broadcast(msg2);
             }
             else if (InMessageType == "onln")
             {
                 OnlnMessageIn onlnMessageIn = new OnlnMessageIn();
                 onlnMessageIn.PraseData(array);
 
-                SendMessageBack(onlnMessageIn);
+                Broadcast(onlnMessageIn);
             }
             else if (InMessageType == "news")
             {
@@ -450,7 +448,7 @@ namespace SSX3_Server.EAClient
 
                 msg2.NEWS = EAServerManager.Instance.News;
 
-                SendMessageBack(msg2);
+                Broadcast(msg2);
             }
             else if (InMessageType == "~png")
             {
@@ -473,7 +471,7 @@ namespace SSX3_Server.EAClient
                 userMessageOut.ADDR = ADDR;
 
 
-                SendMessageBack(userMessageOut);
+                Broadcast(userMessageOut);
             }
             else if (InMessageType == "quik")
             {
@@ -490,7 +488,7 @@ namespace SSX3_Server.EAClient
                     //stop quick match search
                 }
 
-                SendMessageBack(msg);
+                Broadcast(msg);
             }
             else if (InMessageType == "move")
             {
@@ -504,7 +502,7 @@ namespace SSX3_Server.EAClient
                 moveMessageOut.NAME = msg.NAME;
                 moveMessageOut.COUNT = "1";
 
-                SendMessageBack(moveMessageOut);
+                Broadcast(moveMessageOut);
 
                 PlusWhoMessageOut plusWhoMessageOut = new PlusWhoMessageOut();
 
@@ -516,7 +514,7 @@ namespace SSX3_Server.EAClient
                 plusWhoMessageOut.R = msg.NAME;
                 plusWhoMessageOut.RI = "1";
 
-                SendMessageBack(plusWhoMessageOut);
+                Broadcast(plusWhoMessageOut);
 
                 PlusUserMessageOut plusUserMessageOut = new PlusUserMessageOut();
 
@@ -528,13 +526,13 @@ namespace SSX3_Server.EAClient
                 plusUserMessageOut.G = "0";
                 plusUserMessageOut.P = Ping.ToString();
 
-                SendMessageBack(plusUserMessageOut);
+                Broadcast(plusUserMessageOut);
 
                 PlusPopMessageOut plusPopMessageOut = new PlusPopMessageOut();
 
                 plusPopMessageOut.Z = "4"+"/"+"1";
 
-                SendMessageBack(plusPopMessageOut);
+                Broadcast(plusPopMessageOut);
             }
             else if (InMessageType == "room")
             {
@@ -542,7 +540,7 @@ namespace SSX3_Server.EAClient
 
                 msg.PraseData(array);
 
-                SendMessageBack(msg);
+                Broadcast(msg);
 
                 PlusWhoMessageOut plusWhoMessageOut = new PlusWhoMessageOut();
 
@@ -554,13 +552,13 @@ namespace SSX3_Server.EAClient
                 plusWhoMessageOut.R = msg.NAME;
                 plusWhoMessageOut.RI = "1";
 
-                SendMessageBack(plusWhoMessageOut);
+                Broadcast(plusWhoMessageOut);
 
                 _RomMessage Test = new _RomMessage();
 
                 Test.H = LoadedPersona.Name;
 
-                SendMessageBack(Test);
+                Broadcast(Test);
 
 
                 MoveMessageOut moveMessageOut = new MoveMessageOut();
@@ -569,7 +567,7 @@ namespace SSX3_Server.EAClient
                 moveMessageOut.NAME = msg.RoomType+"."+msg.NAME;
                 moveMessageOut.COUNT = "1";
 
-                SendMessageBack(moveMessageOut);
+                Broadcast(moveMessageOut);
             }
             else if (InMessageType == "peek")
             {
@@ -589,7 +587,7 @@ namespace SSX3_Server.EAClient
                     plusUserMessageOut.G = "1";
                     plusUserMessageOut.P = Ping.ToString();
 
-                    SendMessageBack(plusUserMessageOut);
+                    Broadcast(plusUserMessageOut);
                 }
             }
             else
@@ -605,11 +603,11 @@ namespace SSX3_Server.EAClient
 
             //    msg2.AddStringData("RANK", "1234.1234");
 
-            //    SendMessageBack(msg2);
+            //    Broadcast(msg2);
             //}
         }
 
-        public void SendMessageBack(EAMessage msg)
+        public void Broadcast(EAMessage msg)
         {
             LastSend = DateTime.Now;
             byte[] bytes = msg.GenerateData();
