@@ -29,6 +29,8 @@ namespace SSX3_Server.EAClient.Messages
         public override void AssignValuesToString()
         {
             AddStringData("NAME", RoomType + "."+NAME);
+            //AddStringData("LIDENT", "0");
+            //AddStringData("LCOUNT", "0");
             if (PASS != "")
             {
                 AddStringData("PASS", PASS);

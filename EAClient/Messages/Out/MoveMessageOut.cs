@@ -15,6 +15,8 @@ namespace SSX3_Server.EAClient.Messages
         public string COUNT;
         public string FLAGS { get; set; } = "C";
 
+        public bool test = false;
+
         public override void AssignValues()
         {
             IDENT = stringDatas[0].Value;
@@ -25,12 +27,15 @@ namespace SSX3_Server.EAClient.Messages
 
         public override void AssignValuesToString()
         {
-            //AddStringData("LIDENT", IDENT);
-            //AddStringData("LCOUNT", COUNT);
             AddStringData("IDENT", IDENT);
             AddStringData("NAME", NAME);
             AddStringData("COUNT", COUNT);
             AddStringData("FLAGS", FLAGS);
+            if (test)
+            {
+                AddStringData("LIDENT", IDENT);
+                AddStringData("LCOUNT", COUNT);
+            }
         }
 
         //public override byte[] GenerateData(bool Override = false)

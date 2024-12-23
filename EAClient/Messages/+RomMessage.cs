@@ -10,6 +10,8 @@ namespace SSX3_Server.EAClient.Messages
     {
         public override string MessageType { get { return "+rom"; } }
 
+        public string A = "";
+
         public string I = "1"; //ID
         public string N = "Beginner.qwerty";
         public string H { get; set; } = "FreeSO"; //Host?
@@ -18,10 +20,11 @@ namespace SSX3_Server.EAClient.Messages
         public string T = "0"; //Count
 
         public string L = "50"; // Unknown
-        public string P { get; set; } = "0";
+        public string P { get; set; } = "10";
 
         public override void AssignValuesToString()
         {
+            AddStringData("A", A);
             AddStringData("I", I);
             AddStringData("N", N);
             AddStringData("H", H);

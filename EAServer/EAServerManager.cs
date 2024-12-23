@@ -22,7 +22,7 @@ namespace SSX3_Server.EAServer
 
         public EAServerConfig config;
 
-        int IDCount = 0;
+        int IDCount = 30;
         int RoomIDCount = 0;
 
         public string News="WIP Server";
@@ -49,12 +49,12 @@ namespace SSX3_Server.EAServer
 
             Console.WriteLine("Initalised Server, Waiting For Clients...");
 
-            rooms.Add(new EAServerRoom() { roomId = 0, roomType = "Beginner", roomName = "Peak1", isGlobal = true });
-            rooms.Add(new EAServerRoom() { roomId = 1, roomType = "Advanced", roomName = "Peak2", isGlobal = true });
-            rooms.Add(new EAServerRoom() { roomId = 2, roomType = "Elite", roomName = "Peak3", isGlobal = true });
-            rooms.Add(new EAServerRoom() { roomId = 3, roomType = "Intermediate", roomName = "Peak4", isGlobal = true });
+            rooms.Add(new EAServerRoom() { roomId = 1, roomType = "Beginner", roomName = "Peak1", isGlobal = true });
+            rooms.Add(new EAServerRoom() { roomId = 2, roomType = "Advanced", roomName = "Peak2", isGlobal = true });
+            rooms.Add(new EAServerRoom() { roomId = 3, roomType = "Elite", roomName = "Peak3", isGlobal = true });
+            rooms.Add(new EAServerRoom() { roomId = 4, roomType = "Intermediate", roomName = "Peak4", isGlobal = true });
 
-            RoomIDCount = 4;
+            RoomIDCount = 5;
 
             Console.WriteLine("Initalising Inital Rooms");
             NewClientListening();

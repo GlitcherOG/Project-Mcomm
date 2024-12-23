@@ -195,7 +195,7 @@ namespace SSX3_Server.EAClient
                 {
                     AuthMessageOut msg2 = new AuthMessageOut();
 
-                    if (((UserData.Name == authMessageIn.NAME /*&& TempData.Pass == msg.stringDatas[1].Value*/) || UserData.Bypass == true) && UserData.Banned==false)
+                    if (((UserData.Name == authMessageIn.NAME /*&& TempData.Pass == msg.stringDatas[1].Value*/) || UserData.Bypass == true) && UserData.Banned == false)
                     {
                         NAME = UserData.Name;
                         PASS = UserData.Pass;
@@ -459,11 +459,11 @@ namespace SSX3_Server.EAClient
 
                 msg.PraseData(array);
 
-                if(msg.KIND== "DeathRace")
+                if (msg.KIND == "DeathRace")
                 {
                     //quick match search
                 }
-                else if(msg.KIND=="*")
+                else if (msg.KIND == "*")
                 {
                     //stop quick match search
                 }
@@ -478,7 +478,7 @@ namespace SSX3_Server.EAClient
 
                 MoveMessageOut moveMessageOut = new MoveMessageOut();
 
-                moveMessageOut.IDENT = "0";
+                moveMessageOut.IDENT = "1";
                 moveMessageOut.NAME = msg.NAME;
                 moveMessageOut.COUNT = "1";
 
@@ -486,22 +486,22 @@ namespace SSX3_Server.EAClient
 
                 PlusWhoMessageOut plusWhoMessageOut = new PlusWhoMessageOut();
 
-                plusWhoMessageOut.I = "1";
+                plusWhoMessageOut.I = ID.ToString();
                 plusWhoMessageOut.N = LoadedPersona.Name;
                 plusWhoMessageOut.M = NAME;
-                plusWhoMessageOut.A = EAServerManager.Instance.config.ListerIP;
+                plusWhoMessageOut.A = ADDR;
                 plusWhoMessageOut.X = "";
                 plusWhoMessageOut.R = msg.NAME;
-                plusWhoMessageOut.RI = "0";
+                plusWhoMessageOut.RI = "1";
 
                 Broadcast(plusWhoMessageOut);
 
                 PlusUserMessageOut plusUserMessageOut = new PlusUserMessageOut();
 
-                plusUserMessageOut.I = "1";
+                plusUserMessageOut.I = ID.ToString();
                 plusUserMessageOut.N = LoadedPersona.Name;
                 plusUserMessageOut.M = NAME;
-                plusUserMessageOut.A = EAServerManager.Instance.config.ListerIP;
+                plusUserMessageOut.A = ADDR;
                 plusUserMessageOut.X = "";
                 plusUserMessageOut.G = "0";
                 plusUserMessageOut.P = Ping.ToString();
@@ -510,10 +510,10 @@ namespace SSX3_Server.EAClient
 
                 plusUserMessageOut = new PlusUserMessageOut();
 
-                plusUserMessageOut.I = "1";
+                plusUserMessageOut.I = ID.ToString();
                 plusUserMessageOut.N = LoadedPersona.Name;
                 plusUserMessageOut.M = NAME;
-                plusUserMessageOut.A = EAServerManager.Instance.config.ListerIP;
+                plusUserMessageOut.A = ADDR;
                 plusUserMessageOut.X = "";
                 plusUserMessageOut.G = "0";
                 plusUserMessageOut.P = Ping.ToString();
@@ -522,13 +522,17 @@ namespace SSX3_Server.EAClient
 
                 PlusPopMessageOut plusPopMessageOut = new PlusPopMessageOut();
 
-                plusPopMessageOut.Z = "0"+"/"+"1";
+                plusPopMessageOut.Z = "0" + "/" + "1";
 
                 Broadcast(plusPopMessageOut);
 
                 PlusMSGMessageOut plusMSGMessageOut = new PlusMSGMessageOut();
 
                 Broadcast(plusMSGMessageOut);
+
+                PlusSesMessageOut plus = new PlusSesMessageOut();
+
+                Broadcast(plus);
             }
             else if (InMessageType == "room")
             {
@@ -559,7 +563,7 @@ namespace SSX3_Server.EAClient
                 MoveMessageOut moveMessageOut = new MoveMessageOut();
 
                 moveMessageOut.IDENT = "1";
-                moveMessageOut.NAME = msg.RoomType+"."+msg.NAME;
+                moveMessageOut.NAME = msg.RoomType + "." + msg.NAME;
                 moveMessageOut.COUNT = "1";
 
                 Broadcast(moveMessageOut);
@@ -572,7 +576,10 @@ namespace SSX3_Server.EAClient
 
                 var Room = EAServerManager.Instance.GetRoom(msg.NAME);
 
-                Room.BoradcastBackUserList(this);
+                if (Room != null)
+                {
+                    Room.BoradcastBackUserList(this);
+                }
                 //for (int i = 0; i < 6; i++)
                 //{
                 //    PlusUserMessageOut plusUserMessageOut = new PlusUserMessageOut();
