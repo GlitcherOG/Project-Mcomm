@@ -70,7 +70,7 @@ namespace SSX3_Server.EAClient
         DateTime LastSend;
         DateTime LastRecive;
         DateTime LastPing;
-        public int Ping;
+        public int Ping = 20;
 
         public void AssignListiners(TcpClient tcpClient, int InID, string SESSin, string MASKin)
         {
@@ -256,30 +256,6 @@ namespace SSX3_Server.EAClient
 
                         _RomMessage _RomMessage = new _RomMessage();
                         SendMessageBack(_RomMessage);
-
-                        PlusWhoMessageOut plusWhoMessageOut = new PlusWhoMessageOut();
-
-                        plusWhoMessageOut.I = "1";
-                        plusWhoMessageOut.N = LoadedPersona.Name;
-                        plusWhoMessageOut.M = NAME;
-                        plusWhoMessageOut.A = ADDR;
-                        plusWhoMessageOut.X = "";
-                        plusWhoMessageOut.R =_RomMessage.N;
-                        plusWhoMessageOut.RI = "1";
-
-                        SendMessageBack(plusWhoMessageOut);
-
-                        PlusUserMessageOut plusUserMessageOut = new PlusUserMessageOut();
-
-                        plusUserMessageOut.I = "1";
-                        plusUserMessageOut.N = LoadedPersona.Name;
-                        plusUserMessageOut.M = NAME;
-                        plusUserMessageOut.A = ADDR;
-                        plusUserMessageOut.X = "";
-                        plusUserMessageOut.G = "1";
-                        plusUserMessageOut.P = Ping.ToString();
-
-                        SendMessageBack(plusUserMessageOut);
                     }
                     else
                     {
@@ -481,6 +457,8 @@ namespace SSX3_Server.EAClient
                 _PngMessageInOut msg2 = new _PngMessageInOut();
 
                 msg2.PraseData(array);
+
+                Ping = int.Parse(msg2.TIME);
             }
             else if (InMessageType == "user")
             {
@@ -524,7 +502,7 @@ namespace SSX3_Server.EAClient
 
                 moveMessageOut.IDENT = "1";
                 moveMessageOut.NAME = msg.NAME;
-                moveMessageOut.COUNT = "0";
+                moveMessageOut.COUNT = "1";
 
                 SendMessageBack(moveMessageOut);
 
@@ -533,7 +511,7 @@ namespace SSX3_Server.EAClient
                 plusWhoMessageOut.I = "1";
                 plusWhoMessageOut.N = LoadedPersona.Name;
                 plusWhoMessageOut.M = NAME;
-                plusWhoMessageOut.A = ADDR;
+                plusWhoMessageOut.A = EAServerManager.Instance.config.ListerIP;
                 plusWhoMessageOut.X = "";
                 plusWhoMessageOut.R = msg.NAME;
                 plusWhoMessageOut.RI = "1";
@@ -545,29 +523,16 @@ namespace SSX3_Server.EAClient
                 plusUserMessageOut.I = "1";
                 plusUserMessageOut.N = LoadedPersona.Name;
                 plusUserMessageOut.M = NAME;
-                plusUserMessageOut.A = ADDR;
+                plusUserMessageOut.A = EAServerManager.Instance.config.ListerIP;
                 plusUserMessageOut.X = "";
-                plusUserMessageOut.G = "1";
-                plusUserMessageOut.P = Ping.ToString();
-
-                SendMessageBack(plusUserMessageOut);
-
-
-                plusUserMessageOut = new PlusUserMessageOut();
-
-                plusUserMessageOut.I = "1";
-                plusUserMessageOut.N = LoadedPersona.Name;
-                plusUserMessageOut.M = NAME;
-                plusUserMessageOut.A = ADDR;
-                plusUserMessageOut.X = "";
-                plusUserMessageOut.G = "1";
+                plusUserMessageOut.G = "0";
                 plusUserMessageOut.P = Ping.ToString();
 
                 SendMessageBack(plusUserMessageOut);
 
                 PlusPopMessageOut plusPopMessageOut = new PlusPopMessageOut();
 
-                plusPopMessageOut.Z = "1"+"/"+"1";
+                plusPopMessageOut.Z = "4"+"/"+"1";
 
                 SendMessageBack(plusPopMessageOut);
             }

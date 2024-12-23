@@ -39,7 +39,7 @@ namespace SSX3_Server.EAClient.Messages
                 stringDatas.Add(NewStringData);
             }
             Encoding encorder = new UTF8Encoding();
-            Console.WriteLine(encorder.GetString(Data));
+            Console.WriteLine("In:\n"+encorder.GetString(Data));
 
             AssignValues();
         }
@@ -85,7 +85,7 @@ namespace SSX3_Server.EAClient.Messages
             data.Read(buffer, 0, (int)data.Length);
 
             Encoding encorder = new UTF8Encoding();
-            Console.WriteLine(encorder.GetString(buffer)); //now , we write the message as string
+            Console.WriteLine("Out:\n"+encorder.GetString(buffer)); //now , we write the message as string
             //Console.WriteLine(BitConverter.ToString(buffer).Replace("-", ""));
 
             return buffer.ToArray();
