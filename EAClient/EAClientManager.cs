@@ -572,21 +572,31 @@ namespace SSX3_Server.EAClient
                 //    Broadcast(plusUserMessageOut);
                 //}
             }
+            else if (InMessageType == "snap")
+            {
+                snapMessageIn msg = new snapMessageIn();
+
+                msg.PraseData(array);
+
+                Broadcast(msg);
+
+                PlusSnapMessageOut plusSnapMessageOut = new PlusSnapMessageOut();
+
+                Broadcast(plusSnapMessageOut);
+
+                plusSnapMessageOut = new PlusSnapMessageOut();
+
+                plusSnapMessageOut.S = "20";
+                plusSnapMessageOut.R = "2";
+                plusSnapMessageOut.N = "Gamer1";
+
+                Broadcast(plusSnapMessageOut);
+            }
             else
             {
                 Console.WriteLine("Unknown Message " + InMessageType);
                 Console.WriteLine(System.Text.Encoding.UTF8.GetString(array));
             }
-            //else if(msg.MessageType=="snap")
-            //{
-            //    EAMessage msg2 = new EAMessage();
-
-            //    msg2.MessageType = "snap";
-
-            //    msg2.AddStringData("RANK", "1234.1234");
-
-            //    Broadcast(msg2);
-            //}
         }
 
         public void Broadcast(EAMessage msg)

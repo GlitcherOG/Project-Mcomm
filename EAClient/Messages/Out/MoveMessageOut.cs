@@ -13,7 +13,7 @@ namespace SSX3_Server.EAClient.Messages
         public string IDENT;
         public string NAME;
         public string COUNT;
-        public string FLAGS { get; set; } = "C";
+        public string FLAGS { get; set; } = "CK";
 
         public override void AssignValues()
         {
@@ -25,10 +25,48 @@ namespace SSX3_Server.EAClient.Messages
 
         public override void AssignValuesToString()
         {
+            //AddStringData("LIDENT", IDENT);
+            //AddStringData("LCOUNT", COUNT);
             AddStringData("IDENT", IDENT);
             AddStringData("NAME", NAME);
             AddStringData("COUNT", COUNT);
             AddStringData("FLAGS", FLAGS);
         }
+
+        //public override byte[] GenerateData(bool Override = false)
+        //{
+        //    if (!Override)
+        //    {
+        //        stringDatas = new List<StringData>();
+        //    }
+        //    AssignValuesToString();
+        //    MemoryStream data = new MemoryStream();
+
+        //    StreamUtil.WriteString(data, MessageType, 4);
+        //    StreamUtil.WriteString(data, SubMessage, 4);
+        //    data.Position += 4;
+        //    for (int i = 0; i < stringDatas.Count; i++)
+        //    {
+        //        StreamUtil.WriteString(data, stringDatas[i].Type + "=" + stringDatas[i].Value);
+        //        if (stringDatas.Count - 1 > i)
+        //        {
+        //            StreamUtil.WriteUInt8(data, 0x09);
+        //        }
+        //    }
+
+        //    StreamUtil.WriteUInt8(data, 0);
+        //    data.Position = 8;
+        //    StreamUtil.WriteInt32(data, (int)data.Length, true);
+        //    data.Position = 0;
+
+        //    byte[] buffer = new byte[data.Length];
+        //    data.Read(buffer, 0, (int)data.Length);
+
+        //    Encoding encorder = new UTF8Encoding();
+        //    Console.WriteLine("Out:\n" + encorder.GetString(buffer)); //now , we write the message as string
+        //    //Console.WriteLine(BitConverter.ToString(buffer).Replace("-", ""));
+
+        //    return buffer.ToArray();
+        //}
     }
 }

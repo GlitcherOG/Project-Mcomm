@@ -21,6 +21,16 @@ namespace SSX3_Server.EAServer
 
         public bool isGlobal = false;
 
+        public void AddUser(EAClientManager client)
+        {
+
+        }
+
+        public void RemoveUser(EAClientManager client)
+        {
+
+        }
+
         public _RomMessage GeneratePlusRoomInfo()
         {
             _RomMessage _RomMessage = new _RomMessage();
@@ -28,7 +38,7 @@ namespace SSX3_Server.EAServer
             _RomMessage.I = roomId.ToString();
             _RomMessage.N = roomType + "." + roomName;
             _RomMessage.H = roomHost;
-            _RomMessage.T = Clients.Count.ToString();
+            _RomMessage.T = Clients.Count.ToString() + 1;
 
             return _RomMessage;
         }
