@@ -104,39 +104,10 @@ namespace SSX3_Server.EAClient
                         }
                     }
 
-                    //if (BuddyClient != null)
-                    //{
-                    //    if (BuddyClient.Available > 0)
-                    //    {
-                    //        byte[] msg = new byte[65535];     //the messages arrive as byte array
-                    //        BuddyNS.Read(msg, 0, msg.Length);   //the same networkstream reads the message sent by the client
-                    //        if (msg[0] != 0)
-                    //        {
-                    //            LastRecive = DateTime.Now;
-                    //            LastPing = DateTime.Now;
-                    //            ProcessMessage(msg);
-                    //        }
-                    //    }
-                    //}
-
-
-                    ////If Buddy Listener Connection Pending
-                    //if (BuddyListener != null)
-                    //{
-                    //    if (BuddyListener.Pending())
-                    //    {
-                    //        BuddyClient = BuddyListener.AcceptTcpClient();
-                    //        BuddyNS = BuddyClient.GetStream();
-                    //        BuddyListener.Stop();
-                    //        BuddyListener = null;
-                    //    }
-                    //}
-
-                    if ((DateTime.Now - LastPing).TotalSeconds >= 20)
+                    if ((DateTime.Now - LastPing).TotalSeconds >= 30)
                     {
                         LastPing = DateTime.Now;
-                        _PngMessageInOut msg2 = new _PngMessageInOut();
-                        msg2.TIME = "20";
+                        _PngMessageOut msg2 = new _PngMessageOut();
                         Broadcast(msg2);
                     }
 
@@ -452,7 +423,7 @@ namespace SSX3_Server.EAClient
             }
             else if (InMessageType == "~png")
             {
-                _PngMessageInOut msg2 = new _PngMessageInOut();
+                _PngMessageIn msg2 = new _PngMessageIn();
 
                 msg2.PraseData(array);
 

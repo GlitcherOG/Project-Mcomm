@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SSX3_Server.EAClient.Messages
 {
-    internal class _PngMessageInOut : EAMessage
+    internal class _PngMessageIn : EAMessage
     {
         public override string MessageType { get { return "~png"; } }
 

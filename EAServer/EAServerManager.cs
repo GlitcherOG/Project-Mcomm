@@ -28,7 +28,6 @@ namespace SSX3_Server.EAServer
 
         public List<EAClientManager> clients = new List<EAClientManager>();
         public List<EAServerRoom> rooms = new List<EAServerRoom>();
-        //public List<Thread> threads = new List<Thread>();
         
         public void InitaliseServer()
         {
