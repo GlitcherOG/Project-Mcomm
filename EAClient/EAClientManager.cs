@@ -478,7 +478,7 @@ namespace SSX3_Server.EAClient
 
                 MoveMessageOut moveMessageOut = new MoveMessageOut();
 
-                moveMessageOut.IDENT = "1";
+                moveMessageOut.IDENT = "0";
                 moveMessageOut.NAME = msg.NAME;
                 moveMessageOut.COUNT = "1";
 
@@ -492,11 +492,23 @@ namespace SSX3_Server.EAClient
                 plusWhoMessageOut.A = EAServerManager.Instance.config.ListerIP;
                 plusWhoMessageOut.X = "";
                 plusWhoMessageOut.R = msg.NAME;
-                plusWhoMessageOut.RI = "1";
+                plusWhoMessageOut.RI = "0";
 
                 Broadcast(plusWhoMessageOut);
 
                 PlusUserMessageOut plusUserMessageOut = new PlusUserMessageOut();
+
+                plusUserMessageOut.I = "1";
+                plusUserMessageOut.N = LoadedPersona.Name;
+                plusUserMessageOut.M = NAME;
+                plusUserMessageOut.A = EAServerManager.Instance.config.ListerIP;
+                plusUserMessageOut.X = "";
+                plusUserMessageOut.G = "0";
+                plusUserMessageOut.P = Ping.ToString();
+
+                Broadcast(plusUserMessageOut);
+
+                plusUserMessageOut = new PlusUserMessageOut();
 
                 plusUserMessageOut.I = "1";
                 plusUserMessageOut.N = LoadedPersona.Name;
@@ -513,6 +525,10 @@ namespace SSX3_Server.EAClient
                 plusPopMessageOut.Z = "0"+"/"+"1";
 
                 Broadcast(plusPopMessageOut);
+
+                PlusMSGMessageOut plusMSGMessageOut = new PlusMSGMessageOut();
+
+                Broadcast(plusMSGMessageOut);
             }
             else if (InMessageType == "room")
             {
