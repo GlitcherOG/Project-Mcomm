@@ -30,7 +30,7 @@ namespace SSX3_Server.DiscordBot
             var discordConfig = new DiscordConfiguration()
             {
                 Intents = DiscordIntents.All,
-                Token = File.ReadAllText("Token.txt"),
+                Token = Token,
                 TokenType = TokenType.Bot,
                 AutoReconnect = true,
                 MinimumLogLevel = Microsoft.Extensions.Logging.LogLevel.Error
@@ -104,6 +104,39 @@ namespace SSX3_Server.DiscordBot
             DiscordEmbedBuilder embed = new DiscordEmbedBuilder();
 
             embed.Title = "Online Persona's";
+
+            for (int i = 0; i < strings.Count; i++)
+            {
+                embed.Description += strings[i] + "\n";
+            }
+
+            embed.WithThumbnail("https://media.discordapp.net/attachments/1218902383568883794/1219202018816692255/Bot.png");
+
+            await ctx.RespondAsync(embed);
+        }
+
+        [Command("highscore")]
+        public async Task highscoreCommand(CommandContext ctx, string args = "")
+        {
+            int DatabaseEntry = 0;
+
+            var Database = EAServerManager.Instance.highscoreDatabase.courseEntries[DatabaseEntry];
+
+            if (args != "")
+            {
+                DatabaseEntry = HighscoreDatabase.IDToName.FirstOrDefault(x => x.Value == args).Key;
+            }
+
+            List<string> strings = new List<string>();
+
+            for (int i = 0; i < Database.Entries.Count; i++)
+            {
+                strings.Add(Database.Entries[i].Rank + " - " + Database.Entries[i].Name + " - " + Database.Entries[i].Score);
+            }
+
+            DiscordEmbedBuilder embed = new DiscordEmbedBuilder();
+
+            embed.Title = HighscoreDatabase.IDToName[DatabaseEntry] + " Highscores";
 
             for (int i = 0; i < strings.Count; i++)
             {

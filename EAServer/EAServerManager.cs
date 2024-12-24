@@ -21,6 +21,7 @@ namespace SSX3_Server.EAServer
         public MainBot MainBot;
 
         public EAServerConfig config;
+        public HighscoreDatabase highscoreDatabase;
 
         int IDCount = 30;
         int RoomIDCount = 0;
@@ -37,6 +38,8 @@ namespace SSX3_Server.EAServer
             clients = new List<EAClientManager>();
             MainBot = new MainBot();
             config = EAServerConfig.Load(AppContext.BaseDirectory + "\\ServerConfig.cfg");
+            highscoreDatabase = HighscoreDatabase.Load(AppContext.BaseDirectory + "\\Highscore.json");
+
 
             GenerateRequiredFiles();
 
@@ -69,6 +72,13 @@ namespace SSX3_Server.EAServer
             {
                 config = new EAServerConfig();
                 config.CreateJson(AppContext.BaseDirectory + "\\ServerConfig.cfg");
+            }
+
+            if(highscoreDatabase == null)
+            {
+                highscoreDatabase = new HighscoreDatabase();
+                highscoreDatabase.CreateBlankDatabase();
+                highscoreDatabase.CreateJson(AppContext.BaseDirectory + "\\Highscore.json");
             }
 
             if(!File.Exists(AppContext.BaseDirectory + "\\News.txt"))

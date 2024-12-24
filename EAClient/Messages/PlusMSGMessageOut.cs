@@ -12,7 +12,7 @@ namespace SSX3_Server.EAClient.Messages
 
         public string F = "U";
         public string T = "Test";
-        public string N = "";
+        public string N = "Test";
 
         public override void AssignValues()
         {

@@ -480,7 +480,7 @@ namespace SSX3_Server.EAClient
 
                 moveMessageOut.IDENT = "1";
                 moveMessageOut.NAME = msg.NAME;
-                moveMessageOut.COUNT = "1";
+                moveMessageOut.COUNT = "0";
 
                 Broadcast(moveMessageOut);
 
@@ -491,6 +491,7 @@ namespace SSX3_Server.EAClient
                 plusWhoMessageOut.M = NAME;
                 plusWhoMessageOut.A = ADDR;
                 plusWhoMessageOut.X = "";
+                plusWhoMessageOut.S = "0";
                 plusWhoMessageOut.R = msg.NAME;
                 plusWhoMessageOut.RI = "1";
 
@@ -508,17 +509,17 @@ namespace SSX3_Server.EAClient
 
                 Broadcast(plusUserMessageOut);
 
-                plusUserMessageOut = new PlusUserMessageOut();
+                //plusUserMessageOut = new PlusUserMessageOut();
 
-                plusUserMessageOut.I = ID.ToString();
-                plusUserMessageOut.N = LoadedPersona.Name;
-                plusUserMessageOut.M = NAME;
-                plusUserMessageOut.A = ADDR;
-                plusUserMessageOut.X = "";
-                plusUserMessageOut.G = "0";
-                plusUserMessageOut.P = Ping.ToString();
+                //plusUserMessageOut.I = ID.ToString();
+                //plusUserMessageOut.N = LoadedPersona.Name;
+                //plusUserMessageOut.M = NAME;
+                //plusUserMessageOut.A = ADDR;
+                //plusUserMessageOut.X = "";
+                //plusUserMessageOut.G = "0";
+                //plusUserMessageOut.P = Ping.ToString();
 
-                Broadcast(plusUserMessageOut);
+                //Broadcast(plusUserMessageOut);
 
                 PlusPopMessageOut plusPopMessageOut = new PlusPopMessageOut();
 
@@ -530,9 +531,9 @@ namespace SSX3_Server.EAClient
 
                 Broadcast(plusMSGMessageOut);
 
-                PlusSesMessageOut plus = new PlusSesMessageOut();
+                //PlusSesMessageOut plus = new PlusSesMessageOut();
 
-                Broadcast(plus);
+                //Broadcast(plus);
             }
             else if (InMessageType == "room")
             {
