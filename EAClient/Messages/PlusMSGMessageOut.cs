@@ -11,8 +11,8 @@ namespace SSX3_Server.EAClient.Messages
         public override string MessageType { get { return "+msg"; } }
 
         public string F = "U";
-        public string T = "Test";
-        public string N = "Test";
+        public string T = "Welcome to the game";
+        public string N = "";
 
         public override void AssignValues()
         {

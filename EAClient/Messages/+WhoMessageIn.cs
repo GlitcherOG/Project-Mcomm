@@ -13,7 +13,7 @@ namespace SSX3_Server.EAClient.Messages
         public string I;
         public string N;
         public string M;
-        public string F  = "C";
+        public string F  = "";
         public string A;
         public string S  = "";
         public string X;

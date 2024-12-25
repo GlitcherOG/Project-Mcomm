@@ -491,7 +491,7 @@ namespace SSX3_Server.EAClient
                 plusWhoMessageOut.M = NAME;
                 plusWhoMessageOut.A = ADDR;
                 plusWhoMessageOut.X = "";
-                plusWhoMessageOut.S = "0";
+                plusWhoMessageOut.S = "1";
                 plusWhoMessageOut.R = msg.NAME;
                 plusWhoMessageOut.RI = "1";
 
@@ -509,21 +509,21 @@ namespace SSX3_Server.EAClient
 
                 Broadcast(plusUserMessageOut);
 
-                //plusUserMessageOut = new PlusUserMessageOut();
+                plusUserMessageOut = new PlusUserMessageOut();
 
-                //plusUserMessageOut.I = ID.ToString();
-                //plusUserMessageOut.N = LoadedPersona.Name;
-                //plusUserMessageOut.M = NAME;
-                //plusUserMessageOut.A = ADDR;
-                //plusUserMessageOut.X = "";
-                //plusUserMessageOut.G = "0";
-                //plusUserMessageOut.P = Ping.ToString();
+                plusUserMessageOut.I = ID.ToString();
+                plusUserMessageOut.N = LoadedPersona.Name;
+                plusUserMessageOut.M = NAME;
+                plusUserMessageOut.A = ADDR;
+                plusUserMessageOut.X = "";
+                plusUserMessageOut.G = "0";
+                plusUserMessageOut.P = Ping.ToString();
 
-                //Broadcast(plusUserMessageOut);
+                Broadcast(plusUserMessageOut);
 
                 PlusPopMessageOut plusPopMessageOut = new PlusPopMessageOut();
 
-                plusPopMessageOut.Z = "0" + "/" + "1";
+                plusPopMessageOut.Z = "1" + "/" + "1";
 
                 Broadcast(plusPopMessageOut);
 
@@ -534,6 +534,13 @@ namespace SSX3_Server.EAClient
                 //PlusSesMessageOut plus = new PlusSesMessageOut();
 
                 //Broadcast(plus);
+            }
+            else if (InMessageType == "chal")
+            {
+                ChalMessageIn chalMessageIn = new ChalMessageIn();
+                chalMessageIn.PraseData(array);
+                chalMessageIn.PERS = "test";
+                Broadcast(chalMessageIn);
             }
             else if (InMessageType == "room")
             {
@@ -581,20 +588,6 @@ namespace SSX3_Server.EAClient
                 {
                     Room.BoradcastBackUserList(this);
                 }
-                //for (int i = 0; i < 6; i++)
-                //{
-                //    PlusUserMessageOut plusUserMessageOut = new PlusUserMessageOut();
-
-                //    plusUserMessageOut.I = i.ToString();
-                //    plusUserMessageOut.N = "Gamer"+ i.ToString();
-                //    plusUserMessageOut.M = "Gamer"+ i.ToString();
-                //    plusUserMessageOut.A = ADDR;
-                //    plusUserMessageOut.X = "";
-                //    plusUserMessageOut.G = "1";
-                //    plusUserMessageOut.P = Ping.ToString();
-
-                //    Broadcast(plusUserMessageOut);
-                //}
             }
             else if (InMessageType == "snap")
             {
