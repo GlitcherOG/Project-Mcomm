@@ -122,7 +122,7 @@ namespace SSX3_Server.EAClient
                             {
                                 LastRecive = DateTime.Now;
                                 LastPing = DateTime.Now;
-                                ProcessMessage(msg);
+                                ProcessBuddyMessage(msg);
                             }
                         }
                     }
@@ -472,10 +472,6 @@ namespace SSX3_Server.EAClient
 
                 msg.PraseData(array);
 
-                OnlnMessageIn msg2 = new OnlnMessageIn();
-                msg2.PERS = msg.PERS;
-                Broadcast(msg2);
-
                 UserMessageOut userMessageOut = new UserMessageOut();
 
                 userMessageOut.PERS = msg.PERS;
@@ -658,7 +654,37 @@ namespace SSX3_Server.EAClient
 
         public void ProcessBuddyMessage(byte[] array)
         {
+            Console.WriteLine("Buddy Server");
+            string InMessageType = EAMessage.MessageCommandType(array);
 
+            if(InMessageType=="AUTH")
+            {
+                AUTHBuddyMessageIn msg = new AUTHBuddyMessageIn();
+
+                msg.PraseData(array);
+
+                BroadcastBuddy(msg);
+            }
+            if(InMessageType=="PSET")
+            {
+                PSETBuddyMessageIn msg = new PSETBuddyMessageIn();
+
+                msg.PraseData(array);
+
+                PGETBuddyMessageIn pGETBuddyMessageIn = new PGETBuddyMessageIn();
+
+                pGETBuddyMessageIn.PROD = msg.PROD;
+                pGETBuddyMessageIn.USER = LoadedPersona.Name;
+                pGETBuddyMessageIn.STAT = msg.STAT;
+                pGETBuddyMessageIn.SHOW = msg.SHOW;
+
+                BroadcastBuddy(pGETBuddyMessageIn);
+            }
+            else
+            {
+                Console.WriteLine("Unknown Buddy Message " + InMessageType);
+                Console.WriteLine(System.Text.Encoding.UTF8.GetString(array));
+            }
         }
 
         public void Broadcast(EAMessage msg)
@@ -666,6 +692,13 @@ namespace SSX3_Server.EAClient
             LastSend = DateTime.Now;
             byte[] bytes = msg.GenerateData();
             MainNS.Write(bytes, 0, bytes.Length);
+        }
+
+        public void BroadcastBuddy(EAMessage msg)
+        {
+            LastSend = DateTime.Now;
+            byte[] bytes = msg.GenerateData();
+            BuddyNS.Write(bytes, 0, bytes.Length);
         }
 
         public PlusUserMessageOut GeneratePlusUser()
