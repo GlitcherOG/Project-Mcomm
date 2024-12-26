@@ -476,7 +476,16 @@ namespace SSX3_Server.EAClient
 
                 msg.PraseData(array);
 
+                Thread.Sleep(3000);
+
+                //PersMessageOut msg2 = new PersMessageOut();
+
+                //msg2.SubMessage = "room";
+                //Broadcast(msg2);
+
                 MoveMessageOut moveMessageOut = new MoveMessageOut();
+
+                moveMessageOut.SubMessage = "room";
 
                 moveMessageOut.IDENT = "1";
                 moveMessageOut.NAME = msg.NAME;
