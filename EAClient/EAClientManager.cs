@@ -59,6 +59,10 @@ namespace SSX3_Server.EAClient
         public TcpClient MainClient = null;
         NetworkStream MainNS = null;
 
+        TcpListener BuddyListener;
+        public TcpClient BuddyClient = null;
+        NetworkStream BuddyNS = null;
+
         //10 seconds to start till proper connection establised
         //ping every 1 min if failed ping close connection
         public bool LoggedIn = false;
@@ -76,6 +80,10 @@ namespace SSX3_Server.EAClient
             MASK = MASKin;
             MainClient = tcpClient;
             MainNS = MainClient.GetStream();
+
+            IPEndPoint remoteIpEndPoint = MainClient.Client.RemoteEndPoint as IPEndPoint;
+            BuddyListener = new TcpListener(remoteIpEndPoint.Address, 13505);
+            BuddyListener.Start();
 
             LastRecive = DateTime.Now;
             LastSend = DateTime.Now;
@@ -101,6 +109,34 @@ namespace SSX3_Server.EAClient
                             LastRecive = DateTime.Now;
                             LastPing = DateTime.Now;
                             ProcessMessage(msg);
+                        }
+                    }
+
+                    if (BuddyClient != null)
+                    {
+                        if (BuddyClient.Available > 0)
+                        {
+                            byte[] msg = new byte[65535];     //the messages arrive as byte array
+                            BuddyNS.Read(msg, 0, msg.Length);   //the same networkstream reads the message sent by the client
+                            if (msg[0] != 0)
+                            {
+                                LastRecive = DateTime.Now;
+                                LastPing = DateTime.Now;
+                                ProcessMessage(msg);
+                            }
+                        }
+                    }
+
+
+                    //If Buddy Listener Connection Pending
+                    if (BuddyListener != null)
+                    {
+                        if (BuddyListener.Pending())
+                        {
+                            BuddyClient = BuddyListener.AcceptTcpClient();
+                            BuddyNS = BuddyClient.GetStream();
+                            BuddyListener.Stop();
+                            BuddyListener = null;
                         }
                     }
 
@@ -138,16 +174,6 @@ namespace SSX3_Server.EAClient
         public void ProcessMessage(byte[] array)
         {
             string InMessageType = EAMessage.MessageCommandType(array);
-
-            //Type c;
-            //if (!EAMessage.InNameToClass.TryGetValue(InMessageType, out c))
-            //{
-            //    Console.WriteLine("Unexpected Message Type " + InMessageType + ":");
-            //    Console.WriteLine(System.Text.Encoding.UTF8.GetString(array));
-            //    return;
-            //}
-
-            //var msg = (EAMessage)Activator.CreateInstance(c);
 
             if (InMessageType == "addr")
             {
@@ -426,6 +452,8 @@ namespace SSX3_Server.EAClient
 
                 msg2.SubMessage = "new" + msg.NAME;
 
+                msg2.BUDDYSERVERNAME = "ps2ssx04.ea.com";
+
                 msg2.NEWS = EAServerManager.Instance.News;
 
                 Broadcast(msg2);
@@ -444,12 +472,15 @@ namespace SSX3_Server.EAClient
 
                 msg.PraseData(array);
 
+                OnlnMessageIn msg2 = new OnlnMessageIn();
+                msg2.PERS = msg.PERS;
+                Broadcast(msg2);
+
                 UserMessageOut userMessageOut = new UserMessageOut();
 
                 userMessageOut.PERS = msg.PERS;
                 userMessageOut.MESG = msg.PERS;
-                userMessageOut.ADDR = ADDR;
-
+                userMessageOut.ADDR = "192.168.0.141";
 
                 Broadcast(userMessageOut);
             }
@@ -468,7 +499,7 @@ namespace SSX3_Server.EAClient
                     //stop quick match search
                 }
 
-                Broadcast(msg);
+                //Broadcast(msg);
             }
             else if (InMessageType == "move")
             {
@@ -625,6 +656,11 @@ namespace SSX3_Server.EAClient
             }
         }
 
+        public void ProcessBuddyMessage(byte[] array)
+        {
+
+        }
+
         public void Broadcast(EAMessage msg)
         {
             LastSend = DateTime.Now;
@@ -708,6 +744,15 @@ namespace SSX3_Server.EAClient
         {
             MainNS.Close();
             MainClient.Close();
+            if (BuddyListener.Pending())
+            {
+                BuddyClient.Close();
+                BuddyNS.Close();
+            }
+            else
+            {
+                BuddyListener.Stop();
+            }
         }
     }
 }

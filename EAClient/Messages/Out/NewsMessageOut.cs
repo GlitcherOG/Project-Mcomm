@@ -11,6 +11,10 @@ namespace SSX3_Server.EAClient.Messages
         public override string MessageType { get { return "news"; } }
 
         public string NEWS;
+        public string BUDDYSERVERNAME;
+        public string BUDDYPORT = "13505";
+        public string BUDDYRESOURCE = "SSX-PS2-2004";
+        public string BUDDYMSGTIMEOUT = "864000";
 
         public override void AssignValues()
         {
@@ -19,19 +23,23 @@ namespace SSX3_Server.EAClient.Messages
 
         public override void AssignValuesToString()
         {
-            //if (SubMessage == "")
-            //{
-            //    AddStringData("NEWS", NEWS);
-            //}
+            AddStringData("BUDDYSERVERNAME", BUDDYSERVERNAME);
+            AddStringData("BUDDYPORT", BUDDYPORT);
+            AddStringData("BUDDYUSERNAME", BUDDYRESOURCE);
+            AddStringData("BUDDYMSGTIMEOUT", BUDDYMSGTIMEOUT);
         }
 
         public override byte[] GenerateData(bool Override = false)
         {
             MemoryStream data = new MemoryStream();
-
+            AssignValuesToString();
             StreamUtil.WriteString(data, MessageType, 4);
             StreamUtil.WriteString(data, SubMessage, 4);
             data.Position += 4;
+            for (int i = 0; i < stringDatas.Count; i++)
+            {
+                StreamUtil.WriteString(data, stringDatas[i].Type + "=" + stringDatas[i].Value + "\n");
+            }
             StreamUtil.WriteString(data, NEWS + "\n");
 
             StreamUtil.WriteUInt8(data, 0);
