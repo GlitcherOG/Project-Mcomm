@@ -15,7 +15,7 @@ namespace SSX3_Server.EAClient.Messages
         public string I = "1"; //ID
         public string N = "Beginner.qwerty";
         public string H { get; set; } = "FreeSO"; //Host?
-        public string F { get; set; } = "CK"; //?
+        public string F { get; set; } = "CK"; //Flag If no flag requires password
 
         public string T = "0"; //Count
 

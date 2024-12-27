@@ -20,7 +20,7 @@ namespace SSX3_Server.EAClient.Messages
         public string P4;
         public string AUTH;
         public string ADDR = "192.168.0.141";
-        public string FROM;
+        public string FROM; //Wants an IP Address
         public string SEED;
         public string WHEN = "2003.12.8 15:52:54";
 

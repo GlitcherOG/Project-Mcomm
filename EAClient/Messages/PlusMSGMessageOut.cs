@@ -10,7 +10,7 @@ namespace SSX3_Server.EAClient.Messages
     {
         public override string MessageType { get { return "+msg"; } }
 
-        public string F = "U";
+        public string F = "B"; //P for Priv,B for cast, Blank for Chat
         public string T = "Welcome to the game";
         public string N = "";
 
@@ -23,9 +23,9 @@ namespace SSX3_Server.EAClient.Messages
 
         public override void AssignValuesToString()
         {
-            AddStringData("F", F);
-            AddStringData("T", T);
             AddStringData("N", N);
+            AddStringData("T", T);
+            AddStringData("F", F);
         }
     }
 }
