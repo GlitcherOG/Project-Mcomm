@@ -23,10 +23,13 @@ namespace SSX3_Server.EAClient.Messages
 
         public override void AssignValuesToString()
         {
-            AddStringData("BUDDYSERVERNAME", BUDDYSERVERNAME);
-            AddStringData("BUDDYPORT", BUDDYPORT);
-            AddStringData("BUDDYUSERNAME", BUDDYRESOURCE);
-            AddStringData("BUDDYMSGTIMEOUT", BUDDYMSGTIMEOUT);
+            if (SubMessage == "new0")
+            {
+                AddStringData("BUDDYSERVERNAME", BUDDYSERVERNAME);
+                AddStringData("BUDDYPORT", BUDDYPORT);
+                AddStringData("BUDDYUSERNAME", BUDDYRESOURCE);
+                AddStringData("BUDDYMSGTIMEOUT", BUDDYMSGTIMEOUT);
+            }
         }
 
         public override byte[] GenerateData(bool Override = false)

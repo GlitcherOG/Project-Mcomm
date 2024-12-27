@@ -14,7 +14,10 @@ namespace SSX3_Server.EAClient.Messages
 
         public override void AssignValues()
         {
-            PERS = stringDatas[0].Value;
+            if (stringDatas.Count > 0)
+            {
+                PERS = stringDatas[0].Value;
+            }
         }
 
         public override void AssignValuesToString()

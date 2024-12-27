@@ -464,6 +464,16 @@ namespace SSX3_Server.EAClient
                 msg2.NEWS = EAServerManager.Instance.News;
 
                 Broadcast(msg2);
+
+                Thread.Sleep(3000);
+
+                MesgMessageIn msg3 = new MesgMessageIn();
+
+                msg3.PRIV = "SSX_Community";
+                msg3.TEXT = "challenge 1 0 0 0 1 0 4 1 NA_R_F004 0 0 0 0";
+                msg3.ATTR = "N3";
+
+                Broadcast(msg3);
             }
             else if (InMessageType == "~png")
             {
@@ -482,7 +492,6 @@ namespace SSX3_Server.EAClient
                 UserMessageOut userMessageOut = new UserMessageOut();
 
                 userMessageOut.PERS = msg.PERS;
-                //userMessageOut.MESG = msg.PERS;
                 userMessageOut.STAT = "1/1/1/1";
                 userMessageOut.RANK = "10";
                 userMessageOut.ADDR = "192.168.0.141";
@@ -585,8 +594,8 @@ namespace SSX3_Server.EAClient
             {
                 ChalMessageIn chalMessageIn = new ChalMessageIn();
                 chalMessageIn.PraseData(array);
-                chalMessageIn.PERS = "test";
-                Broadcast(chalMessageIn);
+                //chalMessageIn.PERS = "test";
+                //Broadcast(chalMessageIn);
             }
             else if (InMessageType == "room")
             {
