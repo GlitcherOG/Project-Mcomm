@@ -13,8 +13,8 @@ namespace SSX3_Server.EAClient.Messages
         public string PERS;
         public string LAST  = "2004.6.1 15:57:52";
         public string EXPR  = "1072566000";
-        public string STAT = "";
-        public string CHEAT = "3";
+        public string STAT = "1";
+        public string CHEAT = "2";
         public string ACK_REP = "186";
         public string REP = "186";
         public string PLAST = "2004.6.1 15:57:46";
@@ -24,6 +24,7 @@ namespace SSX3_Server.EAClient.Messages
         public string SERV = "192.168.0.141";
         public string RANK = "99999";
         public string MESG;
+        public string ROOM;
 
         public override void AssignValues()
         {
@@ -33,19 +34,20 @@ namespace SSX3_Server.EAClient.Messages
         public override void AssignValuesToString()
         {
             AddStringData("PERS", PERS);
-            AddStringData("LAST", LAST);
-            AddStringData("EXPR", EXPR);
+            //AddStringData("LAST", LAST);
+            //AddStringData("EXPR", EXPR);
             AddStringData("STAT", STAT);
-            AddStringData("CHEAT", CHEAT);
-            AddStringData("ACK_REP", ACK_REP);
-            AddStringData("REP", REP);
-            AddStringData("PLAST", PLAST);
-            AddStringData("PSINCE", PSINCE);
-            AddStringData("DCNT", DCNT);
-            AddStringData("ADDR", ADDR);
-            AddStringData("SERV", SERV);
+            //AddStringData("CHEAT", CHEAT);
+            //AddStringData("ACK_REP", ACK_REP);
+            //AddStringData("REP", REP);
+            //AddStringData("PLAST", PLAST);
+            //AddStringData("PSINCE", PSINCE);
+            //AddStringData("DCNT", DCNT);
             AddStringData("RANK", RANK);
-            AddStringData("MESG", MESG);
+            AddStringData("ADDR", ADDR);
+            //AddStringData("SERV", SERV);
+            //AddStringData("MESG", MESG);
+            AddStringData("ROOM", ROOM);
         }
     }
 }

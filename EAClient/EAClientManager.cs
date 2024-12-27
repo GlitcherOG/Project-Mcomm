@@ -120,8 +120,8 @@ namespace SSX3_Server.EAClient
                             BuddyNS.Read(msg, 0, msg.Length);   //the same networkstream reads the message sent by the client
                             if (msg[0] != 0)
                             {
-                                LastRecive = DateTime.Now;
-                                LastPing = DateTime.Now;
+                                //LastRecive = DateTime.Now;
+                                //LastPing = DateTime.Now;
                                 ProcessBuddyMessage(msg);
                             }
                         }
@@ -145,6 +145,13 @@ namespace SSX3_Server.EAClient
                         LastPing = DateTime.Now;
                         _PngMessageOut msg2 = new _PngMessageOut();
                         Broadcast(msg2);
+
+                        if(BuddyClient!=null)
+                        {
+                            PINGBuddyMessageIn msg3 = new PINGBuddyMessageIn();
+
+                            BroadcastBuddy(msg3);
+                        }
                     }
 
                     if ((DateTime.Now - LastRecive).TotalSeconds >= TimeoutSeconds)
@@ -475,8 +482,11 @@ namespace SSX3_Server.EAClient
                 UserMessageOut userMessageOut = new UserMessageOut();
 
                 userMessageOut.PERS = msg.PERS;
-                userMessageOut.MESG = msg.PERS;
+                //userMessageOut.MESG = msg.PERS;
+                userMessageOut.STAT = "1/1/1/1";
+                userMessageOut.RANK = "10";
                 userMessageOut.ADDR = "192.168.0.141";
+                userMessageOut.ROOM = "Beginner.Peak1";
 
                 Broadcast(userMessageOut);
             }
@@ -664,21 +674,50 @@ namespace SSX3_Server.EAClient
                 msg.PraseData(array);
 
                 BroadcastBuddy(msg);
+
+                ADMNBuddyMessageIn aDMNBuddyMessageIn = new ADMNBuddyMessageIn();
+
+                aDMNBuddyMessageIn.USER = "SSX_Community";
+                aDMNBuddyMessageIn.BODY = "Welcome to the commuinty server";
+                aDMNBuddyMessageIn.SUBJ = "";
+                aDMNBuddyMessageIn.TYPE = "C";
+                aDMNBuddyMessageIn.TIME = "1735269667";
+
+                BroadcastBuddy(aDMNBuddyMessageIn);
             }
-            if(InMessageType=="PSET")
+            else if(InMessageType=="PSET")
             {
                 PSETBuddyMessageIn msg = new PSETBuddyMessageIn();
+
+                msg.PraseData(array);
+            }
+            else if(InMessageType=="RGET")
+            {
+                RGETBuddyMessageIn msg = new RGETBuddyMessageIn();
+
+                msg.ID = "2";
+                msg.SIZE = "0";
+
+                BroadcastBuddy(msg);
+            }
+            else if (InMessageType=="PADD")
+            {
+                PADDBuddyMessageIn msg = new PADDBuddyMessageIn();
 
                 msg.PraseData(array);
 
                 PGETBuddyMessageIn pGETBuddyMessageIn = new PGETBuddyMessageIn();
 
-                pGETBuddyMessageIn.PROD = msg.PROD;
-                pGETBuddyMessageIn.USER = LoadedPersona.Name;
-                pGETBuddyMessageIn.STAT = msg.STAT;
-                pGETBuddyMessageIn.SHOW = msg.SHOW;
+                pGETBuddyMessageIn.PROD = "S%3dSSX-PS2-2004%0aSSXID%3d3%0aLOCID%3d0%0a";
+                pGETBuddyMessageIn.USER = msg.USER;
+                pGETBuddyMessageIn.STAT = "1";
+                pGETBuddyMessageIn.SHOW = "1";
 
                 BroadcastBuddy(pGETBuddyMessageIn);
+            }
+            else if (InMessageType=="PING")
+            {
+
             }
             else
             {
@@ -777,7 +816,7 @@ namespace SSX3_Server.EAClient
         {
             MainNS.Close();
             MainClient.Close();
-            if (BuddyListener.Pending())
+            if (BuddyListener == null)
             {
                 BuddyClient.Close();
                 BuddyNS.Close();
