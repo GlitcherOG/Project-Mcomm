@@ -59,26 +59,5 @@ namespace SSX3_Server.EAClient
                 return null;
             }
         }
-
-        public void AddUserData(EAClient.EAClientManager manager)
-        {
-            Name = manager.NAME;
-            Pass = manager.PASS;
-            Spam = manager.SPAM;
-            Mail = manager.MAIL;
-            Gend = manager.GEND;
-            Born = manager.BORN;
-            Defper = manager.DEFPER;
-            Alts = manager.ALTS;
-            Minage = manager.MINAGE;
-            Lang = manager.LANG;
-            Prod = manager.PROD;
-            Vers = manager.VERS;
-            GameReg = manager.SLUS;
-            Since = manager.SINCE;
-            Last = manager.LAST;
-
-            PersonaList = manager.PersonaList;
-        }
     }
 }

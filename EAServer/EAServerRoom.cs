@@ -31,9 +31,9 @@ namespace SSX3_Server.EAServer
 
         }
 
-        public _RomMessage GeneratePlusRoomInfo()
+        public PlusRomMessageOut GeneratePlusRoomInfo()
         {
-            _RomMessage _RomMessage = new _RomMessage();
+            PlusRomMessageOut _RomMessage = new PlusRomMessageOut();
 
             _RomMessage.I = roomId.ToString();
             _RomMessage.N = roomType + "." + roomName;

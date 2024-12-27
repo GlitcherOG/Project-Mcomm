@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SSX3_Server.EAServer;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -28,13 +29,18 @@ namespace SSX3_Server.EAClient.Messages
 
         public override void AssignValuesToString()
         {
-            AddStringData("NAME", RoomType + "."+NAME);
+            AddStringData("NAME", RoomType + "." + NAME);
             //AddStringData("LIDENT", "0");
             //AddStringData("LCOUNT", "0");
             if (PASS != "")
             {
                 AddStringData("PASS", PASS);
             }
+        }
+
+        public override void ProcessCommand(EAClientManager client, EAServerRoom room = null)
+        {
+            client.Broadcast(this);
         }
     }
 }

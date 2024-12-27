@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SSX3_Server.EAServer;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,10 +18,9 @@ namespace SSX3_Server.EAClient.Messages
             TIME = stringDatas[0].Value;
         }
 
-        public override void AssignValuesToString()
+        public override void ProcessCommand(EAClientManager client, EAServerRoom room = null)
         {
-            AddStringData("TIME", TIME);
+            client.Ping = int.Parse(TIME);
         }
-
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SSX3_Server.EAServer;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -50,6 +51,54 @@ namespace SSX3_Server.EAClient.Messages
             AddStringData("VERS", VERS);
             AddStringData("LANG", LANG);
             AddStringData("SLUS", SLUS);
+        }
+
+        public override void ProcessCommand(EAClientManager client, EAServerRoom room = null)
+        {
+            //Apply AUTH Data
+
+            //Confirm Auth Data with saves
+            var UserData = EAClientManager.GetUserData(NAME);
+            if (UserData != null)
+            {
+                client.userData = UserData;
+                AuthMessageOut msg2 = new AuthMessageOut();
+
+                if (((UserData.Name == NAME /*&& TempData.Pass == msg.stringDatas[1].Value*/) || UserData.Bypass == true) && UserData.Banned == false)
+                {
+                    client.userData.Last = DateTime.Now.ToString("yyyy.MM.dd hh:mm:ss");
+
+                    client.SaveEAUserData();
+
+                    msg2.TOS = "1";
+                    msg2.MAIL = UserData.Mail;
+                    msg2.PERSONAS = client.GetPersonaList();
+                    msg2.BORN = UserData.Born;
+                    msg2.GEND = UserData.Gend;
+                    msg2.FROM = "US";
+                    msg2.LANG = "en";
+                    msg2.SPAM = UserData.Spam;
+                    msg2.SINCE = UserData.Since;
+
+                    client.TimeoutSeconds = 60;
+                    client.LoggedIn = true;
+                    client.Broadcast(msg2);
+
+                    EAServerManager.Instance.SendRooms(client);
+                }
+                else
+                {
+                    msg2.SubMessage = "imst";
+                    client.Broadcast(msg2);
+                }
+
+            }
+            else
+            {
+                AuthMessageOut msg2 = new AuthMessageOut();
+                msg2.SubMessage = "imst";
+                client.Broadcast(msg2);
+            }
         }
     }
 }

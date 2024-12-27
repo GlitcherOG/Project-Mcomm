@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SSX3_Server.EAServer;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SSX3_Server.EAClient.Messages
 {
-    public class snapMessageIn : EAMessage
+    public class SnapMessageInOut : EAMessage
     {
         public override string MessageType { get { return "snap"; } }
 
@@ -32,6 +33,17 @@ namespace SSX3_Server.EAClient.Messages
             AddStringData("START", START);
             AddStringData("RANGE", RANGE);
             AddStringData("SEQN", SEQN);
+        }
+
+        public override void ProcessCommand(EAClientManager client, EAServerRoom room = null)
+        {
+            client.Broadcast(this);
+
+            //NOTE CHANGE TO PULL FROM DATABASE
+
+            PlusSnapMessageOut plusSnapMessageOut = new PlusSnapMessageOut();
+
+            client.Broadcast(plusSnapMessageOut);
         }
     }
 }

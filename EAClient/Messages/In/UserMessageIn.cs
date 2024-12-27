@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SSX3_Server.EAServer;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,6 +21,22 @@ namespace SSX3_Server.EAClient.Messages
         public override void AssignValuesToString()
         {
             AddStringData("PERS", PERS);
+        }
+
+        public override void ProcessCommand(EAClientManager client, EAServerRoom room = null)
+        {
+            //NOTE FIX SO ITS PROPERLY GRABBING DETAILS
+
+
+            UserMessageOut userMessageOut = new UserMessageOut();
+
+            userMessageOut.PERS = PERS;
+            userMessageOut.STAT = "1/1/1/1";
+            userMessageOut.RANK = "10";
+            userMessageOut.ADDR = "192.168.0.141";
+            userMessageOut.ROOM = "Beginner.Peak1";
+
+            client.Broadcast(userMessageOut);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SSX3_Server.EAServer;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -9,7 +10,7 @@ namespace SSX3_Server.EAClient.Messages
 {
     public class QuikMessageIn : EAMessage
     {
-        public override string MessageType { get { return "dper"; } }
+        public override string MessageType { get { return "quik"; } }
 
         public string KIND;
         public bool Ranked;
@@ -22,7 +23,7 @@ namespace SSX3_Server.EAClient.Messages
         {
             KIND = stringDatas[0].Value;
 
-            if(stringDatas.Count>1)
+            if (stringDatas.Count > 1)
             {
                 string[] LineSplit = stringDatas[1].Value.Split(",");
 
@@ -31,7 +32,7 @@ namespace SSX3_Server.EAClient.Messages
                     Ranked = true;
                 }
 
-                if (LineSplit[1]=="1")
+                if (LineSplit[1] == "1")
                 {
                     Race = true;
                 }
@@ -58,7 +59,7 @@ namespace SSX3_Server.EAClient.Messages
         {
             AddStringData("KIND", KIND);
 
-            if(KIND!="*")
+            if (KIND != "*")
             {
                 string TempString = "";
 
@@ -99,6 +100,20 @@ namespace SSX3_Server.EAClient.Messages
                 AddStringData("QMFT", TempString);
             }
 
+        }
+
+        public override void ProcessCommand(EAClientManager client, EAServerRoom room = null)
+        {
+            if (KIND == "DeathRace")
+            {
+                //quick match search
+            }
+            else if (KIND == "*")
+            {
+                //stop quick match search
+            }
+
+            client.Broadcast(this);
         }
     }
 }

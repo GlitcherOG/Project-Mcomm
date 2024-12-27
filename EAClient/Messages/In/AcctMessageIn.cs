@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SSX3_Server.EAServer;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -44,22 +45,74 @@ namespace SSX3_Server.EAClient.Messages
 
         public override void AssignValuesToString()
         {
-            if (SubMessage == "")
+            AddStringData("NAME", NAME);
+            AddStringData("PASS", PASS);
+            AddStringData("SPAM", SPAM);
+            AddStringData("MAIL", MAIL);
+            AddStringData("GEND", GEND);
+            AddStringData("BORN", BORN);
+            AddStringData("DEFPER", DEFPER);
+            AddStringData("ALTS", ALTS);
+            AddStringData("MINAGE", MINAGE);
+            AddStringData("LANG", LANG);
+            AddStringData("PROD", PROD);
+            AddStringData("VERS", VERS);
+            AddStringData("SLUS", SLUS);
+        }
+
+        public override void ProcessCommand(EAClientManager client, EAServerRoom room = null)
+        {
+            //acct - Standard Response
+            //acctdupl - Duplicate Account
+            //acctimst - Invalid Account
+
+            //Set Data Into Client
+            AcctMessageOut msg2 = new AcctMessageOut();
+
+            //Check if user exists if so send back this
+            var Temp = EAClientManager.GetUserData(NAME);
+            string ClientTime = DateTime.Now.ToString("yyyy.MM.dd hh:mm:ss");
+            if (Temp != null)
             {
-                AddStringData("NAME", NAME);
-                AddStringData("PASS", PASS);
-                AddStringData("SPAM", SPAM);
-                AddStringData("MAIL", MAIL);
-                AddStringData("GEND", GEND);
-                AddStringData("BORN", BORN);
-                AddStringData("DEFPER", DEFPER);
-                AddStringData("ALTS", ALTS);
-                AddStringData("MINAGE", MINAGE);
-                AddStringData("LANG", LANG);
-                AddStringData("PROD", PROD);
-                AddStringData("VERS", VERS);
-                AddStringData("SLUS", SLUS);
+                msg2.SubMessage = "dupl";
+
+                client.Broadcast(msg2);
+                return;
             }
+            else
+            {
+                Temp = new EAUserData();
+                Temp.Name = NAME;
+                Temp.Pass = PASS;
+                Temp.Spam = SPAM;
+                Temp.Mail = MAIL;
+                Temp.Gend = GEND;
+                Temp.Born = BORN;
+                Temp.Defper = DEFPER;
+                Temp.Alts = ALTS;
+                Temp.Minage = MINAGE;
+                Temp.Lang = LANG;
+                Temp.Prod = PROD;
+                Temp.Vers = VERS;
+                Temp.GameReg = SLUS;
+                Temp.PersonaList = new List<string>();
+
+                Temp.Since = ClientTime;
+                Temp.Last = ClientTime;
+
+                Temp.CreateJson(AppContext.BaseDirectory + "\\Users\\" + NAME.ToLower() + ".json");
+            }
+
+            //Create save and send back data
+
+            msg2.TOS = "1";
+            msg2.NAME = NAME;
+            msg2.AGE = "21";
+            msg2.PERSONAS = "";
+            msg2.SINCE = ClientTime;
+            msg2.LAST = ClientTime;
+
+            client.Broadcast(msg2);
         }
     }
 }

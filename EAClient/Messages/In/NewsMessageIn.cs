@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SSX3_Server.EAServer;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,10 +20,20 @@ namespace SSX3_Server.EAClient.Messages
 
         public override void AssignValuesToString()
         {
-            if (SubMessage == "")
-            {
-                AddStringData("NAME", NAME);
-            }
+            AddStringData("NAME", NAME);
+        }
+
+        public override void ProcessCommand(EAClientManager client, EAServerRoom room = null)
+        {
+            NewsMessageOut msg2 = new NewsMessageOut();
+
+            msg2.SubMessage = "new" + NAME;
+
+            msg2.BUDDYSERVERNAME = "ps2ssx04.ea.com";
+
+            msg2.NEWS = EAServerManager.Instance.News;
+
+            client.Broadcast(msg2);
         }
     }
 }

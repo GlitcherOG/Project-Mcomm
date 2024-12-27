@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SSX3_Server.EAServer;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -92,6 +93,17 @@ namespace SSX3_Server.EAClient.Messages
             AddStringData("RANKS", RANKS);
             AddStringData("MESGS", MESGS);
             AddStringData("GAMES", GAMES);
+        }
+
+        public override void ProcessCommand(EAClientManager client, EAServerRoom room = null)
+        {
+            ROOMS = EAServerManager.Instance.rooms.Count.ToString();
+            USERS = EAServerManager.Instance.clients.Count.ToString();
+            RANKS = "0";
+            MESGS = "0";
+            GAMES = "0";
+
+            client.Broadcast(this);
         }
     }
 }

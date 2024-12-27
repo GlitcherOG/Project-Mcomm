@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SSX3_Server.EAClient.Messages
 {
-    public class _RomMessage : EAMessage
+    public class PlusRomMessageOut : EAMessage
     {
         public override string MessageType { get { return "+rom"; } }
 

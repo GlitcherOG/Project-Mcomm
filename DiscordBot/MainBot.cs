@@ -68,9 +68,9 @@ namespace SSX3_Server.DiscordBot
 
             for (int i = 0; i < EAServerManager.Instance.clients.Count; i++)
             {
-                if (EAServerManager.Instance.clients[i].NAME!="")
+                if (EAServerManager.Instance.clients[i].userData.Name!="")
                 {
-                    strings.Add(EAServerManager.Instance.clients[i].NAME);
+                    strings.Add(EAServerManager.Instance.clients[i].userData.Name);
                 }
             }
 
@@ -154,7 +154,7 @@ namespace SSX3_Server.DiscordBot
             int ClientID = -1;
             for (int i = 0; i < EAServerManager.Instance.clients.Count; i++)
             {
-                if (EAServerManager.Instance.clients[i].NAME == ctx.RawArgumentString)
+                if (EAServerManager.Instance.clients[i].userData.Name == ctx.RawArgumentString)
                 {
                     ClientID = EAServerManager.Instance.clients[i].ID;
                     EAServerManager.Instance.DestroyClient(ClientID, true);

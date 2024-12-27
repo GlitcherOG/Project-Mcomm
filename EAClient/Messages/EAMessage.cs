@@ -16,7 +16,24 @@ namespace SSX3_Server.EAClient.Messages
         public static Dictionary<string, Type> InNameToClass { get; } =
         new Dictionary<string, Type>()
         {
-                { "~png", typeof(_PngMessageIn) },
+                { "~png", typeof(_PngMessageIn) }, //Ping Command
+                { "addr", typeof(AddrMessageIn) }, //What the game thinks its address is
+                { "skey", typeof(SkeyMessageInOut) }, 
+                { "sele", typeof(SeleMessageInOut) }, //Unused Data but send back to avoid error
+                { "auth", typeof(AuthMessageIn) }, //Login 
+                { "acct", typeof(AcctMessageIn) }, //Account Creation
+                { "cper", typeof(CperMessageInOut) }, //Create Persona
+                { "dper", typeof(DperMessageInOut) }, //Delete Persona
+                { "pers", typeof(PersMessageIn) }, //Persona Login
+                { "onln", typeof(OnlnMessageInOut) }, //Onln Message - Probably used so the server knows to publish to all users
+                { "user", typeof(UserMessageIn) }, //Called when user looks for player
+                { "news", typeof(NewsMessageIn) }, //News and buddy server message
+                { "quik", typeof(QuikMessageIn) }, //QuickPlay
+                { "move", typeof(MoveMessageIn) }, //Move into Room
+                { "peek", typeof(PeekMessageIn) }, //Peak into room
+                { "snap", typeof(SnapMessageInOut) }, //Load highscores
+                { "chal", typeof(ChalMessageIn) }, //Challange Message
+                
         };
 
         public virtual string MessageType { get { return MessageType; } set { MessageType = value; } }

@@ -1,4 +1,5 @@
 ﻿using DSharpPlus.Interactivity;
+using SSX3_Server.EAServer;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -26,6 +27,38 @@ namespace SSX3_Server.EAClient.Messages
             {
                 AddStringData("PERS", PERS);
             }
+        }
+
+        public override void ProcessCommand(EAClientManager client, EAServerRoom room = null)
+        {
+            var TempPersona = EAClientManager.GetUserPersona(PERS);
+            if (TempPersona != null)
+            {
+                SubMessage = "dupl";
+                client.Broadcast(this);
+                return;
+            }
+
+            //Create Persona
+
+            EAUserPersona NewPersona = new EAUserPersona();
+
+            NewPersona.Owner = client.userData.Name;
+            NewPersona.Name = PERS;
+
+            string ClientTime = DateTime.Now.ToString("yyyy.MM.dd hh:mm:ss");
+
+            NewPersona.Since = ClientTime;
+            NewPersona.Last = ClientTime;
+
+            NewPersona.CreateJson(AppContext.BaseDirectory + "\\Personas\\" + NewPersona.Name.ToLower() + ".json");
+
+            client.userData.PersonaList.Add(NewPersona.Name);
+
+            client.SaveEAUserData();
+
+            client.Broadcast(this);
+
         }
     }
 }
