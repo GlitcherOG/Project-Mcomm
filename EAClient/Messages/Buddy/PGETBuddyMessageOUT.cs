@@ -11,7 +11,7 @@ namespace SSX3_Server.EAClient.Messages
         public override string MessageType { get { return "PGET"; } }
 
         public string USER;
-        public string SHOW;
+        public string SHOW; //DISC, CHAT, AWAY, XA, DND, PASS
         public string STAT;
         public string PROD;
 

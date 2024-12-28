@@ -31,17 +31,51 @@ namespace SSX3_Server.EAClient.Messages
             RGETBuddyMessageInOut msg = new RGETBuddyMessageInOut();
 
             msg.ID = "2";
-            msg.SIZE = "0";
+            msg.SIZE = client.LoadedPersona.friendEntries.Count.ToString();
 
             client.BroadcastBuddy(msg);
 
-            //ROSTBuddyMessageOut msg2 = new ROSTBuddyMessageOut();
+            //if (ID == "1")
+            {
+                for (int i = 0; i < client.LoadedPersona.friendEntries.Count; i++)
+                {
+                    ROSTBuddyMessageOut msg2 = new ROSTBuddyMessageOut();
 
-            //msg2.ID = "2";
-            //msg2.USER = "SSX_Community";
-            //msg2.GROUP = "B";
+                    msg2.USER = client.LoadedPersona.friendEntries[i].Name;
+                    msg2.GROUP = "";
 
-            //client.BroadcastBuddy(msg2);
+                    client.BroadcastBuddy(msg2);
+
+                    string Status = "DISC";
+
+                    var UserClient = EAServerManager.Instance.GetUser(client.LoadedPersona.friendEntries[i].Name);
+                    //DISC, CHAT, AWAY, XA, DND, PASS
+                    if (UserClient != null)
+                    {
+                        //UPDATE CHECK FOR PLAYER STATUS
+                        Status = "CHAT";
+                    }
+
+                    PGETBuddyMessageIn pGETBuddyMessageIn = new PGETBuddyMessageIn();
+
+                    pGETBuddyMessageIn.PROD = "S%3dSSX-PS2-2004%0aSSXID%3d3%0aLOCID%3d0%0a";
+                    pGETBuddyMessageIn.USER = client.LoadedPersona.friendEntries[i].Name;
+                    pGETBuddyMessageIn.STAT = "1";
+                    pGETBuddyMessageIn.SHOW = Status;
+
+                    client.BroadcastBuddy(pGETBuddyMessageIn);
+
+                    UserMessageOut msg3 = new UserMessageOut();
+
+                    msg3.PERS = client.LoadedPersona.friendEntries[i].Name;
+                    msg3.STAT = "1";
+                    msg3.STAT = "9999";
+                    msg3.ADDR = "0.0.0.0";
+                    msg3.ROOM = "";
+
+                    client.Broadcast(msg3);
+                }
+            }
         }
     }
 }

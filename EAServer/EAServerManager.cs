@@ -183,6 +183,21 @@ namespace SSX3_Server.EAServer
             return Generation.ToString();
         }
 
+        public EAClientManager GetUser(string Name)
+        {
+            for (int i = 0; i < clients.Count; i++)
+            {
+                if (clients[i].LoadedPersona != null)
+                {
+                    if (clients[i].LoadedPersona.Name == Name)
+                    {
+                        return clients[i];
+                    }
+                }
+            }
+            return null;
+        }
+
         public EAServerRoom GetRoom(string Name)
         {
             for (int i = 0; i < rooms.Count; i++)

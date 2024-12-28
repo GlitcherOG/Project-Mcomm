@@ -16,6 +16,8 @@ namespace SSX3_Server.EAClient
         public string Since = "";
         public string Last = "";
 
+        public List<FriendEntry> friendEntries = new List<FriendEntry>();
+
         public void CreateJson(string path, bool Inline = false)
         {
             var TempFormating = Formatting.None;
@@ -41,6 +43,11 @@ namespace SSX3_Server.EAClient
             {
                 return null;
             }
+        }
+
+        public struct FriendEntry
+        {
+            public string Name;
         }
     }
 }

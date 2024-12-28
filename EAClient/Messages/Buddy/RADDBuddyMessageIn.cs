@@ -40,12 +40,30 @@ namespace SSX3_Server.EAClient.Messages
 
         public override void ProcessCommand(EAClientManager client, EAServerRoom room = null)
         {
+            //ADD CHECK TO SEE IF VAILD PERSONA, should always be the case but confirm
+
+            EAUserPersona.FriendEntry friendEntry = new EAUserPersona.FriendEntry();
+
+            friendEntry.Name = USER;
+
+            client.LoadedPersona.friendEntries.Add(friendEntry);
+
+            string Status = "AWAY";
+
+            var UserClient = EAServerManager.Instance.GetUser(USER);
+            //DISC, CHAT, AWAY, XA, DND, PASS
+            if (UserClient!=null)
+            {
+                //UPDATE CHECK FOR PLAYER STATUS
+                Status = "CHAT";
+            }
+
             PGETBuddyMessageIn pGETBuddyMessageIn = new PGETBuddyMessageIn();
 
             pGETBuddyMessageIn.PROD = "S%3dSSX-PS2-2004%0aSSXID%3d3%0aLOCID%3d0%0a";
             pGETBuddyMessageIn.USER = USER;
             pGETBuddyMessageIn.STAT = "1";
-            pGETBuddyMessageIn.SHOW = "1";
+            pGETBuddyMessageIn.SHOW = Status;
 
             client.BroadcastBuddy(pGETBuddyMessageIn);
         }

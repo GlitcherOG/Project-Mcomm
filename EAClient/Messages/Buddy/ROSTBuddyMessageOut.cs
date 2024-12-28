@@ -11,7 +11,7 @@ namespace SSX3_Server.EAClient.Messages
     {
         public override string MessageType { get { return "ROST"; } }
 
-        public string ID;
+        public string ID = "2";
         public string USER;
         public string GROUP; //1 is blocked
 
