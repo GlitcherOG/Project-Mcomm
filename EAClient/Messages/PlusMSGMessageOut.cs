@@ -10,7 +10,7 @@ namespace SSX3_Server.EAClient.Messages
     {
         public override string MessageType { get { return "+msg"; } }
 
-        public string F = "B"; //P for Priv,B for cast, Blank for Chat
+        public string F = "B"; //P3 for Priv, B for cast, Blank for Chat chat will ensure buddy server is working
         public string T = "Welcome to the game";
         public string N = "";
 

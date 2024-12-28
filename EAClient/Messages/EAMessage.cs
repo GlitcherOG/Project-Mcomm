@@ -20,7 +20,7 @@ namespace SSX3_Server.EAClient.Messages
                 { "addr", typeof(AddrMessageIn) }, //What the game thinks its address is
                 { "skey", typeof(SkeyMessageInOut) }, 
                 { "sele", typeof(SeleMessageInOut) }, //Unused Data but send back to avoid error
-                { "auth", typeof(AuthMessageIn) }, //Login 
+                { "auth", typeof(AuthMessageIn) }, //Login Details
                 { "acct", typeof(AcctMessageIn) }, //Account Creation
                 { "cper", typeof(CperMessageInOut) }, //Create Persona
                 { "dper", typeof(DperMessageInOut) }, //Delete Persona
@@ -34,6 +34,16 @@ namespace SSX3_Server.EAClient.Messages
                 { "snap", typeof(SnapMessageInOut) }, //Load highscores
                 { "chal", typeof(ChalMessageIn) }, //Challange Message
                 
+        };
+
+        public static Dictionary<string, Type> BuddyInNameToClass { get; } =
+        new Dictionary<string, Type>()
+        {
+                { "PING", typeof(PINGBuddyMessageInOut) }, //Ping Command
+                { "AUTH", typeof(AUTHBuddyMessageIn) }, //AUTH Connect Command
+                { "PSET", typeof(PSETBuddyMessageIn) }, //PSET Set Player Status
+                { "RGET", typeof(RGETBuddyMessageInOut) }, //RGET Load Buddy List and return friends
+                { "PADD", typeof(PADDBuddyMessageIn) }, //P Add user to the Message List
         };
 
         public virtual string MessageType { get { return MessageType; } set { MessageType = value; } }

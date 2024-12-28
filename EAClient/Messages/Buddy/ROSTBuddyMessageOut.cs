@@ -7,32 +7,31 @@ using System.Threading.Tasks;
 
 namespace SSX3_Server.EAClient.Messages
 {
-    public class PADDBuddyMessageIn : EAMessage
+    public class ROSTBuddyMessageOut : EAMessage
     {
-        public override string MessageType { get { return "PGET"; } }
+        public override string MessageType { get { return "ROST"; } }
 
+        public string ID;
         public string USER;
+        public string GROUP; //1 is blocked
 
         public override void AssignValues()
         {
-            USER = stringDatas[0].Value;
+            ID = stringDatas[0].Value;
+            USER = stringDatas[1].Value;
+            GROUP = stringDatas[2].Value;
         }
 
         public override void AssignValuesToString()
         {
+            AddStringData("ID", ID);
             AddStringData("USER", USER);
+            AddStringData("GROUP", GROUP);
         }
 
         public override void ProcessCommand(EAClientManager client, EAServerRoom room = null)
         {
-            PGETBuddyMessageIn pGETBuddyMessageIn = new PGETBuddyMessageIn();
 
-            pGETBuddyMessageIn.PROD = "S%3dSSX-PS2-2004%0aSSXID%3d3%0aLOCID%3d0%0a";
-            pGETBuddyMessageIn.USER = USER;
-            pGETBuddyMessageIn.STAT = "1";
-            pGETBuddyMessageIn.SHOW = "1";
-
-            client.BroadcastBuddy(pGETBuddyMessageIn);
         }
     }
 }

@@ -137,7 +137,7 @@ namespace SSX3_Server.EAClient
 
                         if(BuddyClient!=null)
                         {
-                            PINGBuddyMessageIn msg3 = new PINGBuddyMessageIn();
+                            PINGBuddyMessageInOut msg3 = new PINGBuddyMessageInOut();
 
                             BroadcastBuddy(msg3);
                         }
@@ -187,66 +187,20 @@ namespace SSX3_Server.EAClient
 
         public void ProcessBuddyMessage(byte[] array)
         {
-            Console.WriteLine("Buddy Server");
             string InMessageType = EAMessage.MessageCommandType(array);
-
-            if(InMessageType=="AUTH")
+            Console.WriteLine("Buddy Server");
+            Type c;
+            if (!EAMessage.BuddyInNameToClass.TryGetValue(InMessageType, out c))
             {
-                AUTHBuddyMessageIn msg = new AUTHBuddyMessageIn();
-
-                msg.PraseData(array);
-
-                BroadcastBuddy(msg);
-
-                ADMNBuddyMessageIn aDMNBuddyMessageIn = new ADMNBuddyMessageIn();
-
-                aDMNBuddyMessageIn.USER = "SSX_Community";
-                aDMNBuddyMessageIn.BODY = "Welcome to the commuinty server";
-                aDMNBuddyMessageIn.SUBJ = "";
-                aDMNBuddyMessageIn.TYPE = "C";
-                aDMNBuddyMessageIn.TIME = "1735269667";
-
-                BroadcastBuddy(aDMNBuddyMessageIn);
-            }
-            else if(InMessageType=="PSET")
-            {
-                PSETBuddyMessageIn msg = new PSETBuddyMessageIn();
-
-                msg.PraseData(array);
-            }
-            else if(InMessageType=="RGET")
-            {
-                RGETBuddyMessageIn msg = new RGETBuddyMessageIn();
-
-                msg.ID = "2";
-                msg.SIZE = "0";
-
-                BroadcastBuddy(msg);
-            }
-            else if (InMessageType=="PADD")
-            {
-                PADDBuddyMessageIn msg = new PADDBuddyMessageIn();
-
-                msg.PraseData(array);
-
-                PGETBuddyMessageIn pGETBuddyMessageIn = new PGETBuddyMessageIn();
-
-                pGETBuddyMessageIn.PROD = "S%3dSSX-PS2-2004%0aSSXID%3d3%0aLOCID%3d0%0a";
-                pGETBuddyMessageIn.USER = msg.USER;
-                pGETBuddyMessageIn.STAT = "1";
-                pGETBuddyMessageIn.SHOW = "1";
-
-                BroadcastBuddy(pGETBuddyMessageIn);
-            }
-            else if (InMessageType=="PING")
-            {
-
-            }
-            else
-            {
-                Console.WriteLine("Unknown Buddy Message " + InMessageType);
+                Console.WriteLine("Unknown Message " + InMessageType);
                 Console.WriteLine(System.Text.Encoding.UTF8.GetString(array));
+                return;
             }
+
+            var msg = (EAMessage)Activator.CreateInstance(c);
+            msg.PraseData(array);
+
+            msg.ProcessCommand(this, room);
         }
 
         public void Broadcast(EAMessage msg)

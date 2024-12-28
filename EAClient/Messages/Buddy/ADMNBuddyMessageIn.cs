@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SSX3_Server.EAClient.Messages
 {
-    public class ADMNBuddyMessageIn : EAMessage
+    public class ADMNBuddyMessageOut : EAMessage
     {
         public override string MessageType { get { return "ADMN"; } }
         public string USER;

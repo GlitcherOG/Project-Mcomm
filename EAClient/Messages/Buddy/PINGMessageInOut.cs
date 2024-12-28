@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SSX3_Server.EAClient.Messages
 {
-    internal class PINGBuddyMessageIn : EAMessage
+    internal class PINGBuddyMessageInOut : EAMessage
     {
         public override string MessageType { get { return "PING"; } }
 
