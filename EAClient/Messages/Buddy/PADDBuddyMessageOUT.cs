@@ -25,14 +25,7 @@ namespace SSX3_Server.EAClient.Messages
 
         public override void ProcessCommand(EAClientManager client, EAServerRoom room = null)
         {
-            PGETBuddyMessageIn pGETBuddyMessageIn = new PGETBuddyMessageIn();
-
-            pGETBuddyMessageIn.PROD = "S%3dSSX-PS2-2004%0aSSXID%3d3%0aLOCID%3d0%0a";
-            pGETBuddyMessageIn.USER = USER;
-            pGETBuddyMessageIn.STAT = "1";
-            pGETBuddyMessageIn.SHOW = "CHAT";
-
-            client.BroadcastBuddy(pGETBuddyMessageIn);
+            client.AddFriend(USER);
         }
     }
 }

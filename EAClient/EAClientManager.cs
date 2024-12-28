@@ -71,7 +71,7 @@ namespace SSX3_Server.EAClient
             MainNS = MainClient.GetStream();
 
             IPEndPoint remoteIpEndPoint = MainClient.Client.RemoteEndPoint as IPEndPoint;
-            BuddyListener = new TcpListener(remoteIpEndPoint.Address, 13505);
+            BuddyListener = new TcpListener(IPAddress.Any, 13505);
             BuddyListener.Start();
 
             LastRecive = DateTime.Now;
@@ -285,6 +285,56 @@ namespace SSX3_Server.EAClient
             {
                 LoadedPersona.CreateJson(AppContext.BaseDirectory + "\\Personas\\" + LoadedPersona.Name.ToLower() + ".json");
             }
+        }
+
+        public void AddFriend(string USER)
+        {
+            //ADD CHECK TO SEE IF VAILD PERSONA, should always be the case but confirm
+            bool Exists= false;
+
+                for (int i = 0; i < LoadedPersona.friendEntries.Count; i++)
+                {
+                    if (LoadedPersona.friendEntries[i].Name.ToLower() == USER.ToLower())
+                    {
+                        Exists = true;
+                    }
+                }
+
+            if (!Exists)
+            {
+
+                EAUserPersona.FriendEntry friendEntry = new EAUserPersona.FriendEntry();
+
+                friendEntry.Name = USER;
+
+                LoadedPersona.friendEntries.Add(friendEntry);
+
+                SaveEAUserPersona();
+            }
+
+            string Status = "AWAY";
+
+            var UserClient = EAServerManager.Instance.GetUser(USER);
+            //DISC, CHAT, AWAY, XA, DND, PASS
+            if (UserClient != null)
+            {
+                //UPDATE CHECK FOR PLAYER STATUS
+                Status = "CHAT";
+            }
+
+            PGETBuddyMessageIn pGETBuddyMessageIn = new PGETBuddyMessageIn();
+
+            pGETBuddyMessageIn.PROD = "S%3dSSX-PS2-2004%0aSSXID%3d3%0aLOCID%3d0%0a";
+            pGETBuddyMessageIn.USER = USER;
+            pGETBuddyMessageIn.STAT = "1";
+            pGETBuddyMessageIn.SHOW = Status;
+
+            BroadcastBuddy(pGETBuddyMessageIn);
+        }
+
+        public void RemoveFriend()
+        {
+
         }
 
         public void CloseConnection()

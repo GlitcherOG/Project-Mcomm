@@ -33,6 +33,7 @@ namespace SSX3_Server.EAClient.Messages
                 { "peek", typeof(PeekMessageIn) }, //Peak into room
                 { "snap", typeof(SnapMessageInOut) }, //Load highscores
                 { "chal", typeof(ChalMessageIn) }, //Challange Message
+                { "mesg", typeof(MesgMessageIn) }, //Challange Message
                 
         };
 

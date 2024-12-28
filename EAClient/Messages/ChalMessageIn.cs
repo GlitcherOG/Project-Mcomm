@@ -12,12 +12,17 @@ namespace SSX3_Server.EAClient.Messages
         public override string MessageType { get { return "chal"; } }
 
         public string PERS;
+        public string HOST;
 
         public override void AssignValues()
         {
             if (stringDatas.Count > 0)
             {
                 PERS = stringDatas[0].Value;
+            }
+            if (stringDatas.Count > 1)
+            {
+                HOST = stringDatas[1].Value;
             }
         }
 
@@ -28,7 +33,7 @@ namespace SSX3_Server.EAClient.Messages
 
         public override void ProcessCommand(EAClientManager client, EAServerRoom room = null)
         {
-            PERS = "test";
+            PERS = "PERS";
             client.Broadcast(this);
         }
     }
