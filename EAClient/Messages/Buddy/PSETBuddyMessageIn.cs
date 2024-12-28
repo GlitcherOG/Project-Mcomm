@@ -34,7 +34,7 @@ namespace SSX3_Server.EAClient.Messages
 
         public override void ProcessCommand(EAClientManager client, EAServerRoom room = null)
         {
-
+            client.BroadcastBuddy(this);
         }
     }
 }

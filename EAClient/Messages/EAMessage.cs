@@ -43,7 +43,8 @@ namespace SSX3_Server.EAClient.Messages
                 { "AUTH", typeof(AUTHBuddyMessageIn) }, //AUTH Connect Command
                 { "PSET", typeof(PSETBuddyMessageIn) }, //PSET Set Player Status
                 { "RGET", typeof(RGETBuddyMessageInOut) }, //RGET Load Buddy List and return friends
-                { "PADD", typeof(PADDBuddyMessageIn) }, //P Add user to the Message List
+                { "PADD", typeof(PADDBuddyMessageIn) }, //
+                { "RADD", typeof(RADDBuddyMessageIn) }, //RADD user to the Message List
         };
 
         public virtual string MessageType { get { return MessageType; } set { MessageType = value; } }
