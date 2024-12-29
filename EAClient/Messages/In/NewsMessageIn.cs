@@ -2,6 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Sockets;
+using System.Net;
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -28,6 +31,12 @@ namespace SSX3_Server.EAClient.Messages
             NewsMessageOut msg2 = new NewsMessageOut();
 
             msg2.SubMessage = "new" + NAME;
+
+            if (NAME == "0")
+            {
+                client.BuddyListener = new TcpListener(IPAddress.Any/*(client.MainClient.Client.RemoteEndPoint as IPEndPoint).Address*/, 13505);
+                client.BuddyListener.Start();
+            }
 
             msg2.BUDDYSERVERNAME = "ps2ssx04.ea.com";
 

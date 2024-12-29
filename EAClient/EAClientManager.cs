@@ -26,6 +26,8 @@ namespace SSX3_Server.EAClient
         public string GameAddress;
         public string GamePort;
 
+        public string RealAddress;
+
         public string SKEY;
 
         public EAUserData userData;
@@ -46,7 +48,7 @@ namespace SSX3_Server.EAClient
         public TcpClient MainClient = null;
         NetworkStream MainNS = null;
 
-        TcpListener BuddyListener;
+        public TcpListener BuddyListener;
         public TcpClient BuddyClient = null;
         NetworkStream BuddyNS = null;
 
@@ -61,6 +63,7 @@ namespace SSX3_Server.EAClient
         public int Ping = 20;
 
         public EAServerRoom room;
+        public MesgMessageIn.Challange challange;
 
         public EAClientManager(TcpClient tcpClient, int InID, string SESSin, string MASKin)
         {
@@ -70,9 +73,9 @@ namespace SSX3_Server.EAClient
             MainClient = tcpClient;
             MainNS = MainClient.GetStream();
 
+
             IPEndPoint remoteIpEndPoint = MainClient.Client.RemoteEndPoint as IPEndPoint;
-            BuddyListener = new TcpListener(IPAddress.Any, 13505);
-            BuddyListener.Start();
+            RealAddress = remoteIpEndPoint.Address.ToString();
 
             LastRecive = DateTime.Now;
             LastSend = DateTime.Now;
