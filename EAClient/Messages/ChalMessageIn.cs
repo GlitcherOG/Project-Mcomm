@@ -33,8 +33,11 @@ namespace SSX3_Server.EAClient.Messages
 
         public override void ProcessCommand(EAClientManager client, EAServerRoom room = null)
         {
-            MODE = "chal idle play";
-            client.Broadcast(this);
+            DQUEMessageout dQUEMessageout = new DQUEMessageout();
+            client.Broadcast(dQUEMessageout);
+
+            ////MODE = "chal idle";
+            //client.Broadcast(this);
 
 
             //Add to list
@@ -61,6 +64,12 @@ namespace SSX3_Server.EAClient.Messages
                     bool Oppo = false;
                     ChalMessageIn HostEntry = new ChalMessageIn();
                     ChalMessageIn OppoEntry = new ChalMessageIn();
+
+                        ChalMessageIn chalMessageIn = new ChalMessageIn();
+
+                        chalMessageIn.MODE = "play";
+
+                        client.Broadcast(chalMessageIn);
 
                     //Check to see if theres a host command and a receive
                     for (int i = 0; i < chalMessageIns.Count; i++)

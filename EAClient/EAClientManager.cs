@@ -346,8 +346,11 @@ namespace SSX3_Server.EAClient
             MainClient.Close();
             if (BuddyListener == null)
             {
-                BuddyClient.Close();
-                BuddyNS.Close();
+                if (BuddyClient != null)
+                {
+                    BuddyClient.Close();
+                    BuddyNS.Close();
+                }
             }
             else
             {

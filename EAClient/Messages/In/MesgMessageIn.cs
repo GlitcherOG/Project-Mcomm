@@ -74,15 +74,15 @@ namespace SSX3_Server.EAClient.Messages
                 {
                     PlusMSGMessageOut plusMSGMessageOut = new PlusMSGMessageOut();
 
-                    plusMSGMessageOut.N = PRIV;
+                    plusMSGMessageOut.N = client.LoadedPersona.Name;
                     plusMSGMessageOut.T = TEXT;
                     plusMSGMessageOut.F = "P3";
 
-                    client.Broadcast(plusMSGMessageOut);
+                    TempClient.Broadcast(plusMSGMessageOut);
 
                     plusMSGMessageOut.N = client.LoadedPersona.Name;
 
-                    TempClient.Broadcast(plusMSGMessageOut);
+                    client.Broadcast(plusMSGMessageOut);
                 }
             }
         }

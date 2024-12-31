@@ -9,7 +9,7 @@ namespace SSX3_Server.EAClient.Messages
 {
     public class MoveMessageIn : EAMessage
     {
-        public override string MessageType { get { return "move"; } }
+        public override string MessageType { get { return "evom"; } }
 
         public string NAME;
 
@@ -34,18 +34,22 @@ namespace SSX3_Server.EAClient.Messages
             //Send Pop
             //Send Join Message
 
-            MoveMessageOut moveMessageOut = new MoveMessageOut();
+            //for (int i = 0; i < 2; i++)
+            //{
 
-            moveMessageOut.IDENT = "1";
-            moveMessageOut.NAME = NAME;
-            moveMessageOut.COUNT = "0";
+            DQUEMessageout dQUEMessageout = new DQUEMessageout();
 
-            client.Broadcast(moveMessageOut);
+            client.Broadcast(dQUEMessageout);
 
-            //PersMessageOut msg2 = new PersMessageOut();
 
-            //msg2.SubMessage = "room";
-            //Broadcast(msg2);
+                MoveMessageOut moveMessageOut = new MoveMessageOut();
+
+                moveMessageOut.IDENT = "1";
+                moveMessageOut.NAME = NAME;
+                moveMessageOut.COUNT = "0";
+
+                client.Broadcast(moveMessageOut);
+            //}
 
             //PlusWhoMessageOut plusWhoMessageOut = new PlusWhoMessageOut();
 

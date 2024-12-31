@@ -40,7 +40,10 @@ namespace SSX3_Server.EAClient.Messages
 
         public override void ProcessCommand(EAClientManager client, EAServerRoom room = null)
         {
-            client.Broadcast(this);
+            for (int i = 0; i < 2; i++)
+            {
+                client.Broadcast(this);
+            }
         }
     }
 }

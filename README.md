@@ -8,8 +8,7 @@ There is currently a 500 dollar bounty on getting working server messages to get
 - Add Remove Buddy
 - Send Online Details before displaying Search
 - Patch Search so it works correctly
-- Fix Crashing when steam deck connects with Listener and Buddy Server
-- Fix Room Entering
+- Fix Room Entering (DQUE Found patch so it updates room correctly)
 - Get Messages working
 - Find out Stat Struct
 - Get Challanges working
