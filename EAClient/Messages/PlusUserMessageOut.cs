@@ -13,7 +13,7 @@ namespace SSX3_Server.EAClient.Messages
         public string I;
         public string N;
         public string M;
-        public string F = "H";
+        public string F = "H"; //U is used to detrimune user flag
         public string A;
         public string P;
         public string S = "";

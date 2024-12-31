@@ -29,7 +29,7 @@ namespace SSX3_Server.EAClient.Messages
 
             if (Room != null)
             {
-                Room.BoradcastBackUserList(client);
+                Room.PeekBoradcastBackUserList(client);
             }
         }
     }

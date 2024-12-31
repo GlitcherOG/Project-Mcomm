@@ -62,6 +62,8 @@ namespace SSX3_Server.EAClient
         DateTime LastPing;
         public int Ping = 20;
 
+        public bool DQUETest = false;
+
         public EAServerRoom room;
         public MesgMessageIn.Challange challange;
 
@@ -224,7 +226,7 @@ namespace SSX3_Server.EAClient
         {
             PlusUserMessageOut plusUserMessageOut = new PlusUserMessageOut();
 
-            plusUserMessageOut.I = "1";
+            plusUserMessageOut.I = ID.ToString();
             plusUserMessageOut.N = LoadedPersona.Name;
             plusUserMessageOut.M = userData.Name;
             plusUserMessageOut.A = EAServerManager.Instance.config.ListerIP;

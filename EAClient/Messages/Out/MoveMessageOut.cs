@@ -15,7 +15,7 @@ namespace SSX3_Server.EAClient.Messages
         public string COUNT;
         public string FLAGS { get; set; } = "C";
 
-        public bool test = false;
+        public bool Leaving = false;
 
         public override void AssignValues()
         {
@@ -27,14 +27,17 @@ namespace SSX3_Server.EAClient.Messages
 
         public override void AssignValuesToString()
         {
-            AddStringData("IDENT", IDENT);
-            AddStringData("NAME", NAME);
-            AddStringData("COUNT", COUNT);
-            AddStringData("FLAGS", FLAGS);
-            if (test)
+            if (Leaving)
             {
                 AddStringData("LIDENT", IDENT);
                 AddStringData("LCOUNT", COUNT);
+            }
+            else
+            {
+                AddStringData("IDENT", IDENT);
+                AddStringData("NAME", NAME);
+                AddStringData("COUNT", COUNT);
+                AddStringData("FLAGS", FLAGS);
             }
         }
 

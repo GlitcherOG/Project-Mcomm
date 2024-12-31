@@ -33,75 +33,28 @@ namespace SSX3_Server.EAClient.Messages
             //Send user to all users in room
             //Send Pop
             //Send Join Message
+            if (!client.DQUETest)
+            {
+                DQUEMessageout dQUEMessageout = new DQUEMessageout();
 
-            //for (int i = 0; i < 2; i++)
-            //{
+                client.Broadcast(dQUEMessageout);
+            }
 
-            DQUEMessageout dQUEMessageout = new DQUEMessageout();
+            if (NAME != "")
+            {
+                client.DQUETest = false;
+                var TempRoom = EAServerManager.Instance.GetRoom(NAME);
 
-            client.Broadcast(dQUEMessageout);
-
-
-                MoveMessageOut moveMessageOut = new MoveMessageOut();
-
-                moveMessageOut.IDENT = "1";
-                moveMessageOut.NAME = NAME;
-                moveMessageOut.COUNT = "0";
-
-                client.Broadcast(moveMessageOut);
-            //}
-
-            //PlusWhoMessageOut plusWhoMessageOut = new PlusWhoMessageOut();
-
-            //plusWhoMessageOut.I = ID.ToString();
-            //plusWhoMessageOut.N = LoadedPersona.Name;
-            //plusWhoMessageOut.M = NAME;
-            //plusWhoMessageOut.A = ADDR;
-            //plusWhoMessageOut.X = "";
-            //plusWhoMessageOut.S = "1";
-            //plusWhoMessageOut.R = msg.NAME;
-            //plusWhoMessageOut.RI = "1";
-
-            //Broadcast(plusWhoMessageOut);
-
-            //PlusUserMessageOut plusUserMessageOut = new PlusUserMessageOut();
-
-            //plusUserMessageOut.I = ID.ToString();
-            //plusUserMessageOut.N = LoadedPersona.Name;
-            //plusUserMessageOut.M = NAME;
-            //plusUserMessageOut.A = ADDR;
-            //plusUserMessageOut.X = "";
-            //plusUserMessageOut.G = "0";
-            //plusUserMessageOut.P = Ping.ToString();
-
-            //Broadcast(plusUserMessageOut);
-
-            //plusUserMessageOut = new PlusUserMessageOut();
-
-            //plusUserMessageOut.I = ID.ToString();
-            //plusUserMessageOut.N = LoadedPersona.Name;
-            //plusUserMessageOut.M = NAME;
-            //plusUserMessageOut.A = ADDR;
-            //plusUserMessageOut.X = "";
-            //plusUserMessageOut.G = "0";
-            //plusUserMessageOut.P = Ping.ToString();
-
-            //Broadcast(plusUserMessageOut);
-
-            //PlusPopMessageOut plusPopMessageOut = new PlusPopMessageOut();
-
-            //plusPopMessageOut.Z = "1" + "/" + "1";
-
-            //Broadcast(plusPopMessageOut);
-
-            //PlusMSGMessageOut plusMSGMessageOut = new PlusMSGMessageOut();
-
-            //Broadcast(plusMSGMessageOut);
-
-            //PlusSesMessageOut plus = new PlusSesMessageOut();
-
-            //Broadcast(plus);
-
+                TempRoom.AddUser(client);
+            }
+            else
+            {
+                if(client.room!=null)
+                {
+                    client.DQUETest = true;
+                    room.RemoveUser(client);
+                }
+            }
         }
     }
 }

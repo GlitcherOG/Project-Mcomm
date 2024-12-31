@@ -23,12 +23,99 @@ namespace SSX3_Server.EAServer
 
         public void AddUser(EAClientManager client)
         {
+            client.room = this;
 
+            MoveMessageOut moveMessageOut = new MoveMessageOut();
+
+            moveMessageOut.IDENT = roomId.ToString();
+            moveMessageOut.NAME = roomType + "." + roomName;
+            moveMessageOut.COUNT = Clients.Count.ToString();
+
+            client.Broadcast(moveMessageOut);
+
+            Clients.Add(client);
+
+            PlusWhoMessageOut plusWhoMessageOut = new PlusWhoMessageOut();
+
+            plusWhoMessageOut.I = client.ID.ToString();
+            plusWhoMessageOut.N = client.LoadedPersona.Name;
+            plusWhoMessageOut.M = client.userData.Name;
+            plusWhoMessageOut.A = client.GameAddress;
+            plusWhoMessageOut.X = "";
+            plusWhoMessageOut.S = "1";
+            plusWhoMessageOut.R = roomType+"."+roomName;
+            plusWhoMessageOut.RI = roomId.ToString();
+
+            client.Broadcast(plusWhoMessageOut);
+
+            PlusUserMessageOut plusUserMessageOut = new PlusUserMessageOut();
+
+            plusUserMessageOut.I = client.ID.ToString();
+            plusUserMessageOut.N = client.LoadedPersona.Name;
+            plusUserMessageOut.M = client.userData.Name;
+            plusUserMessageOut.A = client.GameAddress;
+            plusUserMessageOut.X = "";
+            plusUserMessageOut.G = "0";
+            plusUserMessageOut.P = client.Ping.ToString();
+
+            client.Broadcast(plusUserMessageOut);
+
+            BoradcastBackUserList();
+
+            PlusPopMessageOut plusPopMessageOut = new PlusPopMessageOut();
+
+            plusPopMessageOut.Z = roomId + "/" + Clients.Count;
+
+            EAServerManager.Instance.BroadcastMessage(plusPopMessageOut);
+
+            PlusMSGMessageOut plusMSGMessageOut = new PlusMSGMessageOut();
+
+            plusMSGMessageOut.N = "";
+            plusMSGMessageOut.F = "C";
+            plusMSGMessageOut.T = "Welcome to the SSX Community";
+
+            client.Broadcast(plusMSGMessageOut);
         }
 
         public void RemoveUser(EAClientManager client)
         {
+            Clients.Remove(client);
 
+            MoveMessageOut moveMessageOut = new MoveMessageOut();
+
+            moveMessageOut.Leaving = true;
+
+            moveMessageOut.IDENT = roomId.ToString();
+            moveMessageOut.NAME = roomType + "." + roomName;
+            moveMessageOut.COUNT = Clients.Count.ToString();
+
+            client.Broadcast(moveMessageOut);
+
+            PlusUserMessageOut plusUserMessageOut = new PlusUserMessageOut();
+
+            plusUserMessageOut.I = client.ID.ToString();
+            plusUserMessageOut.N = "";
+            plusUserMessageOut.M = client.userData.Name;
+            plusUserMessageOut.A = client.GameAddress;
+            plusUserMessageOut.X = "";
+            plusUserMessageOut.G = "0";
+            plusUserMessageOut.P = client.Ping.ToString();
+
+            BroadcastAllUsers(plusUserMessageOut);
+
+            PlusPopMessageOut plusPopMessageOut = new PlusPopMessageOut();
+
+            plusPopMessageOut.Z = roomId + "/" + Clients.Count;
+
+            EAServerManager.Instance.BroadcastMessage(plusPopMessageOut);
+
+            PlusMSGMessageOut plusMSGMessageOut = new PlusMSGMessageOut();
+
+            plusMSGMessageOut.N = client.LoadedPersona.Name;
+            plusMSGMessageOut.F = "C";
+            plusMSGMessageOut.T = "\"Has Left the Room\"";
+
+            BroadcastAllUsers(plusMSGMessageOut);
         }
 
         public PlusRomMessageOut GeneratePlusRoomInfo()
@@ -43,7 +130,7 @@ namespace SSX3_Server.EAServer
             return _RomMessage;
         }
 
-        public void BoradcastBackUserList(EAClientManager client)
+        public void PeekBoradcastBackUserList(EAClientManager client)
         {
             for (int i = 0; i < Clients.Count; i++)
             {
@@ -62,6 +149,24 @@ namespace SSX3_Server.EAServer
                 plusUserMessageOut.P = "0";
 
                 client.Broadcast(plusUserMessageOut);
+            }
+        }
+
+        public void BoradcastBackUserList()
+        {
+            for (int i = 0; i < Clients.Count; i++)
+            {
+                PlusUserMessageOut plusUserMessageOut = new PlusUserMessageOut();
+
+                plusUserMessageOut.I = Clients[i].ID.ToString();
+                plusUserMessageOut.N = Clients[i].LoadedPersona.Name;
+                plusUserMessageOut.M = Clients[i].userData.Name;
+                plusUserMessageOut.A = Clients[i].GameAddress;
+                plusUserMessageOut.X = "";
+                plusUserMessageOut.G = "0";
+                plusUserMessageOut.P = Clients[i].Ping.ToString();
+
+                BroadcastAllUsers(plusUserMessageOut);
             }
         }
 
