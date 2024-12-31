@@ -39,7 +39,7 @@ namespace SSX3_Server.EAClient.Messages
                 {
                     var TempChallange = new MesgMessageIn.Challange();
 
-                    string[] TempString = TEXT.Remove('\"').Split(' ');
+                    string[] TempString = TEXT/*.Remove('\"')*/.Split(' ');
 
                     TempChallange.TrackID = TempString[1];
                     TempChallange.Gamemode1 = TempString[2];
@@ -72,7 +72,6 @@ namespace SSX3_Server.EAClient.Messages
 
                 if (TempClient != null)
                 {
-
                     PlusMSGMessageOut plusMSGMessageOut = new PlusMSGMessageOut();
 
                     plusMSGMessageOut.N = PRIV;
