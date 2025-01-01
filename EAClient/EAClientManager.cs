@@ -62,6 +62,7 @@ namespace SSX3_Server.EAClient
         DateTime LastPing;
         public int Ping = 20;
 
+        public int PrevPeekCount=0;
         public bool DQUETest = false;
 
         public EAServerRoom room;

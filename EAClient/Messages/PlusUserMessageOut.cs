@@ -39,14 +39,17 @@ namespace SSX3_Server.EAClient.Messages
         {
             AddStringData("I", I);
             AddStringData("N", N);
-            AddStringData("M", M);
-            AddStringData("F", F);
-            AddStringData("A", A);
-            AddStringData("P", P);
-            AddStringData("S", S);
-            AddStringData("X", X);
-            AddStringData("G", G);
-            AddStringData("T", T);
+            if (N != "")
+            {
+                AddStringData("M", M);
+                AddStringData("F", F);
+                AddStringData("A", A);
+                AddStringData("P", P);
+                AddStringData("S", S);
+                AddStringData("X", X);
+                AddStringData("G", G);
+                AddStringData("T", T);
+            }
         }
     }
 }

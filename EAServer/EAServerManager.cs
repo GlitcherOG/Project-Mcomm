@@ -23,8 +23,8 @@ namespace SSX3_Server.EAServer
         public EAServerConfig config;
         public HighscoreDatabase highscoreDatabase;
 
-        int IDCount = 30;
-        int RoomIDCount = 0;
+        int IDCount = 1;
+        int RoomIDCount = 1;
 
         public string News="WIP Server";
 

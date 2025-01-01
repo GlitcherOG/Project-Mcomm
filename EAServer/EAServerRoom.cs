@@ -20,6 +20,7 @@ namespace SSX3_Server.EAServer
         public List<EAClientManager> Clients = new List<EAClientManager>();
 
         public bool isGlobal = false;
+        int prevListCount = 0;
 
         public void AddUser(EAClientManager client)
         {
@@ -37,7 +38,7 @@ namespace SSX3_Server.EAServer
 
             PlusWhoMessageOut plusWhoMessageOut = new PlusWhoMessageOut();
 
-            plusWhoMessageOut.I = client.ID.ToString();
+            plusWhoMessageOut.I = Clients.Count.ToString();
             plusWhoMessageOut.N = client.LoadedPersona.Name;
             plusWhoMessageOut.M = client.userData.Name;
             plusWhoMessageOut.A = client.GameAddress;
@@ -50,7 +51,7 @@ namespace SSX3_Server.EAServer
 
             PlusUserMessageOut plusUserMessageOut = new PlusUserMessageOut();
 
-            plusUserMessageOut.I = client.ID.ToString();
+            plusUserMessageOut.I = Clients.Count.ToString();
             plusUserMessageOut.N = client.LoadedPersona.Name;
             plusUserMessageOut.M = client.userData.Name;
             plusUserMessageOut.A = client.GameAddress;
@@ -91,17 +92,7 @@ namespace SSX3_Server.EAServer
 
             client.Broadcast(moveMessageOut);
 
-            PlusUserMessageOut plusUserMessageOut = new PlusUserMessageOut();
-
-            plusUserMessageOut.I = client.ID.ToString();
-            plusUserMessageOut.N = "";
-            plusUserMessageOut.M = client.userData.Name;
-            plusUserMessageOut.A = client.GameAddress;
-            plusUserMessageOut.X = "";
-            plusUserMessageOut.G = "0";
-            plusUserMessageOut.P = client.Ping.ToString();
-
-            BroadcastAllUsers(plusUserMessageOut);
+            BoradcastBackUserList();
 
             PlusPopMessageOut plusPopMessageOut = new PlusPopMessageOut();
 
@@ -134,9 +125,27 @@ namespace SSX3_Server.EAServer
         {
             for (int i = 0; i < Clients.Count; i++)
             {
-                client.Broadcast(Clients[i].GeneratePlusUser());
+                var TempUser = Clients[i].GeneratePlusUser();
+
+                TempUser.I = (i + 1).ToString();
+
+                client.Broadcast(TempUser);
             }
-            if(Clients.Count==0)
+
+            for (int i = Clients.Count; i < client.PrevPeekCount; i++)
+            {
+                var TempUser = new PlusUserMessageOut();
+
+                TempUser.I = (i + 1).ToString();
+
+                TempUser.N = "";
+
+                client.Broadcast(TempUser);
+            }
+
+            client.PrevPeekCount = Clients.Count;
+
+            if (Clients.Count==0)
             {
                 PlusUserMessageOut plusUserMessageOut = new PlusUserMessageOut();
 
@@ -158,7 +167,7 @@ namespace SSX3_Server.EAServer
             {
                 PlusUserMessageOut plusUserMessageOut = new PlusUserMessageOut();
 
-                plusUserMessageOut.I = Clients[i].ID.ToString();
+                plusUserMessageOut.I = (i+1).ToString();
                 plusUserMessageOut.N = Clients[i].LoadedPersona.Name;
                 plusUserMessageOut.M = Clients[i].userData.Name;
                 plusUserMessageOut.A = Clients[i].GameAddress;
@@ -168,6 +177,19 @@ namespace SSX3_Server.EAServer
 
                 BroadcastAllUsers(plusUserMessageOut);
             }
+
+            for (int i = Clients.Count; i < prevListCount; i++)
+            {
+                var TempUser = new PlusUserMessageOut();
+
+                TempUser.I = (i + 1).ToString();
+
+                TempUser.N = "";
+
+                BroadcastAllUsers(TempUser);
+            }
+
+            prevListCount = Clients.Count;
         }
 
         public void BroadcastAllUsers(EAMessage message)
