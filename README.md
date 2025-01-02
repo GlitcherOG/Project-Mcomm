@@ -8,8 +8,7 @@ There is currently a 500 dollar bounty on getting working server messages to get
 - Add Remove Buddy
 - Send Online Details before displaying Search
 - Patch Search so it works correctly
-- Fix Room Exiting and re-entering
-- fix peaking keeping non existant user
+- fix peaking keeping from entering room, think i need to clear out peek
 - fix room messages
 - Get Messages working
 - Find out Stat Struct

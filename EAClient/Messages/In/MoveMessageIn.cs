@@ -33,7 +33,7 @@ namespace SSX3_Server.EAClient.Messages
             //Send user to all users in room
             //Send Pop
             //Send Join Message
-            if (!client.DQUETest)
+            //if (!client.DQUETest)
             {
                 DQUEMessageout dQUEMessageout = new DQUEMessageout();
 

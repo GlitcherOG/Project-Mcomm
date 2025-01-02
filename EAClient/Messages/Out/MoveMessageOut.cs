@@ -31,6 +31,7 @@ namespace SSX3_Server.EAClient.Messages
             {
                 AddStringData("LIDENT", IDENT);
                 AddStringData("LCOUNT", COUNT);
+                AddStringData("NAME", NAME);
             }
             else
             {

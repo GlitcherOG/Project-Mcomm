@@ -145,20 +145,20 @@ namespace SSX3_Server.EAServer
 
             client.PrevPeekCount = Clients.Count;
 
-            if (Clients.Count==0)
-            {
-                PlusUserMessageOut plusUserMessageOut = new PlusUserMessageOut();
+            //if (Clients.Count==0)
+            //{
+            //    PlusUserMessageOut plusUserMessageOut = new PlusUserMessageOut();
 
-                plusUserMessageOut.I = "1";
-                plusUserMessageOut.N = "Empty";
-                plusUserMessageOut.M = "Empty";
-                plusUserMessageOut.A = EAServerManager.Instance.config.ListerIP;
-                plusUserMessageOut.X = "";
-                plusUserMessageOut.G = "0";
-                plusUserMessageOut.P = "0";
+            //    plusUserMessageOut.I = "1";
+            //    plusUserMessageOut.N = "Empty";
+            //    plusUserMessageOut.M = "Empty";
+            //    plusUserMessageOut.A = EAServerManager.Instance.config.ListerIP;
+            //    plusUserMessageOut.X = "";
+            //    plusUserMessageOut.G = "0";
+            //    plusUserMessageOut.P = "0";
 
-                client.Broadcast(plusUserMessageOut);
-            }
+            //    client.Broadcast(plusUserMessageOut);
+            //}
         }
 
         public void BoradcastBackUserList()
