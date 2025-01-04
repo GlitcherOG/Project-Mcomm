@@ -12,7 +12,7 @@ namespace SSX3_Server.EAClient.Messages
 
         public string USER;
         public string SHOW; //DISC, CHAT, AWAY, XA, DND, PASS
-        public string STAT;
+        public string STAT; //Can Contain P= FourCC
         public string PROD;
 
         public override void AssignValues()

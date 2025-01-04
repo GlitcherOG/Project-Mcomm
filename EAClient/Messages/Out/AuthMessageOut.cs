@@ -26,6 +26,10 @@ namespace SSX3_Server.EAClient.Messages
         public string NAME;
         public string ADDR;
 
+        //If Submessage is lock
+        public string DATE;
+        public string INTRO;
+
         public override void AssignValues()
         {
             TOS = stringDatas[0].Value;

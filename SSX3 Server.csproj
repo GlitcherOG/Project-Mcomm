@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <None Remove="EAClient\Messages\In\~PngMessageIn.cs~RF421a9b.TMP" />
+    <None Remove="EAClient\Messages\Out\PlusRNKMessageOut.cs~RF7030f2.TMP" />
   </ItemGroup>
 
   <ItemGroup>
