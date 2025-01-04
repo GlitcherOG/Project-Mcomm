@@ -11,16 +11,13 @@ namespace SSX3_Server.EAClient.Messages
         public override string MessageType { get { return "+rom"; } }
 
         public string A = "";
-
         public string I = "1"; //ID
         public string N = "Beginner.qwerty";
-        public string H { get; set; } = "FreeSO"; //Host?
-        public string F { get; set; } = "CK"; //P is password
-
+        public string H = "FreeSO"; //Host?
+        public string F = "CK"; //P is password
         public string T = "0"; //Count
-
-        public string L = "50"; // Unknown
-        public string P { get; set; } = "10";
+        public string L = "32"; //Limit
+        public string P = "10"; //Ping
 
         public override void AssignValuesToString()
         {

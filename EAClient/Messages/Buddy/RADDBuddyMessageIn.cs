@@ -18,6 +18,10 @@ namespace SSX3_Server.EAClient.Messages
         public string USER;
         public string GROUP;
 
+        //Out Message
+        //ID
+        public string FUSR;
+
         public override void AssignValues()
         {
             LRSC = stringDatas[0].Value;

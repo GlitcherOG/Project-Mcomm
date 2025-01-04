@@ -22,6 +22,10 @@ namespace SSX3_Server.EAClient.Messages
         public string SPAM;
         public string SINCE;
 
+        //Unused
+        public string NAME;
+        public string ADDR;
+
         public override void AssignValues()
         {
             TOS = stringDatas[0].Value;

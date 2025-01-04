@@ -19,6 +19,9 @@ namespace SSX3_Server.EAClient.Messages
         public string MESGS;
         public string GAMES;
 
+        public string MORE;
+        public string SLOTS;
+
         public override void PraseData(byte[] Data)
         {
             SubMessage = ByteUtil.ReadString(Data, 4, 4).Trim('\0');

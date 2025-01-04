@@ -15,6 +15,10 @@ namespace SSX3_Server.EAClient.Messages
         public string SESS;
         public string MASK;
 
+        //Currently not used
+        public string DIRECT;
+        public string DOWN;
+
         public override void AssignValues()
         {
             ADDR = stringDatas[0].Value;
