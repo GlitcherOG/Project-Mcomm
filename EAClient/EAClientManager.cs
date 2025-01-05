@@ -169,7 +169,7 @@ namespace SSX3_Server.EAClient
             }
 
             //Disconnect and Destroy
-            Console.WriteLine("Client Disconnecting...");
+            Console.WriteLine(MainClient.Client.RemoteEndPoint.ToString() + " Client Disconnecting...");
             CloseConnection();
             EAServerManager.Instance.DestroyClient(ID);
         }
