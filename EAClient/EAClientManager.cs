@@ -160,7 +160,7 @@ namespace SSX3_Server.EAClient
                 {
                     //Unknown Connection Error
                     //Most Likely Game has crashed
-                    Console.WriteLine("Connection Crashed, Disconnecting...");
+                    Console.WriteLine(MainClient.Client.RemoteEndPoint.ToString() + " Connection Ended, Disconnecting...");
                     SaveEAUserData();
                     SaveEAUserPersona();
                     CloseConnection();
