@@ -55,7 +55,7 @@ namespace SSX3_Server.EAClient
         //10 seconds to start till proper connection establised
         //ping every 1 min if failed ping close connection
         public bool LoggedIn = false;
-        public int TimeoutSeconds =30;
+        public int TimeoutSeconds = 5;
 
         DateTime LastSend;
         DateTime LastRecive;
@@ -129,6 +129,7 @@ namespace SSX3_Server.EAClient
                         if (BuddyListener.Pending())
                         {
                             BuddyClient = BuddyListener.AcceptTcpClient();
+                            Console.WriteLine("Buddy Connection From: " + BuddyClient.Client.RemoteEndPoint.ToString());
                             BuddyNS = BuddyClient.GetStream();
                             BuddyListener.Stop();
                             BuddyListener = null;
@@ -186,7 +187,7 @@ namespace SSX3_Server.EAClient
             }
 
             var msg = (EAMessage)Activator.CreateInstance(c);
-            msg.PraseData(array);
+            msg.PraseData(array, EAServerManager.Instance.config.Verbose, RealAddress + " Main Server");
 
             msg.ProcessCommand(this, room);
         }
@@ -204,7 +205,7 @@ namespace SSX3_Server.EAClient
             }
 
             var msg = (EAMessage)Activator.CreateInstance(c);
-            msg.PraseData(array);
+            msg.PraseData(array, EAServerManager.Instance.config.VerboseBuddy, RealAddress + " Buddy Server");
 
             msg.ProcessCommand(this, room);
         }
@@ -230,7 +231,7 @@ namespace SSX3_Server.EAClient
             plusUserMessageOut.I = ID.ToString();
             plusUserMessageOut.N = LoadedPersona.Name;
             plusUserMessageOut.M = userData.Name;
-            plusUserMessageOut.A = EAServerManager.Instance.config.ListerIP;
+            plusUserMessageOut.A = RealAddress;
             plusUserMessageOut.X = "";
             plusUserMessageOut.G = "0";
             plusUserMessageOut.P = Ping.ToString();
@@ -308,7 +309,6 @@ namespace SSX3_Server.EAClient
 
             if (!Exists)
             {
-
                 EAUserPersona.FriendEntry friendEntry = new EAUserPersona.FriendEntry();
 
                 friendEntry.Name = USER;

@@ -7,38 +7,26 @@ using System.Threading.Tasks;
 
 namespace SSX3_Server.EAClient.Messages
 {
-    public class OnlnMessageInOut : EAMessage
+    public class ReptMessageIn : EAMessage
     {
-        public override string MessageType { get { return "onln"; } }
+        public override string MessageType { get { return "rept"; } }
 
         public string PERS;
-
-        //Expects Both for Out Message
-        public string STAT;
-        public string R;
-
-        //Others it can expect back
-        //M
-        //N
-        //A
-        //F
-        //P
-        //S
-        //R
+        public string LANG;
 
         public override void AssignValues()
         {
-            PERS = stringDatas[0].Value;
+ 
         }
 
         public override void AssignValuesToString()
         {
-            AddStringData("PERS", PERS);
+
         }
 
         public override void ProcessCommand(EAClientManager client, EAServerRoom room = null)
         {
-            client.Broadcast(this);
+
         }
     }
 }

@@ -13,9 +13,11 @@ namespace SSX3_Server.EAServer
         public string ListerIP = "192.168.0.141";
         public int GamePort = 11000;
         public int ListenerPort = 10901;
-        public int BuddyPort = 10899;
+        public int BuddyPort = 13505;
         public bool DiscordBot = true;
         public string DiscordBotToken = "";
+        public bool Verbose = false;
+        public bool VerboseBuddy = false;
 
         public void CreateJson(string path, bool Inline = false)
         {

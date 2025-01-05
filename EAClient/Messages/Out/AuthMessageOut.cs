@@ -56,6 +56,9 @@ namespace SSX3_Server.EAClient.Messages
                 AddStringData("LANG", LANG);
                 AddStringData("SPAM", SPAM);
                 AddStringData("SINCE", SINCE);
+
+                //DEV STUFF
+                AddStringData("CPAT", "1");
             }
         }
 

@@ -22,7 +22,7 @@ namespace SSX3_Server.EAClient.Messages
         public string MORE;
         public string SLOTS;
 
-        public override void PraseData(byte[] Data)
+        public override void PraseData(byte[] Data, bool Verbose, string Location)
         {
             SubMessage = ByteUtil.ReadString(Data, 4, 4).Trim('\0');
             Size = ByteUtil.ReadInt32(Data, 8);
@@ -43,8 +43,12 @@ namespace SSX3_Server.EAClient.Messages
 
                 stringDatas.Add(NewStringData);
             }
-            Encoding encorder = new UTF8Encoding();
-            Console.WriteLine(encorder.GetString(Data));
+
+            if (Verbose)
+            {
+                Encoding encorder = new UTF8Encoding();
+                Console.WriteLine(Location + " In:\n" + encorder.GetString(Data));
+            }
             AssignValues();
         }
 

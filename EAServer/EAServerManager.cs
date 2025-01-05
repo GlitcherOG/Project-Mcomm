@@ -38,8 +38,8 @@ namespace SSX3_Server.EAServer
             clients = new List<EAClientManager>();
             MainBot = new MainBot();
             config = EAServerConfig.Load(AppContext.BaseDirectory + "\\ServerConfig.cfg");
-            highscoreDatabase = HighscoreDatabase.Load(AppContext.BaseDirectory + "\\Highscore.json");
 
+            highscoreDatabase = HighscoreDatabase.Load(AppContext.BaseDirectory + "\\Highscore.json");
 
             GenerateRequiredFiles();
 
@@ -59,7 +59,7 @@ namespace SSX3_Server.EAServer
 
             RoomIDCount = 5;
 
-            Console.WriteLine("Initalising Inital Rooms");
+            Console.WriteLine("Initalising Inital Rooms...");
             NewClientListening();
         }
 
@@ -71,17 +71,17 @@ namespace SSX3_Server.EAServer
             if (config == null)
             {
                 config = new EAServerConfig();
-                config.CreateJson(AppContext.BaseDirectory + "\\ServerConfig.cfg");
             }
+            config.CreateJson(AppContext.BaseDirectory + "\\ServerConfig.cfg");
 
-            if(highscoreDatabase == null)
+            if (highscoreDatabase == null)
             {
                 highscoreDatabase = new HighscoreDatabase();
                 highscoreDatabase.CreateBlankDatabase();
-                highscoreDatabase.CreateJson(AppContext.BaseDirectory + "\\Highscore.json");
             }
+            highscoreDatabase.CreateJson(AppContext.BaseDirectory + "\\Highscore.json");
 
-            if(!File.Exists(AppContext.BaseDirectory + "\\News.txt"))
+            if (!File.Exists(AppContext.BaseDirectory + "\\News.txt"))
             {
                 File.WriteAllText(AppContext.BaseDirectory + "\\News.txt", "WIP Server");
             }
@@ -111,7 +111,7 @@ namespace SSX3_Server.EAServer
                 {
                     _DirMessageIn ConnectionMessage = new _DirMessageIn();
 
-                    ConnectionMessage.PraseData(msg);
+                    ConnectionMessage.PraseData(msg, config.Verbose, (client.Client.RemoteEndPoint as IPEndPoint).Address + " Main Server");
 
                     //Assign Listiner
                     TcpListener server1 = new TcpListener(IPAddress.Any /*(client.Client.RemoteEndPoint as IPEndPoint).Address*/, config.ListenerPort);

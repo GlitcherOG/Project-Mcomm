@@ -12,6 +12,7 @@ namespace SSX3_Server.EAClient.Messages
         public override string MessageType { get { return "evom"; } }
 
         public string NAME;
+        public string PASS;
 
         public override void AssignValues()
         {
