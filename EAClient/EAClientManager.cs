@@ -55,7 +55,7 @@ namespace SSX3_Server.EAClient
         //10 seconds to start till proper connection establised
         //ping every 1 min if failed ping close connection
         public bool LoggedIn = false;
-        public int TimeoutSeconds = 5;
+        public int TimeoutSeconds = 30;
 
         DateTime LastSend;
         DateTime LastRecive;

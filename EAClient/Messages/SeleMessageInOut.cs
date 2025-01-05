@@ -19,6 +19,7 @@ namespace SSX3_Server.EAClient.Messages
         public string MESGS;
         public string GAMES;
 
+        //Expects in Out Message
         public string MORE;
         public string SLOTS;
 
