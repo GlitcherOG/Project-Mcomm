@@ -195,7 +195,6 @@ namespace SSX3_Server.EAClient
         public void ProcessBuddyMessage(byte[] array)
         {
             string InMessageType = EAMessage.MessageCommandType(array);
-            Console.WriteLine("Buddy Server");
             Type c;
             if (!EAMessage.BuddyInNameToClass.TryGetValue(InMessageType, out c))
             {
@@ -213,14 +212,14 @@ namespace SSX3_Server.EAClient
         public void Broadcast(EAMessage msg)
         {
             LastSend = DateTime.Now;
-            byte[] bytes = msg.GenerateData();
+            byte[] bytes = msg.GenerateData(false, EAServerManager.Instance.config.Verbose, RealAddress + " Main Server");
             MainNS.Write(bytes, 0, bytes.Length);
         }
 
         public void BroadcastBuddy(EAMessage msg)
         {
             LastSend = DateTime.Now;
-            byte[] bytes = msg.GenerateData();
+            byte[] bytes = msg.GenerateData(false, EAServerManager.Instance.config.VerboseBuddy, RealAddress + " Buddy Server");
             BuddyNS.Write(bytes, 0, bytes.Length);
         }
 

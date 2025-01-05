@@ -32,7 +32,7 @@ namespace SSX3_Server.EAClient.Messages
             }
         }
 
-        public override byte[] GenerateData(bool Override = false)
+        public override byte[] GenerateData(bool Override = false, bool Verbose = false, string Location = "ERROR")
         {
             MemoryStream data = new MemoryStream();
             AssignValuesToString();
@@ -53,9 +53,11 @@ namespace SSX3_Server.EAClient.Messages
             byte[] buffer = new byte[data.Length];
             data.Read(buffer, 0, (int)data.Length);
 
-            Encoding encorder = new UTF8Encoding();
-            Console.WriteLine(encorder.GetString(buffer)); //now , we write the message as string
-            //Console.WriteLine(BitConverter.ToString(buffer).Replace("-", ""));
+            if (Verbose)
+            {
+                Encoding encorder = new UTF8Encoding();
+                Console.WriteLine(Location + " OUT:\n" + encorder.GetString(buffer));
+            }
 
             return buffer.ToArray();
         }
