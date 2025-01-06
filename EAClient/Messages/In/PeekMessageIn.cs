@@ -32,6 +32,10 @@ namespace SSX3_Server.EAClient.Messages
             {
                 Room.PeekBoradcastBackUserList(client);
             }
+
+            DQUEMessageout dQUEMessageout = new DQUEMessageout();
+
+            client.Broadcast(dQUEMessageout);
         }
     }
 }

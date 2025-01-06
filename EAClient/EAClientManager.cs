@@ -160,7 +160,7 @@ namespace SSX3_Server.EAClient
                 {
                     //Unknown Connection Error
                     //Most Likely Game has crashed
-                    Console.WriteLine(MainClient.Client.RemoteEndPoint.ToString() + " Connection Ended, Disconnecting...");
+                    Console.WriteLine(RealAddress + " Connection Ended, Disconnecting...");
                     SaveEAUserData();
                     SaveEAUserPersona();
                     CloseConnection();
@@ -169,7 +169,7 @@ namespace SSX3_Server.EAClient
             }
 
             //Disconnect and Destroy
-            Console.WriteLine(MainClient.Client.RemoteEndPoint.ToString() + " Client Disconnecting...");
+            Console.WriteLine(RealAddress + " Client Disconnecting...");
             CloseConnection();
             EAServerManager.Instance.DestroyClient(ID);
         }

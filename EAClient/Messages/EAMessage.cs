@@ -46,6 +46,7 @@ namespace SSX3_Server.EAClient.Messages
                 { "RGET", typeof(RGETBuddyMessageInOut) }, //RGET Load Buddy List and return friends
                 { "PADD", typeof(PADDBuddyMessageIn) }, //
                 { "RADD", typeof(RADDBuddyMessageIn) }, //RADD user to the Message List
+                { "SEND", typeof(SENDBuddyMessageIn) }, //Private Message In
         };
 
         public virtual string MessageType { get { return MessageType; } set { MessageType = value; } }

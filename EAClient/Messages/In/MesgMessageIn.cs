@@ -103,6 +103,10 @@ namespace SSX3_Server.EAClient.Messages
                     plusMSGMessageOut.F = "C";
 
                     client.room.BroadcastAllUsers(plusMSGMessageOut);
+
+                    DQUEMessageout dQUEMessageout = new DQUEMessageout();
+
+                    client.Broadcast(dQUEMessageout);
                 }
             }
         }
