@@ -27,16 +27,39 @@ namespace SSX3_Server.EAClient.Messages
         {
             //NOTE FIX SO ITS PROPERLY GRABBING DETAILS
 
+            var TempUser = EAServerManager.Instance.GetUser(PERS);
 
-            UserMessageOut userMessageOut = new UserMessageOut();
+            if (TempUser!=null)
+            {
+                UserMessageOut userMessageOut = new UserMessageOut();
 
-            userMessageOut.PERS = PERS;
-            userMessageOut.STAT = "1/1/1/1";
-            userMessageOut.RANK = "10";
-            userMessageOut.ADDR = "192.168.0.141";
-            userMessageOut.ROOM = "Beginner.Peak1";
+                userMessageOut.PERS = TempUser.LoadedPersona.Name;
+                userMessageOut.STAT = TempUser.LoadedPersona.GenerateStat();
+                userMessageOut.RANK = TempUser.LoadedPersona.GenerateRank();
+                userMessageOut.ADDR = TempUser.RealAddress;
+                userMessageOut.ROOM = "";
 
-            client.Broadcast(userMessageOut);
+                if (TempUser.room!=null)
+                {
+                    userMessageOut.ROOM = TempUser.room.roomType+"."+TempUser.room.roomName;
+                }
+
+                client.Broadcast(userMessageOut);
+            }
+            else
+            {
+                //SWAP TO LOAD WHEN OFFLINE
+
+                UserMessageOut userMessageOut = new UserMessageOut();
+
+                userMessageOut.PERS = "";
+                userMessageOut.STAT = "";
+                userMessageOut.RANK = "";
+                userMessageOut.ADDR = "";
+                userMessageOut.ROOM = "";
+
+                client.Broadcast(userMessageOut);
+            }
         }
     }
 }

@@ -45,6 +45,16 @@ namespace SSX3_Server.EAClient
             }
         }
 
+        public string GenerateStat()
+        {
+            return "0";
+        }
+
+        public string GenerateRank()
+        {
+            return "0";
+        }
+
         public struct FriendEntry
         {
             public string Name;
