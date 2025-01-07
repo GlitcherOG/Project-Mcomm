@@ -21,11 +21,13 @@ namespace SSX3_Server.EAClient.Messages
 
         public override void AssignValuesToString()
         {
-            AddStringData("NAME", NAME);
+            //AddStringData("NAME", NAME);
         }
 
         public override void ProcessCommand(EAClientManager client, EAServerRoom room = null)
         {
+            client.Broadcast(this);
+
             var Room = EAServerManager.Instance.GetRoom(NAME);
 
             if (Room != null)
@@ -33,9 +35,9 @@ namespace SSX3_Server.EAClient.Messages
                 Room.PeekBoradcastBackUserList(client);
             }
 
-            DQUEMessageout dQUEMessageout = new DQUEMessageout();
+            //DQUEMessageout dQUEMessageout = new DQUEMessageout();
 
-            client.Broadcast(dQUEMessageout);
+            //client.Broadcast(dQUEMessageout);
         }
     }
 }

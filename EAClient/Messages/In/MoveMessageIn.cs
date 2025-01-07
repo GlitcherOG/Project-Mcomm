@@ -9,7 +9,7 @@ namespace SSX3_Server.EAClient.Messages
 {
     public class MoveMessageIn : EAMessage
     {
-        public override string MessageType { get { return "evom"; } }
+        public override string MessageType { get { return "move"; } }
 
         public string NAME;
         public string PASS;
@@ -34,12 +34,8 @@ namespace SSX3_Server.EAClient.Messages
             //Send user to all users in room
             //Send Pop
             //Send Join Message
-            //if (!client.DQUETest)
-            {
-                DQUEMessageout dQUEMessageout = new DQUEMessageout();
 
-                client.Broadcast(dQUEMessageout);
-            }
+            client.Broadcast(this);
 
             if (NAME != "")
             {
