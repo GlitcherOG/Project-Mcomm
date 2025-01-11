@@ -35,11 +35,10 @@ namespace SSX3_Server.EAClient.Messages
             //Send Pop
             //Send Join Message
 
-            client.Broadcast(this);
+            //client.Broadcast(this);
 
             if (NAME != "")
             {
-                client.DQUETest = false;
                 var TempRoom = EAServerManager.Instance.GetRoom(NAME);
 
                 TempRoom.AddUser(client);
@@ -48,7 +47,6 @@ namespace SSX3_Server.EAClient.Messages
             {
                 if(client.room!=null)
                 {
-                    client.DQUETest = true;
                     room.RemoveUser(client);
                 }
             }

@@ -76,6 +76,8 @@ namespace SSX3_Server.EAServer
             plusMSGMessageOut.T = "Welcome to the SSX Community";
 
             client.Broadcast(plusMSGMessageOut);
+
+            client.Broadcast(moveMessageOut);
         }
 
         public void RemoveUser(EAClientManager client)

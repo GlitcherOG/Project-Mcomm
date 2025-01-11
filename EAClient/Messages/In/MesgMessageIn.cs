@@ -38,6 +38,8 @@ namespace SSX3_Server.EAClient.Messages
 
         public override void ProcessCommand(EAClientManager client, EAServerRoom room = null)
         {
+            client.Broadcast(this);
+
             if(ATTR=="N3"&&TEXT.Contains("challenge"))
             {
                 var TempClient = EAServerManager.Instance.GetUser(PRIV);

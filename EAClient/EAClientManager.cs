@@ -63,7 +63,6 @@ namespace SSX3_Server.EAClient
         public int Ping = 20;
 
         public int PrevPeekCount=0;
-        public bool DQUETest = false;
 
         public EAServerRoom room;
         public MesgMessageIn.Challange challange;
