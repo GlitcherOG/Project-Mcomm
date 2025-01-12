@@ -31,67 +31,78 @@ namespace SSX3_Server.EAClient.Messages
 
         public override void AssignValuesToString()
         {
-            AddStringData("PRIV", PRIV);
-            AddStringData("TEXT", TEXT);
-            AddStringData("ATTR", ATTR);
+            //AddStringData("PRIV", PRIV);
+            //AddStringData("TEXT", TEXT);
+            //AddStringData("ATTR", ATTR);
         }
 
         public override void ProcessCommand(EAClientManager client, EAServerRoom room = null)
         {
             client.Broadcast(this);
 
-            if(ATTR=="N3"&&TEXT.Contains("challenge"))
+            if(ATTR=="N3")
             {
-                var TempClient = EAServerManager.Instance.GetUser(PRIV);
-
-                if(TempClient != null)
+                if (TEXT.Contains("challenge"))
                 {
-                    var TempChallange = new MesgMessageIn.Challange();
+                    var TempClient = EAServerManager.Instance.GetUser(PRIV);
 
-                    string[] TempString = TEXT/*.Remove('\"')*/.Split(' ');
+                    if (TempClient != null)
+                    {
+                        var TempChallange = new MesgMessageIn.Challange();
 
-                    TempChallange.TrackID = TempString[1];
-                    TempChallange.Gamemode1 = TempString[2];
-                    TempChallange.Gamemode2 = TempString[3];
-                    TempChallange.Ranked = TempString[4];
-                    TempChallange.Multipliers = TempString[5];
-                    TempChallange.Powerups = TempString[6];
-                    TempChallange.AI = TempString[7];
-                    TempChallange.PointIcons = TempString[8];
-                    TempChallange.U0 = TempString[9];
-                    TempChallange.U1 = TempString[10];
-                    TempChallange.U2 = TempString[11];
-                    TempChallange.U3 = TempString[12];
-                    TempChallange.U4 = TempString[13];
+                        string[] TempString = TEXT/*.Remove('\"')*/.Split(' ');
 
-                    client.challange = TempChallange;
+                        TempChallange.TrackID = TempString[1];
+                        TempChallange.Gamemode1 = TempString[2];
+                        TempChallange.Gamemode2 = TempString[3];
+                        TempChallange.Ranked = TempString[4];
+                        TempChallange.Multipliers = TempString[5];
+                        TempChallange.Powerups = TempString[6];
+                        TempChallange.AI = TempString[7];
+                        TempChallange.PointIcons = TempString[8];
+                        TempChallange.U0 = TempString[9];
+                        TempChallange.U1 = TempString[10];
+                        TempChallange.U2 = TempString[11];
+                        TempChallange.U3 = TempString[12];
+                        TempChallange.U4 = TempString[13];
 
-                    PlusMSGMessageOut plusMSGMessageOut = new PlusMSGMessageOut();
+                        client.challange = TempChallange;
 
-                    plusMSGMessageOut.N = client.LoadedPersona.Name;
-                    plusMSGMessageOut.T = TEXT;
-                    plusMSGMessageOut.F = "P3";
+                        PlusMSGMessageOut plusMSGMessageOut = new PlusMSGMessageOut();
 
-                    TempClient.Broadcast(plusMSGMessageOut);
+                        plusMSGMessageOut.N = client.LoadedPersona.Name;
+                        plusMSGMessageOut.T = TEXT;
+                        plusMSGMessageOut.F = "P3";
+
+                        TempClient.Broadcast(plusMSGMessageOut);
+                    }
                 }
-            }
-            else if(ATTR == "N3" && TEXT.Contains("lockChal"))
-            {
-                var TempClient = EAServerManager.Instance.GetUser(PRIV);
-
-                if (TempClient != null)
+                else
                 {
-                    PlusMSGMessageOut plusMSGMessageOut = new PlusMSGMessageOut();
+                    var TempClient = EAServerManager.Instance.GetUser(PRIV);
 
-                    plusMSGMessageOut.N = client.LoadedPersona.Name;
-                    plusMSGMessageOut.T = TEXT;
-                    plusMSGMessageOut.F = "P3";
+                    if (TempClient != null)
+                    {
+                        PlusMSGMessageOut plusMSGMessageOut = new PlusMSGMessageOut();
 
-                    TempClient.Broadcast(plusMSGMessageOut);
+                        plusMSGMessageOut.N = client.LoadedPersona.Name;
+                        plusMSGMessageOut.T = TEXT;
+                        plusMSGMessageOut.F = "P3";
 
-                    plusMSGMessageOut.N = client.LoadedPersona.Name;
+                        TempClient.Broadcast(plusMSGMessageOut);
 
-                    client.Broadcast(plusMSGMessageOut);
+                        if (TEXT.Contains("lockchal"))
+                        {
+                            plusMSGMessageOut.N = client.LoadedPersona.Name;
+
+                            client.Broadcast(plusMSGMessageOut);
+                        }
+
+                        if (TEXT.Contains("abortChal"))
+                        {
+                            ChalMessageIn.RemoveChallange(client, this);
+                        }
+                    }
                 }
             }
             else
@@ -105,10 +116,6 @@ namespace SSX3_Server.EAClient.Messages
                     plusMSGMessageOut.F = "C";
 
                     client.room.BroadcastAllUsers(plusMSGMessageOut);
-
-                    DQUEMessageout dQUEMessageout = new DQUEMessageout();
-
-                    client.Broadcast(dQUEMessageout);
                 }
             }
         }

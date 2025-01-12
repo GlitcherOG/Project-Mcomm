@@ -33,13 +33,6 @@ namespace SSX3_Server.EAClient.Messages
 
         public override void ProcessCommand(EAClientManager client, EAServerRoom room = null)
         {
-            DQUEMessageout dQUEMessageout = new DQUEMessageout();
-            client.Broadcast(dQUEMessageout);
-
-            ////MODE = "chal idle";
-            //client.Broadcast(this);
-
-
             //Add to list
             FromPlayer = client.LoadedPersona.Name;
             lock (chalMessageIns)
@@ -65,11 +58,11 @@ namespace SSX3_Server.EAClient.Messages
                     ChalMessageIn HostEntry = new ChalMessageIn();
                     ChalMessageIn OppoEntry = new ChalMessageIn();
 
-                        ChalMessageIn chalMessageIn = new ChalMessageIn();
+                    ChalMessageIn chalMessageIn = new ChalMessageIn();
 
-                        chalMessageIn.MODE = "play";
+                    chalMessageIn.MODE = "play";
 
-                        client.Broadcast(chalMessageIn);
+                    client.Broadcast(chalMessageIn);
 
                     //Check to see if theres a host command and a receive
                     for (int i = 0; i < chalMessageIns.Count; i++)
@@ -126,6 +119,32 @@ namespace SSX3_Server.EAClient.Messages
 
                         chalMessageIns.Remove(HostEntry);
                         chalMessageIns.Remove(OppoEntry);
+                    }
+                }
+            }
+        }
+
+        public static void RemoveChallange(EAClientManager client, MesgMessageIn mesgMessageIn = null)
+        {
+            //Clear Out Challange
+            for (global::System.Int32 i = 0; i < ChalMessageIn.chalMessageIns.Count; i++)
+            {
+                var TempChal = ChalMessageIn.chalMessageIns[i];
+
+                if (TempChal.FromPlayer == client.LoadedPersona.Name)
+                {
+                    ChalMessageIn.chalMessageIns.Remove(TempChal);
+                }
+            }
+            if (mesgMessageIn != null)
+            {
+                for (global::System.Int32 i = 0; i < ChalMessageIn.chalMessageIns.Count; i++)
+                {
+                    var TempChal = ChalMessageIn.chalMessageIns[i];
+
+                    if (TempChal.FromPlayer == mesgMessageIn.PRIV)
+                    {
+                        ChalMessageIn.chalMessageIns.Remove(TempChal);
                     }
                 }
             }

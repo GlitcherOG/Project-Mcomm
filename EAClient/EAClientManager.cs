@@ -357,6 +357,14 @@ namespace SSX3_Server.EAClient
             {
                 BuddyListener.Stop();
             }
+
+            //Delete Room if in one
+            if(room!=null)
+            {
+                room.RemoveUser(this);
+            }
+
+            ChalMessageIn.RemoveChallange(this);
         }
     }
 }

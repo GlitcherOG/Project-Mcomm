@@ -82,6 +82,7 @@ namespace SSX3_Server.EAServer
 
         public void RemoveUser(EAClientManager client)
         {
+
             Clients.Remove(client);
 
             MoveMessageOut moveMessageOut = new MoveMessageOut();

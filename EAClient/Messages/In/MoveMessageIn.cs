@@ -47,6 +47,9 @@ namespace SSX3_Server.EAClient.Messages
             {
                 if(client.room!=null)
                 {
+                    //DQUE NEEDS TO BE FIXED
+                    client.Broadcast(new DQUEMessageout());
+
                     room.RemoveUser(client);
                 }
             }
