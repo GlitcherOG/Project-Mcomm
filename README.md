@@ -1,7 +1,7 @@
 # SSX3-Server
 
 ## Bounty
-There is currently a 500 dollar bounty on getting working server messages to get in a room and in game. 
+There is currently a 500 dollar bounty on getting working server messages to get in game. 
 
 ## Todo
 - Fix Bug where users are blocked when logging in
