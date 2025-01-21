@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using SSX3_Server.EAClient.Messages;
 using System.Net.NetworkInformation;
 using System.Xml.Linq;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace SSX3_Server.EAServer
 {
@@ -102,6 +103,11 @@ namespace SSX3_Server.EAServer
             plusPopMessageOut.Z = roomId + "/" + Clients.Count;
 
             EAServerManager.Instance.BroadcastMessage(plusPopMessageOut);
+
+            if (!isGlobal && Clients.Count == 0)
+            {
+                //Disconnect Room
+            }
 
             PlusMSGMessageOut plusMSGMessageOut = new PlusMSGMessageOut();
 
@@ -200,6 +206,24 @@ namespace SSX3_Server.EAServer
             for (int i = 0; i < Clients.Count; i++)
             {
                 Clients[i].Broadcast(message);
+            }
+        }
+
+        public void ProcessMessage(MesgMessageIn mesgMessageIn, EAClientManager clientManager)
+        {
+            if (mesgMessageIn.TEXT.StartsWith("/"))
+            {
+
+            }
+            else
+            {
+                PlusMSGMessageOut plusMSGMessageOut = new PlusMSGMessageOut();
+
+                plusMSGMessageOut.N = clientManager.LoadedPersona.Name;
+                plusMSGMessageOut.T = mesgMessageIn.TEXT;
+                plusMSGMessageOut.F = "C";
+
+                BroadcastAllUsers(plusMSGMessageOut);
             }
         }
 

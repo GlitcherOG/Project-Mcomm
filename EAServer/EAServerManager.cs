@@ -114,7 +114,7 @@ namespace SSX3_Server.EAServer
                     ConnectionMessage.PraseData(msg, config.Verbose, (client.Client.RemoteEndPoint as IPEndPoint).Address + " Main Server");
 
                     //Assign Listiner
-                    TcpListener server1 = new TcpListener(IPAddress.Any /*(client.Client.RemoteEndPoint as IPEndPoint).Address*/, config.ListenerPort);
+                    TcpListener server1 = new TcpListener(IPAddress.Any, config.ListenerPort);
                     server1.Start();
 
                     //Send Connection Details Back

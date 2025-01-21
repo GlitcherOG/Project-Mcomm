@@ -109,13 +109,7 @@ namespace SSX3_Server.EAClient.Messages
             {
                 if(client.room!=null)
                 {
-                    PlusMSGMessageOut plusMSGMessageOut = new PlusMSGMessageOut();
-
-                    plusMSGMessageOut.N = client.LoadedPersona.Name;
-                    plusMSGMessageOut.T = TEXT;
-                    plusMSGMessageOut.F = "C";
-
-                    client.room.BroadcastAllUsers(plusMSGMessageOut);
+                    client.room.ProcessMessage(this, client);
                 }
             }
         }
