@@ -1,7 +1,9 @@
 ﻿using SSX3_Server.EAServer;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -30,8 +32,6 @@ namespace SSX3_Server.EAClient.Messages
         public override void AssignValuesToString()
         {
             AddStringData("NAME", RoomType + "." + NAME);
-            //AddStringData("LIDENT", "0");
-            //AddStringData("LCOUNT", "0");
             if (PASS != "")
             {
                 AddStringData("PASS", PASS);
@@ -40,10 +40,15 @@ namespace SSX3_Server.EAClient.Messages
 
         public override void ProcessCommand(EAClientManager client, EAServerRoom room = null)
         {
-            for (int i = 0; i < 2; i++)
-            {
-                client.Broadcast(this);
-            }
+            client.Broadcast(this);
+
+            EAServerRoom NewRoom = new EAServerRoom() { roomId = EAServerManager.Instance.RoomIDCount, roomType = RoomType, roomName = NAME, isGlobal = false, roomHost = client.LoadedPersona.Name, roomPassword = PASS, address = client.GameAddress };
+
+            NewRoom.AddUser(client);
+
+            EAServerManager.Instance.BroadcastMessage(NewRoom.GeneratePlusRoomInfo());
+
+            EAServerManager.Instance.rooms.Add(NewRoom);
         }
     }
 }

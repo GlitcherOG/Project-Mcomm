@@ -14,6 +14,7 @@ namespace SSX3_Server.EAServer
     public class EAServerRoom
     {
         public int roomId = -1;
+        public string address = "";
         public string roomType = "Beginner";
         public string roomName = "Null";
         public string roomPassword = "";
@@ -81,20 +82,22 @@ namespace SSX3_Server.EAServer
             client.Broadcast(moveMessageOut);
         }
 
-        public void RemoveUser(EAClientManager client)
+        public void RemoveUser(EAClientManager client, bool Quit = false)
         {
-
             Clients.Remove(client);
 
-            MoveMessageOut moveMessageOut = new MoveMessageOut();
+            if (!Quit)
+            {
+                MoveMessageOut moveMessageOut = new MoveMessageOut();
 
-            moveMessageOut.Leaving = true;
+                moveMessageOut.Leaving = true;
 
-            moveMessageOut.IDENT = roomId.ToString();
-            moveMessageOut.NAME = roomType + "." + roomName;
-            moveMessageOut.COUNT = Clients.Count.ToString();
+                moveMessageOut.IDENT = roomId.ToString();
+                moveMessageOut.NAME = roomType + "." + roomName;
+                moveMessageOut.COUNT = Clients.Count.ToString();
 
-            client.Broadcast(moveMessageOut);
+                client.Broadcast(moveMessageOut);
+            }
 
             BoradcastBackUserList();
 
@@ -122,6 +125,7 @@ namespace SSX3_Server.EAServer
         {
             PlusRomMessageOut _RomMessage = new PlusRomMessageOut();
 
+            _RomMessage.A = address;
             _RomMessage.I = roomId.ToString();
             _RomMessage.N = roomType + "." + roomName;
             _RomMessage.H = roomHost;

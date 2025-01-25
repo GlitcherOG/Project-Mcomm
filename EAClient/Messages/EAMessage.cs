@@ -34,6 +34,7 @@ namespace SSX3_Server.EAClient.Messages
                 { "snap", typeof(SnapMessageInOut) }, //Load highscores
                 { "chal", typeof(ChalMessageIn) }, //Challange Message
                 { "mesg", typeof(MesgMessageIn) }, //Base Message
+                { "room", typeof(RoomMessageIn) }, //Create Room
                 
         };
 
