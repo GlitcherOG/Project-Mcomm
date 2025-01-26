@@ -36,6 +36,8 @@ namespace SSX3_Server.EAServer
 
             client.Broadcast(moveMessageOut);
 
+            Console.WriteLine("(" + roomType + "." + roomName + ")" + client.LoadedPersona.Name + " Joined Room");
+
             Clients.Add(client);
 
             PlusWhoMessageOut plusWhoMessageOut = new PlusWhoMessageOut();
@@ -73,7 +75,7 @@ namespace SSX3_Server.EAServer
 
             PlusMSGMessageOut plusMSGMessageOut = new PlusMSGMessageOut();
 
-            plusMSGMessageOut.N = "";
+            plusMSGMessageOut.N = "Mcomm";
             plusMSGMessageOut.F = "C";
             plusMSGMessageOut.T = "Welcome to the SSX Community";
 
@@ -98,6 +100,8 @@ namespace SSX3_Server.EAServer
 
                 client.Broadcast(moveMessageOut);
             }
+
+            Console.WriteLine("(" + roomType + "." + roomName + ")" + client.LoadedPersona.Name + " Joined Room");
 
             BoradcastBackUserList();
 
@@ -228,6 +232,8 @@ namespace SSX3_Server.EAServer
                 plusMSGMessageOut.F = "C";
 
                 BroadcastAllUsers(plusMSGMessageOut);
+
+                Console.WriteLine("("+ roomType+"."+roomName +")" + clientManager.LoadedPersona.Name + ":"+ mesgMessageIn.TEXT);
             }
         }
 

@@ -1,4 +1,4 @@
-# SSX3-Server
+# Mcomm Project Server (SSX3 Online Server)
 
 ## Bounty
 There is currently a 500 dollar bounty on getting working server messages to get in game. 

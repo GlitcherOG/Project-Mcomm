@@ -132,6 +132,7 @@ namespace SSX3_Server.EAServer
                     //Add Pending Connection Check
 
                     TcpClient MainClient = server1.AcceptTcpClient();
+                    Console.WriteLine("Accepted Connection From: " + client.Client.RemoteEndPoint.ToString());
 
                     //Rewrork Threading
                     clients.Add(new EAClientManager(MainClient, IDCount, ReturnMessage.SESS, ReturnMessage.MASK));

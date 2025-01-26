@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace SSX3_Server.EAClient.Messages
 {
@@ -75,6 +76,8 @@ namespace SSX3_Server.EAClient.Messages
                         plusMSGMessageOut.F = "P3";
 
                         TempClient.Broadcast(plusMSGMessageOut);
+
+                        Console.WriteLine(client.LoadedPersona.Name + " Challanaged " + PRIV);
                     }
                 }
                 else
@@ -96,11 +99,13 @@ namespace SSX3_Server.EAClient.Messages
                             plusMSGMessageOut.N = client.LoadedPersona.Name;
 
                             client.Broadcast(plusMSGMessageOut);
+                            Console.WriteLine(client.LoadedPersona.Name + " Accepted Challanage from " + PRIV);
                         }
 
                         if (TEXT.Contains("abortChal"))
                         {
                             ChalMessageIn.RemoveChallange(client, this);
+                            Console.WriteLine(client.LoadedPersona.Name + " Accepted Challanage from " + PRIV);
                         }
                     }
                 }
