@@ -16,9 +16,6 @@ namespace SSX3_Server.EAClient.Messages
 
         public string PERS;
 
-        //Expects in Out Message
-        public string OPTS;
-
         public override void AssignValues()
         {
             PERS = stringDatas[0].Value;

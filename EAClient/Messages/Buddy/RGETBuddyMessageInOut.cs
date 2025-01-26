@@ -42,7 +42,7 @@ namespace SSX3_Server.EAClient.Messages
                     ROSTBuddyMessageOut msg2 = new ROSTBuddyMessageOut();
 
                     msg2.USER = client.LoadedPersona.friendEntries[i].Name;
-                    msg2.GROUP = "B";
+                    msg2.GROUP = ""; //B == Blocked?
 
                     client.BroadcastBuddy(msg2);
 
