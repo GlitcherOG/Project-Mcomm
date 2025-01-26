@@ -126,7 +126,7 @@ namespace SSX3_Server.EAClient.Messages
                         if (TEXT.Contains("abortChal"))
                         {
                             ChalMessageIn.RemoveChallange(client, this);
-                            Console.WriteLine(client.LoadedPersona.Name + " Accepted Challanage from " + PRIV);
+                            Console.WriteLine(client.LoadedPersona.Name + " Aborted Challanage from " + PRIV);
                         }
                     }
                 }

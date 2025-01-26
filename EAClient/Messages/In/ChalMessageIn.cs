@@ -60,7 +60,14 @@ namespace SSX3_Server.EAClient.Messages
 
                     ChalMessageIn chalMessageIn = new ChalMessageIn();
 
-                    chalMessageIn.MODE = "play";
+                    if (HOST == "1")
+                    {
+                        chalMessageIn.MODE = "chal";
+                    }
+                    else
+                    {
+                        chalMessageIn.MODE = "idle";
+                    }
 
                     client.Broadcast(chalMessageIn);
 
