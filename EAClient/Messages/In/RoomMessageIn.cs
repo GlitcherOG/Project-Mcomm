@@ -49,6 +49,8 @@ namespace SSX3_Server.EAClient.Messages
             EAServerManager.Instance.BroadcastMessage(NewRoom.GeneratePlusRoomInfo());
 
             EAServerManager.Instance.rooms.Add(NewRoom);
+
+            Console.WriteLine("New Room Created: " + RoomType+"."+ NAME);
         }
     }
 }
