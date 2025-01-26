@@ -356,7 +356,7 @@ namespace SSX3_Server.EAClient
             //Delete Room if in one
             if(room!=null)
             {
-                room.RemoveUser(this);
+                room.RemoveUser(this, true);
             }
 
             ChalMessageIn.RemoveChallange(this);

@@ -4,6 +4,7 @@
 There is currently a 500 dollar bounty on getting working server messages to get in game. 
 
 ## Todo
+- Direct Connect
 - Fix Bug where users are blocked on buddy list when logging in
 - Add Remove Buddy
 - Send Online Details before displaying Search
@@ -21,6 +22,7 @@ There is currently a 500 dollar bounty on getting working server messages to get
 - Fix Quick Match So it Works
 - Persona Generator for Duplicate Personas
 - Fix Having to DQUE to leave room
+- Mcomm Buddy for server commands
 
 # Todo Discord Bot
 - Discord bot able to send messages in game and to rooms

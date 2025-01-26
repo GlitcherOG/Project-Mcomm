@@ -31,9 +31,11 @@ namespace SSX3_Server.EAClient.Messages
             RGETBuddyMessageInOut msg = new RGETBuddyMessageInOut();
 
             msg.ID = "2";
-            msg.SIZE = client.LoadedPersona.friendEntries.Count.ToString();
+            msg.SIZE = (client.LoadedPersona.friendEntries.Count+1).ToString();
 
             client.BroadcastBuddy(msg);
+
+            McommDetails(client);
 
             //if (ID == "1")
             {
@@ -68,7 +70,6 @@ namespace SSX3_Server.EAClient.Messages
                     UserMessageOut msg3 = new UserMessageOut();
 
                     msg3.PERS = client.LoadedPersona.friendEntries[i].Name;
-                    msg3.STAT = "1";
                     msg3.STAT = "9999";
                     msg3.ADDR = "0.0.0.0";
                     msg3.ROOM = "";
@@ -76,6 +77,28 @@ namespace SSX3_Server.EAClient.Messages
                     client.Broadcast(msg3);
                 }
             }
+        }
+
+        public void McommDetails(EAClientManager client)
+        {
+            ROSTBuddyMessageOut msg2 = new ROSTBuddyMessageOut();
+            msg2.USER = "Mcomm";
+            msg2.GROUP = ""; //B == Blocked?
+            client.BroadcastBuddy(msg2);
+
+            PGETBuddyMessageIn pGETBuddyMessageIn = new PGETBuddyMessageIn();
+            pGETBuddyMessageIn.PROD = "S%3dSSX-PS2-2004%0aSSXID%3d3%0aLOCID%3d0%0a";
+            pGETBuddyMessageIn.USER = "Mcomm";
+            pGETBuddyMessageIn.STAT = "";
+            pGETBuddyMessageIn.SHOW = "CHAT";
+            client.BroadcastBuddy(pGETBuddyMessageIn);
+
+            UserMessageOut msg3 = new UserMessageOut();
+            msg3.PERS = "Mcomm";
+            msg3.STAT = "1";
+            msg3.ADDR = "0.0.0.0";
+            msg3.ROOM = "";
+            client.Broadcast(msg3);
         }
     }
 }

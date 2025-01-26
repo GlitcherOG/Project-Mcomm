@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -43,6 +44,26 @@ namespace SSX3_Server.EAClient.Messages
 
             if(ATTR=="N3")
             {
+                if(PRIV=="Mcomm")
+                {
+                    if (TEXT.Contains("challenge"))
+                    {
+                        //Abort Chal
+                        PlusMSGMessageOut plusMSGMessageOut = new PlusMSGMessageOut();
+
+                        plusMSGMessageOut.N = "Mcomm";
+                        plusMSGMessageOut.T = "abortChal";
+                        plusMSGMessageOut.F = "P3";
+
+                        client.Broadcast(plusMSGMessageOut);
+                    }
+                    else
+                    {
+                        //Process Command
+                    }
+                    return;
+                }
+
                 if (TEXT.Contains("challenge"))
                 {
                     var TempClient = EAServerManager.Instance.GetUser(PRIV);

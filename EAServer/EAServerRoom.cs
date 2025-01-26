@@ -77,7 +77,7 @@ namespace SSX3_Server.EAServer
 
             plusMSGMessageOut.N = "Mcomm";
             plusMSGMessageOut.F = "C";
-            plusMSGMessageOut.T = "Welcome to the SSX Community";
+            plusMSGMessageOut.T = client.LoadedPersona.Name + " Has Joined the Room";
 
             client.Broadcast(plusMSGMessageOut);
 
@@ -118,9 +118,9 @@ namespace SSX3_Server.EAServer
 
             PlusMSGMessageOut plusMSGMessageOut = new PlusMSGMessageOut();
 
-            plusMSGMessageOut.N = client.LoadedPersona.Name;
+            plusMSGMessageOut.N = "Mcomm";
             plusMSGMessageOut.F = "C";
-            plusMSGMessageOut.T = "\"Has Left the Room\"";
+            plusMSGMessageOut.T = client.LoadedPersona.Name + " Has Left the Room";
 
             BroadcastAllUsers(plusMSGMessageOut);
         }
@@ -219,7 +219,7 @@ namespace SSX3_Server.EAServer
 
         public void ProcessMessage(MesgMessageIn mesgMessageIn, EAClientManager clientManager)
         {
-            if (mesgMessageIn.TEXT.StartsWith("/"))
+            if (mesgMessageIn.TEXT.StartsWith("/") || mesgMessageIn.TEXT.StartsWith("\\"))
             {
 
             }
