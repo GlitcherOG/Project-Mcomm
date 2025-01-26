@@ -72,7 +72,7 @@ namespace SSX3_Server.EAClient.Messages
             //Check if user exists if so send back this
             var Temp = EAClientManager.GetUserData(NAME);
             string ClientTime = DateTime.Now.ToString("yyyy.MM.dd hh:mm:ss");
-            if (Temp != null)
+            if (Temp != null || EAServerManager.Instance.BannedNames.Contains(NAME))
             {
                 msg2.SubMessage = "dupl";
 

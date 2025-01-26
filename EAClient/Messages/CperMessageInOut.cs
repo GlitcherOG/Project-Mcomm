@@ -32,7 +32,7 @@ namespace SSX3_Server.EAClient.Messages
         public override void ProcessCommand(EAClientManager client, EAServerRoom room = null)
         {
             var TempPersona = EAClientManager.GetUserPersona(PERS);
-            if (TempPersona != null)
+            if (TempPersona != null || EAServerManager.Instance.BannedNames.Contains(PERS))
             {
                 SubMessage = "dupl";
                 client.Broadcast(this);

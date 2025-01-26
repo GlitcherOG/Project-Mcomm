@@ -22,6 +22,7 @@ namespace SSX3_Server.EAServer
 
         public EAServerConfig config;
         public HighscoreDatabase highscoreDatabase;
+        public string[] BannedNames;
 
         public int IDCount = 1;
         public int RoomIDCount = 1;
@@ -44,6 +45,8 @@ namespace SSX3_Server.EAServer
             GenerateRequiredFiles();
 
             News = File.ReadAllText(AppContext.BaseDirectory + "\\News.txt");
+
+            BannedNames = File.ReadAllLines(AppContext.BaseDirectory + "\\Names.txt");
 
             if (config.DiscordBot)
             {
@@ -84,6 +87,11 @@ namespace SSX3_Server.EAServer
             if (!File.Exists(AppContext.BaseDirectory + "\\News.txt"))
             {
                 File.WriteAllText(AppContext.BaseDirectory + "\\News.txt", "WIP Server");
+            }
+
+            if (!File.Exists(AppContext.BaseDirectory + "\\Names.txt"))
+            {
+                File.WriteAllText(AppContext.BaseDirectory + "\\Names.txt", "Mcomm\nZoe\nElise\nMac\nKaori\nJP\nMoby\nHiro\nEddie\nJurgen\nSeeiah\nLuther\nPsymon\nBrodi\nMarty\nAllegra\nGriff\nNate\nViggo");
             }
         }
 

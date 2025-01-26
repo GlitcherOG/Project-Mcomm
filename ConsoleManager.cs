@@ -9,7 +9,6 @@ namespace SSX3_Server
 {
     public static class ConsoleManager
     {
-
         static Color DefaultColour = Color.White;
 
         public static void WriteLine(string Input = "", Color? color = null)
@@ -20,9 +19,7 @@ namespace SSX3_Server
             }
 
             Console.WriteLine(Input);
-
         }
-
 
     }
 }

@@ -12,10 +12,6 @@ using System.Xml.Linq;
 
 namespace SSX3_Server.EAClient
 {
-    //TODO
-    //MOVE MESSAGES TO BE PHRASED BETTER
-    //FIX PNG MESSAGES
-    //FIND OUT MORE MESSAGES
 
     public class EAClientManager
     {
@@ -52,7 +48,7 @@ namespace SSX3_Server.EAClient
         public TcpClient BuddyClient = null;
         NetworkStream BuddyNS = null;
 
-        //10 seconds to start till proper connection establised
+        //30 seconds to start till proper connection establised
         //ping every 1 min if failed ping close connection
         public bool LoggedIn = false;
         public int TimeoutSeconds = 30;
@@ -74,7 +70,6 @@ namespace SSX3_Server.EAClient
             MASK = MASKin;
             MainClient = tcpClient;
             MainNS = MainClient.GetStream();
-
 
             IPEndPoint remoteIpEndPoint = MainClient.Client.RemoteEndPoint as IPEndPoint;
             RealAddress = remoteIpEndPoint.Address.ToString();
