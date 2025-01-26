@@ -4,24 +4,29 @@
 There is currently a 500 dollar bounty on getting working server messages to get in game. 
 
 ## Todo
-- Fix Bug where users are blocked when logging in
+- Fix Bug where users are blocked on buddy list when logging in
 - Add Remove Buddy
 - Send Online Details before displaying Search
 - Patch Search so it gets offline personas
-- fix room messages so user can create room
 - Find out Stat Struct
 - Get Challanges working
 - Fix Sending Player List Twice on startup
-- Fix Duplicate Persona not getting back possible names
 - Add Edit user and lost user
 - Patch Console Manager so it is used instead of console.writeline
-- Discord Bot Fix Kick Messages
 - Fix Disconnecting not working correctly
-- Discord bot able to send messages in game and to rooms
-- Fix Chal not getting user details properly
+- Fix Chal not getting user details/stats properly
 - Fix Highscore not listing database scores
 - Add check to see if user is already logged in, if so disconnect and allow new connection
- 
+- Fix Challanger Messages to Create Session
+- Fix Quick Match So it Works
+- Persona Generator for Duplicate Personas
+- Fix Having to DQUE to leave room
+
+# Todo Discord Bot
+- Discord bot able to send messages in game and to rooms
+- Discord Bot Fix Kick Messages
+- Link Ingame Account To Discord Account
+
 ## To Connect to server
 1. Using DNAS Patcher 21 bypass the DNAS Checks using mode 1 and 3 to generate an iso to bypass dnas check
 2. In Emulator go to network settings swap DNS1 Address to Internal
