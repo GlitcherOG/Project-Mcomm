@@ -63,13 +63,13 @@ namespace SSX3_Server.EAClient
         public EAServerRoom room;
         public MesgMessageIn.Challange challange;
 
-        public EAClientManager(TcpClient tcpClient, int InID, string SESSin, string MASKin)
+        public EAClientManager(TcpClient tcpClient, NetworkStream NSClient, int InID, string SESSin, string MASKin)
         {
             ID = InID;
             SESS = SESSin;
             MASK = MASKin;
             MainClient = tcpClient;
-            MainNS = MainClient.GetStream();
+            MainNS = NSClient;
 
             IPEndPoint remoteIpEndPoint = MainClient.Client.RemoteEndPoint as IPEndPoint;
             RealAddress = remoteIpEndPoint.Address.ToString();

@@ -121,15 +121,24 @@ namespace SSX3_Server.EAServer
 
                     ConnectionMessage.PraseData(msg, config.Verbose, (client.Client.RemoteEndPoint as IPEndPoint).Address + " Main Server");
 
-                    //Assign Listiner
-                    TcpListener server1 = new TcpListener(IPAddress.Any, config.ListenerPort);
-                    server1.Start();
-
                     //Send Connection Details Back
                     _DirMessageOut ReturnMessage = new _DirMessageOut();
+                    TcpListener server1 = new TcpListener(IPAddress.None, config.ListenerPort);
 
-                    ReturnMessage.ADDR = config.ListerIP;
-                    ReturnMessage.PORT = config.ListenerPort.ToString();
+                    if (!config.DirectConnect)
+                    {
+                        //Assign Listiner
+                        server1 = new TcpListener(IPAddress.Any, config.ListenerPort);
+                        server1.Start();
+                        ReturnMessage.ADDR = config.ListerIP;
+                        ReturnMessage.PORT = config.ListenerPort.ToString();
+                    }
+                    else
+                    {
+                        //Direct Connect Doesnt work this way
+                        ReturnMessage.DIRECT = "True";
+                        ReturnMessage.DOWN = "Server Currently Down";
+                    }
 
                     ReturnMessage.SESS = GenerateSESS();
                     ReturnMessage.MASK = GenerateMASK();
@@ -137,21 +146,36 @@ namespace SSX3_Server.EAServer
                     msg = ReturnMessage.GenerateData();
                     tcpNS.Write(msg, 0, msg.Length);
 
-                    //Add Pending Connection Check
+                    TcpClient MainClient = client;
+                    NetworkStream MainNS = tcpNS;
 
-                    TcpClient MainClient = server1.AcceptTcpClient();
-                    Console.WriteLine("Accepted Connection From: " + client.Client.RemoteEndPoint.ToString());
+                    //Add Pending Connection Check
+                    if (!config.DirectConnect)
+                    {
+                        MainClient = server1.AcceptTcpClient();
+                        MainNS = MainClient.GetStream();
+                        Console.WriteLine("Accepted Connection From: " + client.Client.RemoteEndPoint.ToString());
+                    }
+                    else
+                    {
+                        Console.WriteLine("Accepted Direct Connection From: " + client.Client.RemoteEndPoint.ToString());
+                    }
 
                     //Rewrork Threading
-                    clients.Add(new EAClientManager(MainClient, IDCount, ReturnMessage.SESS, ReturnMessage.MASK));
+                    clients.Add(new EAClientManager(MainClient, MainNS, IDCount, ReturnMessage.SESS, ReturnMessage.MASK));
                     IDCount++;
 
-                    tcpNS.Dispose();
-                    tcpNS.Close();
-                    client.Dispose();
-                    client.Close();
                     server.Stop();
+
+                    if(!config.DirectConnect)
+                    {
+                        tcpNS.Dispose();
+                        tcpNS.Close();
+                        client.Dispose();
+                        client.Close();
+                    }
                     server1.Stop();
+                    server.Stop();
                 }
                 else
                 {

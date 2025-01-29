@@ -156,5 +156,18 @@ namespace SSX3_Server.EAClient.Messages
 
             stringDatas.Add(stringData);
         }
+
+        public string GetStringData(string Type)
+        {
+            for (int i = 0; i < stringDatas.Count; i++)
+            {
+                if (stringDatas[i].Type==Type)
+                {
+                    return stringDatas[i].Value;
+                }
+            }
+
+            return "";
+        }
     }
 }

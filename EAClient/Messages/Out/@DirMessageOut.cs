@@ -16,8 +16,8 @@ namespace SSX3_Server.EAClient.Messages
         public string MASK;
 
         //Currently not used
-        public string DIRECT;
-        public string DOWN;
+        public string DIRECT = "";
+        public string DOWN = "";
 
         public override void AssignValues()
         {
@@ -29,10 +29,20 @@ namespace SSX3_Server.EAClient.Messages
 
         public override void AssignValuesToString()
         {
-            AddStringData("ADDR", ADDR);
-            AddStringData("PORT", PORT);
+            if (DIRECT == "")
+            {
+                AddStringData("ADDR", ADDR);
+                AddStringData("PORT", PORT);
+            }
+            else
+            {
+                AddStringData("DIRECT", DIRECT);
+                AddStringData("DOWN", DOWN);
+            }
             AddStringData("SESS", SESS);
             AddStringData("MASK", MASK);
+            //AddStringData("DIRECT", DIRECT);
+            //AddStringData("DOWN", DOWN);
         }
 
     }

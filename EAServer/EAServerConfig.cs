@@ -10,6 +10,7 @@ namespace SSX3_Server.EAServer
 {
     public class EAServerConfig
     {
+        public bool DirectConnect = false;
         public string ListerIP = "192.168.0.141";
         public int GamePort = 11000;
         public int ListenerPort = 10901;
