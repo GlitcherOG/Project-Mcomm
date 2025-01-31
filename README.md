@@ -4,6 +4,10 @@
 There is currently a 500 dollar bounty on getting working server messages to get in game. 
 
 ## Status
+General
+• Challanaging Player: 
+• Quick Play: 
+
 Accounts 
 
 • Authentication & Account Creation: ✅
@@ -25,15 +29,16 @@ Buddies
 • Add as Buddy: ✅ (Show as blocked when leaving and rejoining)
 • Removing buddies:  
 • Blocking buddies:  
-• Online Status: 
+• Online Status: ✅
 • Send & receive messages: ✅ 
 • View profile: ✅
-• Pressence info: 
+• Pressence info:
 
 Statistics
 
 • Leaderboards: 
 • Rider Stats: 
+• Ranked Play: 
 
 News
 
