@@ -1,7 +1,43 @@
-# Mcomm Project Server (SSX3 Online Server)
+﻿# Mcomm Project Server (SSX3 Online Server)
 
 ## Bounty
 There is currently a 500 dollar bounty on getting working server messages to get in game. 
+
+## Status
+Accounts 
+
+• Authentication & Account Creation: ✅
+• Persona creation & Persona deletion: ✅
+• Account Management: 
+• Username & Password recovery:  
+
+Rooms
+
+• Create & join rooms ✅
+• Text Chat: ✅
+• Voice Chat: 
+• Kick player: 
+• Password-locked rooms:
+
+Buddies
+
+• Searching for buddies: ✅ 
+• Add as Buddy: ✅ (Show as blocked when leaving and rejoining)
+• Removing buddies:  
+• Blocking buddies:  
+• Online Status: 
+• Send & receive messages: ✅ 
+• View profile: ✅
+• Pressence info: 
+
+Statistics
+
+• Leaderboards: 
+• Rider Stats: 
+
+News
+
+• News: ✅
 
 ## Todo
 - Direct Connect
