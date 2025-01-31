@@ -60,7 +60,7 @@ namespace SSX3_Server.EAClient.Messages
 
                     ChalMessageIn chalMessageIn = new ChalMessageIn();
 
-                    chalMessageIn.MODE = "idle";
+                    chalMessageIn.MODE = "chal";
 
                     client.Broadcast(chalMessageIn);
 
@@ -108,7 +108,7 @@ namespace SSX3_Server.EAClient.Messages
                        plusSesMessageOut.P2 = HostClient.challange.Gamemode2;/*OtherUser.ID.ToString();*/
                        plusSesMessageOut.P3 = "0";
                        plusSesMessageOut.P4 = "0";
-                       plusSesMessageOut.AUTH = "Test";
+                       plusSesMessageOut.AUTH = "";
                        plusSesMessageOut.SEED = Seed;
                        plusSesMessageOut.WHEN = "2003.12.8 15:52:54";
 

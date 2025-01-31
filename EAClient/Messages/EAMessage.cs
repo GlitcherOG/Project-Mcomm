@@ -44,7 +44,7 @@ namespace SSX3_Server.EAClient.Messages
                 { "PING", typeof(PINGBuddyMessageInOut) }, //Ping Command
                 { "AUTH", typeof(AUTHBuddyMessageIn) }, //AUTH Connect Command
                 { "PSET", typeof(PSETBuddyMessageIn) }, //PSET Set Player Status
-                { "RGET", typeof(RGETBuddyMessageInOut) }, //RGET Load Buddy List and return friends
+                { "RGET", typeof(RGETBuddyMessageIn) }, //RGET Load Buddy List and return friends
                 { "PADD", typeof(PADDBuddyMessageIn) }, //
                 { "RADD", typeof(RADDBuddyMessageIn) }, //RADD user to the Message List
                 { "SEND", typeof(SENDBuddyMessageIn) }, //Private Message In

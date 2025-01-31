@@ -7,44 +7,44 @@ using System.Threading.Tasks;
 
 namespace SSX3_Server.EAClient.Messages
 {
-    public class RGETBuddyMessageInOut : EAMessage
+    public class RGETBuddyMessageIn : EAMessage
     {
         public override string MessageType { get { return "RGET"; } }
 
+        public string LRSC;
+        public string LIST;
+        public string PRES;
         public string ID;
-        public string SIZE;
+
 
         public override void AssignValues()
         {
-            ID = stringDatas[0].Value;
-            SIZE = stringDatas[1].Value;
-        }
-
-        public override void AssignValuesToString()
-        {
-            AddStringData("ID", ID);
-            AddStringData("SIZE", SIZE);
+            LRSC = stringDatas[0].Value;
+            LIST = stringDatas[1].Value;
+            PRES = stringDatas[2].Value;
+            ID = stringDatas[3].Value;
         }
 
         public override void ProcessCommand(EAClientManager client, EAServerRoom room = null)
         {
-            RGETBuddyMessageInOut msg = new RGETBuddyMessageInOut();
+            RGETBuddyMessageOut msg = new RGETBuddyMessageOut();
 
-            msg.ID = "2";
-            msg.SIZE = (client.LoadedPersona.friendEntries.Count+1).ToString();
+            msg.ID = ID.ToString();
 
-            client.BroadcastBuddy(msg);
-
-            McommDetails(client);
-
-            //if (ID == "1")
+            if (LIST == "I")
             {
+                msg.SIZE = (client.LoadedPersona.friendEntries.Count).ToString();
+
+                client.BroadcastBuddy(msg);
+
+                McommDetails(client);
+
                 for (int i = 0; i < client.LoadedPersona.friendEntries.Count; i++)
                 {
                     ROSTBuddyMessageOut msg2 = new ROSTBuddyMessageOut();
 
                     msg2.USER = client.LoadedPersona.friendEntries[i].Name;
-                    msg2.GROUP = ""; //B == Blocked?
+                    msg2.GROUP = "I"; //B == Blocked?
 
                     client.BroadcastBuddy(msg2);
 
@@ -76,6 +76,12 @@ namespace SSX3_Server.EAClient.Messages
 
                     client.Broadcast(msg3);
                 }
+            }
+            else
+            {
+                msg.SIZE = 0.ToString();
+
+                client.BroadcastBuddy(msg);
             }
         }
 
