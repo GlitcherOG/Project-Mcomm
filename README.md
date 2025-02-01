@@ -45,13 +45,11 @@ News
 • News: ✅
 
 ## Todo
-- Direct Connect
 - Fix Bug where users are blocked on buddy list when logging in
 - Add Remove Buddy
 - Send Online Details before displaying Search
 - Patch Search so it gets offline personas
 - Find out Stat Struct
-- Get Challanges working
 - Fix Sending Player List Twice on startup
 - Add Edit user and lost user
 - Patch Console Manager so it is used instead of console.writeline
