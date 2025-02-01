@@ -114,6 +114,12 @@ namespace SSX3_Server.EAClient.Messages
 
                        HostClient.Broadcast(plusSesMessageOut);
 
+                        plusSesMessageOut.SELF = OtherUser.LoadedPersona.Name;
+                        plusSesMessageOut.OPPO = HostClient.LoadedPersona.Name;
+                        plusSesMessageOut.ADDR = HostClient.RealAddress;
+
+                       OtherUser.Broadcast(plusSesMessageOut);
+
                        chalMessageIns.Remove(HostEntry);
                        chalMessageIns.Remove(OppoEntry);
                    }
