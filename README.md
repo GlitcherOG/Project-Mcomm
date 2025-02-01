@@ -1,45 +1,45 @@
 ﻿# Mcomm Project Server (SSX3 Online Server)
 
 ## Status
-General
-• Challanaging Player: ✅
-• Quick Play: 
+General  
+• Challanaging Player: ✅  
+• Quick Play:  
 
-Accounts 
-
-• Authentication & Account Creation: ✅
-• Persona creation & Persona deletion: ✅
-• Account Management: 
+Accounts  
+  
+• Authentication & Account Creation: ✅  
+• Persona creation & Persona deletion: ✅  
+• Account Management:  
 • Username & Password recovery:  
 
-Rooms
+Rooms  
 
-• Create & join rooms ✅
-• Text Chat: ✅
-• Voice Chat: 
-• Kick player: 
-• Password-locked rooms: 
+• Create & join rooms ✅  
+• Text Chat: ✅  
+• Voice Chat:  
+• Kick player:  
+• Password-locked rooms:  
 
-Buddies
+Buddies  
 
-• Searching for buddies: ✅ 
-• Add as Buddy: ✅ (Show as blocked when leaving and rejoining)
+• Searching for buddies: ✅  
+• Add as Buddy: ✅ (Show as blocked when leaving and rejoining)  
 • Removing buddies:  
 • Blocking buddies:  
-• Online Status: ✅
-• Send & receive messages: ✅ 
-• View profile: ✅
-• Pressence info:
+• Online Status: ✅  
+• Send & receive messages: ✅  
+• View profile: ✅  
+• Pressence info:  
 
-Statistics
+Statistics  
 
-• Leaderboards: 
-• Rider Stats: 
-• Ranked Play: 
+• Leaderboards:  
+• Rider Stats:  
+• Ranked Play:  
 
-News
+News  
 
-• News: ✅
+• News: ✅  
 
 ## Todo
 - Fix Bug where users are blocked on buddy list when logging in
@@ -88,16 +88,16 @@ Note: PCAP options treat PCSX2 as its own device on your network. So, we need to
 5. For the final section, enter any number 100 - 250
 Note: Choosing a high number will give you a better chance at avoiding conflict with existing devices.
 
-## Prevent Windows from messing with your connection (PCSX2 Only)
-__Firewall Exception for PCSX2__
-Control Panel -> System and Security -> Windows Defender Firewall
-Allow an app or feature through Windows Defender Firewall
-Allow another app... -> Browse... -> PCSX2 PS2 Emulator.exe -> Add
+## Prevent Windows from messing with your connection (PCSX2 Only)  
+__Firewall Exception for PCSX2__  
+Control Panel -> System and Security -> Windows Defender Firewall  
+Allow an app or feature through Windows Defender Firewall  
+Allow another app... -> Browse... -> PCSX2 PS2 Emulator.exe -> Add  
 
-__Inbound Rules__
-Control Panel -> System and Security -> Windows Defender Firewall
-Advanced Settings -> Inbound Rules -> New Rule
-Rule Type: Custom -> Program: This Program Path -> Browse... -> PCSX2 PS2 Emulator.exe
-Protocol and Ports -> Protocol Type: UDP
-Name: PCSX2 UDP -> Finish
-Repeat but for TCP (select Protocol Type: TCP)
+__Inbound Rules__  
+Control Panel -> System and Security -> Windows Defender Firewall  
+Advanced Settings -> Inbound Rules -> New Rule  
+Rule Type: Custom -> Program: This Program Path -> Browse... -> PCSX2 PS2 Emulator.exe  
+Protocol and Ports -> Protocol Type: UDP  
+Name: PCSX2 UDP -> Finish  
+Repeat but for TCP (select Protocol Type: TCP)  
