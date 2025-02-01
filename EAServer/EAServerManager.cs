@@ -123,15 +123,15 @@ namespace SSX3_Server.EAServer
 
                     //Send Connection Details Back
                     _DirMessageOut ReturnMessage = new _DirMessageOut();
-                    TcpListener server1 = new TcpListener(IPAddress.None, config.ListenerPort);
+                    TcpListener server1 = new TcpListener(IPAddress.None, config.GamePort);
 
                     if (!config.DirectConnect)
                     {
                         //Assign Listiner
-                        server1 = new TcpListener(IPAddress.Any, config.ListenerPort);
+                        server1 = new TcpListener(IPAddress.Any, config.GamePort);
                         server1.Start();
-                        ReturnMessage.ADDR = config.ListerIP;
-                        ReturnMessage.PORT = config.ListenerPort.ToString();
+                        ReturnMessage.ADDR = config.GameIP;
+                        ReturnMessage.PORT = config.GamePort.ToString();
                     }
                     else
                     {

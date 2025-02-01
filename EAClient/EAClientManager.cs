@@ -12,7 +12,6 @@ using System.Xml.Linq;
 
 namespace SSX3_Server.EAClient
 {
-
     public class EAClientManager
     {
         public int ID;
@@ -118,7 +117,6 @@ namespace SSX3_Server.EAClient
                             }
                         }
                     }
-
 
                     //If Buddy Listener Connection Pending
                     if (BuddyListener != null)

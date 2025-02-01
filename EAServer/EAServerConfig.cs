@@ -11,9 +11,9 @@ namespace SSX3_Server.EAServer
     public class EAServerConfig
     {
         public bool DirectConnect = false;
-        public string ListerIP = "192.168.0.141";
-        public int GamePort = 11000;
-        public int ListenerPort = 10901;
+        public string GameIP = "192.168.0.141";
+        public int ListenerPort = 11000;
+        public int GamePort = 10901;
         public int BuddyPort = 13505;
         public bool DiscordBot = true;
         public string DiscordBotToken = "";
