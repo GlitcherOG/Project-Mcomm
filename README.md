@@ -2,7 +2,7 @@
 
 ## Status
 General
-• Challanaging Player: 
+• Challanaging Player: ✅
 • Quick Play: 
 
 Accounts 
@@ -18,7 +18,7 @@ Rooms
 • Text Chat: ✅
 • Voice Chat: 
 • Kick player: 
-• Password-locked rooms:
+• Password-locked rooms: 
 
 Buddies
 
@@ -54,7 +54,6 @@ News
 - Fix Chal not getting user details/stats properly
 - Fix Highscore not listing database scores
 - Add check to see if user is already logged in, if so disconnect and allow new connection
-- Fix Challanger Messages to Create Session
 - Fix Quick Match So it Works
 - Persona Generator for Duplicate Personas
 - Fix Having to DQUE to leave room

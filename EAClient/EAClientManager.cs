@@ -71,6 +71,8 @@ namespace SSX3_Server.EAClient
             MainClient = tcpClient;
             MainNS = NSClient;
 
+            MainClient.ReceiveBufferSize = 2048;
+
             IPEndPoint remoteIpEndPoint = MainClient.Client.RemoteEndPoint as IPEndPoint;
             RealAddress = remoteIpEndPoint.Address.ToString();
 
@@ -91,8 +93,9 @@ namespace SSX3_Server.EAClient
                     //Read Main Network Stream
                     if (MainClient.Available > 0)
                     {
-                        byte[] msg = new byte[65535];     //the messages arrive as byte array
+                        byte[] msg = new byte[2048];     //the messages arrive as byte array
                         MainNS.Read(msg, 0, msg.Length);   //the same networkstream reads the message sent by the client
+
                         if (msg[0] != 0)
                         {
                             LastRecive = DateTime.Now;
@@ -205,16 +208,39 @@ namespace SSX3_Server.EAClient
 
         public void Broadcast(EAMessage msg)
         {
-            LastSend = DateTime.Now;
-            byte[] bytes = msg.GenerateData(false, EAServerManager.Instance.config.Verbose, RealAddress + " Main Server");
-            MainNS.Write(bytes, 0, bytes.Length);
+            try
+            {
+                LastSend = DateTime.Now;
+                byte[] bytes = msg.GenerateData(false, EAServerManager.Instance.config.Verbose, RealAddress + " Main Server");
+                MainNS.Write(bytes, 0, bytes.Length);
+            }
+            catch 
+            {
+                Console.WriteLine(RealAddress + " Connection Ended, Disconnecting...");
+                SaveEAUserData();
+                SaveEAUserPersona();
+                CloseConnection();
+                EAServerManager.Instance.DestroyClient(ID);
+            }
+
         }
 
         public void BroadcastBuddy(EAMessage msg)
         {
-            LastSend = DateTime.Now;
-            byte[] bytes = msg.GenerateData(false, EAServerManager.Instance.config.VerboseBuddy, RealAddress + " Buddy Server");
-            BuddyNS.Write(bytes, 0, bytes.Length);
+            try
+            {
+                LastSend = DateTime.Now;
+                byte[] bytes = msg.GenerateData(false, EAServerManager.Instance.config.VerboseBuddy, RealAddress + " Buddy Server");
+                BuddyNS.Write(bytes, 0, bytes.Length);
+            }
+            catch
+            {
+                Console.WriteLine(RealAddress + " Connection Ended, Disconnecting...");
+                SaveEAUserData();
+                SaveEAUserPersona();
+                CloseConnection();
+                EAServerManager.Instance.DestroyClient(ID);
+            }
         }
 
         public PlusUserMessageOut GeneratePlusUser()
