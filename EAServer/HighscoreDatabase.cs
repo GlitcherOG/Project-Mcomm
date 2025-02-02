@@ -19,14 +19,14 @@ namespace SSX3_Server.EAServer
                 { 1, "Null" },
                 { 2, "Null" },
                 { 3, "Null" },
-                { 4, "SnowJam" },
+                { 4, "Snow Jam" },
                 { 5, "Metro City" },
                 { 6, "Ruthless Ridge" },
                 { 7, "Intimidator" },
                 { 8, "Gravitude" },
-                { 9, "Happiness" },
-                { 10, "Ruthless" },
-                { 11, "The Throne" },
+                { 9, "Happiness" }, //Race
+                { 10, "Ruthless" }, //Race
+                { 11, "The Throne" }, //Race
                 { 12, "R&N" },
                 { 13, "Style Mile" },
                 { 14, "Kick Doubt" },
@@ -35,9 +35,9 @@ namespace SSX3_Server.EAServer
                 { 17, "Null" },
                 { 18, "Null" },
                 { 19, "Null" },
-                { 20, "Happiness" },
-                { 21, "Ruthless" },
-                { 22, "The Throne" },
+                { 20, "Happiness" }, //Score
+                { 21, "Ruthless" },//Score
+                { 22, "The Throne" }, //Score
                 { 23, "Crows Nest" },
                 { 24, "Launch Time" },
                 { 25, "Much-2-Much" },
@@ -45,6 +45,12 @@ namespace SSX3_Server.EAServer
                 { 27, "Schiophrenia" },
                 { 28, "Pernendiculous" },
         };
+
+        public void AddScores(RankDataFile rankDataFile)
+        {
+            //Convert Race Track ID To Leaderboard TrackID
+            //TrackID Against GameMode 
+        }
 
         public void CreateBlankDatabase()
         {
@@ -63,6 +69,7 @@ namespace SSX3_Server.EAServer
                 TempEntry.Name = "Empty";
                 TempEntry.Score = "0";
                 TempEntry.HexScore = "0";
+                TempEntry.RaceDataFile = "NULL"
 
                 courseEntry.Entries.Add(TempEntry);
 
@@ -97,7 +104,6 @@ namespace SSX3_Server.EAServer
             }
         }
 
-
         public struct CourseEntry
         {
             public int ID;
@@ -111,6 +117,7 @@ namespace SSX3_Server.EAServer
             public string Name;
             public string Score;
             public string HexScore;
+            public string RaceDataFile;
         }
     }
 }
