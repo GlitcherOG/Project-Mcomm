@@ -61,10 +61,10 @@ namespace SSX3_Server.EAClient.Messages
 
             client.LoadedPersona.Last = DateTime.Now.ToString("yyyy.MM.dd hh:mm:ss");
 
-            msg2.A = EAServerManager.Instance.config.ListerIP.ToString();
-            msg2.LA = EAServerManager.Instance.config.ListerIP.ToString();
+            msg2.A = EAServerManager.Instance.config.GameIP.ToString();
+            msg2.LA = EAServerManager.Instance.config.GameIP.ToString();
             msg2.LOC = "enUS";
-            msg2.MA = EAServerManager.Instance.config.ListerIP.ToString();
+            msg2.MA = EAServerManager.Instance.config.GameIP.ToString();
             msg2.NAME = client.userData.Name;
             msg2.PERS = client.LoadedPersona.Name;
             msg2.LAST = client.userData.Last;
