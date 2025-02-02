@@ -29,7 +29,7 @@ Buddies
 • Online Status: ✅  
 • Send & receive messages: ✅  
 • View profile: ✅  
-• Pressence info:  
+• Pressence info:  ✅
 
 Statistics  
 
@@ -58,6 +58,8 @@ News
 - Persona Generator for Duplicate Personas
 - Fix Having to DQUE to leave room
 - Mcomm Buddy for server commands
+- Fix Passwords
+- Tunneling Service (Temp Hide IPs as well)
 
 # Todo Discord Bot
 - Discord bot able to send messages in game and to rooms

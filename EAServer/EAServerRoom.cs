@@ -14,7 +14,7 @@ namespace SSX3_Server.EAServer
     public class EAServerRoom
     {
         public int roomId = -1;
-        public string address = "";
+        public string Address = "";
         public string roomType = "Beginner";
         public string roomName = "Null";
         public string roomPassword = "";
