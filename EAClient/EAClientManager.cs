@@ -57,7 +57,7 @@ namespace SSX3_Server.EAClient
         DateTime LastPing;
         public int Ping = 20;
 
-        public int PrevPeekCount=0;
+        public int PrevPeekCount = 0;
 
         public EAServerRoom room;
         public MesgMessageIn.Challange challange;
@@ -137,7 +137,7 @@ namespace SSX3_Server.EAClient
                         _PngMessageOut msg2 = new _PngMessageOut();
                         Broadcast(msg2);
 
-                        if(BuddyClient!=null)
+                        if (BuddyClient != null)
                         {
                             PINGBuddyMessageInOut msg3 = new PINGBuddyMessageInOut();
 
@@ -206,38 +206,43 @@ namespace SSX3_Server.EAClient
 
         public void Broadcast(EAMessage msg)
         {
-            try
+            if (!Closing)
             {
-                LastSend = DateTime.Now;
-                byte[] bytes = msg.GenerateData(false, EAServerManager.Instance.config.Verbose, RealAddress + " Main Server");
-                MainNS.Write(bytes, 0, bytes.Length);
+                try
+                {
+                    LastSend = DateTime.Now;
+                    byte[] bytes = msg.GenerateData(false, EAServerManager.Instance.config.Verbose, RealAddress + " Main Server");
+                    MainNS.Write(bytes, 0, bytes.Length);
+                }
+                catch
+                {
+                    Console.WriteLine(RealAddress + " Connection Ended, Disconnecting...");
+                    SaveEAUserData();
+                    SaveEAUserPersona();
+                    CloseConnection();
+                    EAServerManager.Instance.DestroyClient(ID);
+                }
             }
-            catch 
-            {
-                Console.WriteLine(RealAddress + " Connection Ended, Disconnecting...");
-                SaveEAUserData();
-                SaveEAUserPersona();
-                CloseConnection();
-                EAServerManager.Instance.DestroyClient(ID);
-            }
-
         }
 
         public void BroadcastBuddy(EAMessage msg)
         {
-            try
+            if (!Closing)
             {
-                LastSend = DateTime.Now;
-                byte[] bytes = msg.GenerateData(false, EAServerManager.Instance.config.VerboseBuddy, RealAddress + " Buddy Server");
-                BuddyNS.Write(bytes, 0, bytes.Length);
-            }
-            catch
-            {
-                Console.WriteLine(RealAddress + " Connection Ended, Disconnecting...");
-                SaveEAUserData();
-                SaveEAUserPersona();
-                CloseConnection();
-                EAServerManager.Instance.DestroyClient(ID);
+                try
+                {
+                    LastSend = DateTime.Now;
+                    byte[] bytes = msg.GenerateData(false, EAServerManager.Instance.config.VerboseBuddy, RealAddress + " Buddy Server");
+                    BuddyNS.Write(bytes, 0, bytes.Length);
+                }
+                catch
+                {
+                    Console.WriteLine(RealAddress + " Connection Ended, Disconnecting...");
+                    SaveEAUserData();
+                    SaveEAUserPersona();
+                    CloseConnection();
+                    EAServerManager.Instance.DestroyClient(ID);
+                }
             }
         }
 
@@ -258,7 +263,7 @@ namespace SSX3_Server.EAClient
 
         public static EAUserData GetUserData(string Name)
         {
-            if(Path.Exists(AppContext.BaseDirectory + "\\Users\\" + Name.ToLower() + ".json"))
+            if (Path.Exists(AppContext.BaseDirectory + "\\Users\\" + Name.ToLower() + ".json"))
             {
                 return EAUserData.Load(AppContext.BaseDirectory + "\\Users\\" + Name.ToLower() + ".json");
             }
@@ -282,7 +287,7 @@ namespace SSX3_Server.EAClient
 
             for (int i = 0; i < userData.PersonaList.Count; i++)
             {
-                if(i==0)
+                if (i == 0)
                 {
                     StringPersonas = userData.PersonaList[i];
                 }
@@ -314,15 +319,15 @@ namespace SSX3_Server.EAClient
         public void AddFriend(string USER)
         {
             //ADD CHECK TO SEE IF VAILD PERSONA, should always be the case but confirm
-            bool Exists= false;
+            bool Exists = false;
 
-                for (int i = 0; i < LoadedPersona.friendEntries.Count; i++)
+            for (int i = 0; i < LoadedPersona.friendEntries.Count; i++)
+            {
+                if (LoadedPersona.friendEntries[i].Name.ToLower() == USER.ToLower())
                 {
-                    if (LoadedPersona.friendEntries[i].Name.ToLower() == USER.ToLower())
-                    {
-                        Exists = true;
-                    }
+                    Exists = true;
                 }
+            }
 
             if (!Exists)
             {
@@ -359,14 +364,18 @@ namespace SSX3_Server.EAClient
         {
 
         }
-
+        bool Closing = false;
         public void CloseConnection()
         {
-            MainNS.Close();
-            MainClient.Close();
+            Closing = true;
+            if (MainClient.Connected)
+            {
+                MainNS.Close();
+                MainClient.Close();
+            }
             if (BuddyListener == null)
             {
-                if (BuddyClient != null)
+                if (BuddyClient.Connected)
                 {
                     BuddyClient.Close();
                     BuddyNS.Close();
