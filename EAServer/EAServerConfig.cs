@@ -15,7 +15,7 @@ namespace SSX3_Server.EAServer
         public int ListenerPort = 11000;
         public int GamePort = 10901;
         public int BuddyPort = 13505;
-        public bool DiscordBot = true;
+        public bool DiscordBot = false;
         public string DiscordBotToken = "";
         public bool Verbose = false;
         public bool VerboseBuddy = false;
