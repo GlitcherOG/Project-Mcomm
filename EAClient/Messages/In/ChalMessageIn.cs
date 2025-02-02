@@ -110,7 +110,7 @@ namespace SSX3_Server.EAClient.Messages
                        plusSesMessageOut.P4 = "0";
                        plusSesMessageOut.AUTH = "";
                        plusSesMessageOut.SEED = Seed;
-                       plusSesMessageOut.WHEN = "2003.12.8 15:52:54";
+                       plusSesMessageOut.WHEN = DateTime.Now.ToString("yyyy.MM.dd hh:mm:ss");
 
                        HostClient.Broadcast(plusSesMessageOut);
 

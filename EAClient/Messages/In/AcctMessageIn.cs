@@ -83,7 +83,7 @@ namespace SSX3_Server.EAClient.Messages
             {
                 Temp = new EAUserData();
                 Temp.Name = NAME;
-                Temp.Pass = PASS;
+                Temp.Pass = ByteUtil.CreateMD5(PASS);
                 Temp.Spam = SPAM;
                 Temp.Mail = MAIL;
                 Temp.Gend = GEND;

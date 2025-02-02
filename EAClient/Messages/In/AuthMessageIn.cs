@@ -64,7 +64,7 @@ namespace SSX3_Server.EAClient.Messages
                 client.userData = UserData;
                 AuthMessageOut msg2 = new AuthMessageOut();
 
-                if (((UserData.Name == NAME /*&& TempData.Pass == msg.stringDatas[1].Value*/) || UserData.Bypass == true) && UserData.Banned == false)
+                if (((UserData.Name == NAME && UserData.Pass == PASS) || UserData.Bypass == true) && UserData.Banned == false)
                 {
                     client.userData.Last = DateTime.Now.ToString("yyyy.MM.dd hh:mm:ss");
 
