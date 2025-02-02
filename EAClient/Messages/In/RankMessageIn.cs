@@ -224,7 +224,10 @@ namespace SSX3_Server.EAClient.Messages
 
             RankDataFile rankDataFile = new RaceDataFile();
             rankDataFile.AddData(this);
-            rankDataFile.CreateJson(AppContext.BaseDirectory + "\\Races\\"+client.LoadedPersona.Name+"."+WHEN+".json");
+            rankDataFile.CreateJson(AppContext.BaseDirectory + "\\Races\\"+client.LoadedPersona.Name+"."+WHEN.Replace(":","_")+".json");
+
+            //Check if other users race data is there if not dont process
+            //If there process and add both users to leaderboard if ranked
         }
     }
 }

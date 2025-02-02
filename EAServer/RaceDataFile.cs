@@ -223,13 +223,13 @@ namespace SSX3_Server.EAServer
             File.WriteAllText(path, serializer);
         }
 
-        public static HighscoreDatabase Load(string path)
+        public static RaceDataFile Load(string path)
         {
             string paths = path;
             if (File.Exists(paths))
             {
                 var stream = File.ReadAllText(paths);
-                var container = JsonConvert.DeserializeObject<HighscoreDatabase>(stream);
+                var container = JsonConvert.DeserializeObject<RaceDataFile>(stream);
                 return container;
             }
             else
