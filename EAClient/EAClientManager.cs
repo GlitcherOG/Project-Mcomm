@@ -379,10 +379,13 @@ namespace SSX3_Server.EAClient
                 }
                 if (BuddyListener == null)
                 {
-                    if (BuddyClient.Connected)
+                    if (BuddyClient != null)
                     {
-                        BuddyClient.Close();
-                        BuddyNS.Close();
+                        if (BuddyClient.Connected)
+                        {
+                            BuddyClient.Close();
+                            BuddyNS.Close();
+                        }
                     }
                 }
                 else
