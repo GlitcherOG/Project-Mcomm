@@ -70,7 +70,8 @@ namespace SSX3_Server.EAServer
         {
             Directory.CreateDirectory(AppContext.BaseDirectory + "\\Users");
             Directory.CreateDirectory(AppContext.BaseDirectory + "\\Personas");
-
+            Directory.CreateDirectory(AppContext.BaseDirectory + "\\Races");
+            
             if (config == null)
             {
                 config = new EAServerConfig();

@@ -47,16 +47,14 @@ News
 - Send Online Details before displaying Search
 - Patch Search so it gets offline personas
 - Find out Stat Struct
-- Fix Sending Player List Twice on startup
 - Add Edit user and lost user
-- Patch Console Manager so it is used instead of console.writeline
 - Fix Disconnecting not working correctly
 - Fix Chal not getting user details/stats properly
 - Fix Highscore not listing database scores
 - Add check to see if user is already logged in, if so disconnect and allow new connection
 - Fix Quick Match So it Works
 - Persona Generator for Duplicate Personas
-- Fix Having to DQUE to leave room
+- Fix Having to DQUE to leave room (Probably due to an issue with vc)
 - Mcomm Buddy for server commands
 - Fix Passwords
 - Tunneling Service (Temp Hide IPs as well)
