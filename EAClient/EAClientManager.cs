@@ -364,35 +364,40 @@ namespace SSX3_Server.EAClient
         {
 
         }
+
         bool Closing = false;
+
         public void CloseConnection()
         {
-            Closing = true;
-            if (MainClient.Connected)
+            if (!Closing)
             {
-                MainNS.Close();
-                MainClient.Close();
-            }
-            if (BuddyListener == null)
-            {
-                if (BuddyClient.Connected)
+                Closing = true;
+                if (MainClient.Connected)
                 {
-                    BuddyClient.Close();
-                    BuddyNS.Close();
+                    MainNS.Close();
+                    MainClient.Close();
                 }
-            }
-            else
-            {
-                BuddyListener.Stop();
-            }
+                if (BuddyListener == null)
+                {
+                    if (BuddyClient.Connected)
+                    {
+                        BuddyClient.Close();
+                        BuddyNS.Close();
+                    }
+                }
+                else
+                {
+                    BuddyListener.Stop();
+                }
 
-            //Delete Room if in one
-            if(room!=null)
-            {
-                room.RemoveUser(this, true);
-            }
+                //Delete Room if in one
+                if (room != null)
+                {
+                    room.RemoveUser(this, true);
+                }
 
-            ChalMessageIn.RemoveChallange(this);
+                ChalMessageIn.RemoveChallange(this);
+            }
         }
     }
 }
