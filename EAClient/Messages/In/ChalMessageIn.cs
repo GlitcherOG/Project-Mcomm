@@ -122,6 +122,8 @@ namespace SSX3_Server.EAClient.Messages
 
                        chalMessageIns.Remove(HostEntry);
                        chalMessageIns.Remove(OppoEntry);
+
+                       ConsoleManager.WriteLine(HostClient.LoadedPersona.Name + " Started Session with " + OtherUser.LoadedPersona.Name);
                    }
                 }
             }

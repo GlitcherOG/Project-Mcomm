@@ -18,7 +18,7 @@ namespace SSX3_Server
                 color = DefaultColour;
             }
 
-            Console.WriteLine(Input);
+            Console.WriteLine("[InsetDateTime]: "+Input);
         }
 
     }

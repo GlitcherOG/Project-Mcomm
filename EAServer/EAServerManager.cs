@@ -34,7 +34,7 @@ namespace SSX3_Server.EAServer
         
         public void InitaliseServer()
         {
-            Console.WriteLine("Initalising Server...");
+            ConsoleManager.WriteLine("Initalising Server...");
             Instance = this;
             clients = new List<EAClientManager>();
             MainBot = new MainBot();
@@ -53,7 +53,7 @@ namespace SSX3_Server.EAServer
                 Task.Run(() => MainBot.Main(config.DiscordBotToken));
             }
 
-            Console.WriteLine("Initalised Server, Waiting For Clients...");
+            ConsoleManager.WriteLine("Initalised Server, Waiting For Clients...");
 
             rooms.Add(new EAServerRoom() { roomId = 1, roomType = "Beginner", roomName = "Peak1", isGlobal = true });
             rooms.Add(new EAServerRoom() { roomId = 2, roomType = "Advanced", roomName = "Peak2", isGlobal = true });
@@ -62,7 +62,7 @@ namespace SSX3_Server.EAServer
 
             RoomIDCount = 5;
 
-            Console.WriteLine("Initalising Inital Rooms...");
+            ConsoleManager.WriteLine("Initalising Inital Rooms...");
             NewClientListening();
         }
 
@@ -107,7 +107,7 @@ namespace SSX3_Server.EAServer
 
                 NetworkStream tcpNS = client.GetStream();
 
-                Console.WriteLine("Connection From: " + client.Client.RemoteEndPoint.ToString());
+                ConsoleManager.WriteLine("Connection From: " + client.Client.RemoteEndPoint.ToString());
 
                 //tcpClient.ReceiveTimeout = 20;
 
@@ -154,11 +154,11 @@ namespace SSX3_Server.EAServer
                     {
                         MainClient = server1.AcceptTcpClient();
                         MainNS = MainClient.GetStream();
-                        Console.WriteLine("Accepted Connection From: " + client.Client.RemoteEndPoint.ToString());
+                        ConsoleManager.WriteLine("Accepted Connection From: " + client.Client.RemoteEndPoint.ToString());
                     }
                     else
                     {
-                        Console.WriteLine("Accepted Direct Connection From: " + client.Client.RemoteEndPoint.ToString());
+                        ConsoleManager.WriteLine("Accepted Direct Connection From: " + client.Client.RemoteEndPoint.ToString());
                     }
 
                     //Rewrork Threading

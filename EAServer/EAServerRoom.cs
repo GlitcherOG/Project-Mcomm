@@ -36,7 +36,7 @@ namespace SSX3_Server.EAServer
 
             client.Broadcast(moveMessageOut);
 
-            Console.WriteLine("(" + roomType + "." + roomName + ")" + client.LoadedPersona.Name + " Joined Room");
+            ConsoleManager.WriteLine(client.LoadedPersona.Name + " Joined Room " + roomType + "." + roomName);
 
             Clients.Add(client);
 
@@ -101,7 +101,7 @@ namespace SSX3_Server.EAServer
                 client.Broadcast(moveMessageOut);
             }
 
-            Console.WriteLine("(" + roomType + "." + roomName + ")" + client.LoadedPersona.Name + " Joined Room");
+            ConsoleManager.WriteLine(client.LoadedPersona.Name + " Left Room " + roomType + "." + roomName);
 
             BoradcastBackUserList();
 
@@ -115,14 +115,16 @@ namespace SSX3_Server.EAServer
             {
                 //Disconnect Room
             }
+            else
+            {
+                PlusMSGMessageOut plusMSGMessageOut = new PlusMSGMessageOut();
 
-            PlusMSGMessageOut plusMSGMessageOut = new PlusMSGMessageOut();
+                plusMSGMessageOut.N = "Mcomm";
+                plusMSGMessageOut.F = "C";
+                plusMSGMessageOut.T = client.LoadedPersona.Name + " Has Left the Room";
 
-            plusMSGMessageOut.N = "Mcomm";
-            plusMSGMessageOut.F = "C";
-            plusMSGMessageOut.T = client.LoadedPersona.Name + " Has Left the Room";
-
-            BroadcastAllUsers(plusMSGMessageOut);
+                BroadcastAllUsers(plusMSGMessageOut);
+            }
         }
 
         public PlusRomMessageOut GeneratePlusRoomInfo()
@@ -221,7 +223,7 @@ namespace SSX3_Server.EAServer
         {
             if (mesgMessageIn.TEXT.StartsWith("/") || mesgMessageIn.TEXT.StartsWith("\\"))
             {
-
+            
             }
             else
             {

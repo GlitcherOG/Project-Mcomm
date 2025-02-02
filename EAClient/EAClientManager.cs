@@ -124,7 +124,7 @@ namespace SSX3_Server.EAClient
                         if (BuddyListener.Pending())
                         {
                             BuddyClient = BuddyListener.AcceptTcpClient();
-                            Console.WriteLine("Buddy Connection From: " + BuddyClient.Client.RemoteEndPoint.ToString());
+                            ConsoleManager.WriteLine("Buddy Connection From: " + BuddyClient.Client.RemoteEndPoint.ToString());
                             BuddyNS = BuddyClient.GetStream();
                             BuddyListener.Stop();
                             BuddyListener = null;
@@ -155,7 +155,7 @@ namespace SSX3_Server.EAClient
                 {
                     //Unknown Connection Error
                     //Most Likely Game has crashed
-                    Console.WriteLine(RealAddress + " Connection Ended, Disconnecting...");
+                    ConsoleManager.WriteLine(RealAddress + " Connection Ended, Disconnecting...");
                     SaveEAUserData();
                     SaveEAUserPersona();
                     CloseConnection();
@@ -163,10 +163,13 @@ namespace SSX3_Server.EAClient
                 }
             }
 
-            //Disconnect and Destroy
-            Console.WriteLine(RealAddress + " Client Disconnecting...");
-            CloseConnection();
-            EAServerManager.Instance.DestroyClient(ID);
+            if(!Closing)
+            {
+                //Disconnect and Destroy
+                ConsoleManager.WriteLine(RealAddress + " Client Disconnecting...");
+                CloseConnection();
+                EAServerManager.Instance.DestroyClient(ID);
+            }
         }
 
         public void ProcessMessage(byte[] array)
@@ -176,8 +179,8 @@ namespace SSX3_Server.EAClient
             Type c;
             if (!EAMessage.InNameToClass.TryGetValue(InMessageType, out c))
             {
-                Console.WriteLine("Unknown Message " + InMessageType);
-                Console.WriteLine(System.Text.Encoding.UTF8.GetString(array));
+                ConsoleManager.WriteLine("Unknown Message " + InMessageType);
+                ConsoleManager.WriteLine(System.Text.Encoding.UTF8.GetString(array));
                 return;
             }
 
@@ -193,8 +196,8 @@ namespace SSX3_Server.EAClient
             Type c;
             if (!EAMessage.BuddyInNameToClass.TryGetValue(InMessageType, out c))
             {
-                Console.WriteLine("Unknown Message " + InMessageType);
-                Console.WriteLine(System.Text.Encoding.UTF8.GetString(array));
+                ConsoleManager.WriteLine("Unknown Message " + InMessageType);
+                ConsoleManager.WriteLine(System.Text.Encoding.UTF8.GetString(array));
                 return;
             }
 
@@ -216,7 +219,7 @@ namespace SSX3_Server.EAClient
                 }
                 catch
                 {
-                    Console.WriteLine(RealAddress + " Connection Ended, Disconnecting...");
+                    ConsoleManager.WriteLine(RealAddress + " Connection Ended, Disconnecting...");
                     SaveEAUserData();
                     SaveEAUserPersona();
                     CloseConnection();
@@ -237,7 +240,7 @@ namespace SSX3_Server.EAClient
                 }
                 catch
                 {
-                    Console.WriteLine(RealAddress + " Connection Ended, Disconnecting...");
+                    ConsoleManager.WriteLine(RealAddress + " Connection Ended, Disconnecting...");
                     SaveEAUserData();
                     SaveEAUserPersona();
                     CloseConnection();
@@ -340,7 +343,7 @@ namespace SSX3_Server.EAClient
                 SaveEAUserPersona();
             }
 
-            string Status = "AWAY";
+            string Status = "DISC";
 
             var UserClient = EAServerManager.Instance.GetUser(USER);
             //DISC, CHAT, AWAY, XA, DND, PASS

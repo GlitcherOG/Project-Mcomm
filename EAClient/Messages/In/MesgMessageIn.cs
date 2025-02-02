@@ -57,10 +57,6 @@ namespace SSX3_Server.EAClient.Messages
 
                         client.Broadcast(plusMSGMessageOut);
                     }
-                    else
-                    {
-                        //Process Command
-                    }
                     return;
                 }
 
@@ -98,7 +94,7 @@ namespace SSX3_Server.EAClient.Messages
 
                         TempClient.Broadcast(plusMSGMessageOut);
 
-                        Console.WriteLine(client.LoadedPersona.Name + " Challanaged " + PRIV);
+                        ConsoleManager.WriteLine(client.LoadedPersona.Name + " Challanaged " + PRIV);
                     }
                 }
                 else
@@ -117,16 +113,14 @@ namespace SSX3_Server.EAClient.Messages
 
                         if (TEXT.Contains("lockchal"))
                         {
-                            plusMSGMessageOut.N = client.LoadedPersona.Name;
-
-                            client.Broadcast(plusMSGMessageOut);
-                            Console.WriteLine(client.LoadedPersona.Name + " Accepted Challanage from " + PRIV);
+                            client.Broadcast(plusMSGMessageOut); //This is wrong? Why does it work? Check If not needed remove to save data
+                            ConsoleManager.WriteLine(client.LoadedPersona.Name + " Accepted Challanage from " + PRIV);
                         }
 
                         if (TEXT.Contains("abortChal"))
                         {
                             ChalMessageIn.RemoveChallange(client, this);
-                            Console.WriteLine(client.LoadedPersona.Name + " Aborted Challanage from " + PRIV);
+                            ConsoleManager.WriteLine(client.LoadedPersona.Name + " Aborted Challanage from " + PRIV);
                         }
                     }
                 }
