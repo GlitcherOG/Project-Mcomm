@@ -8,6 +8,7 @@ using SSX3_Server.EAClient.Messages;
 using System.Net.NetworkInformation;
 using System.Xml.Linq;
 using static System.Net.Mime.MediaTypeNames;
+using System.Net.Sockets;
 
 namespace SSX3_Server.EAServer
 {
@@ -73,19 +74,12 @@ namespace SSX3_Server.EAServer
 
             EAServerManager.Instance.BroadcastMessage(plusPopMessageOut);
 
-            PlusMSGMessageOut plusMSGMessageOut = new PlusMSGMessageOut();
-
-            plusMSGMessageOut.N = "Mcomm";
-            plusMSGMessageOut.F = "C";
-            plusMSGMessageOut.T = client.LoadedPersona.Name + " Has Joined the Room";
-
-            BroadcastAllUsers(plusMSGMessageOut);
+            McommCommands.GenerateMcommMessage(client.LoadedPersona.Name + " Has Joined the Room", this);
         }
 
         public void RemoveUser(EAClientManager client, bool Quit = false)
         {
             Clients.Remove(client);
-
             if (!Quit)
             {
                 MoveMessageOut moveMessageOut = new MoveMessageOut();
@@ -117,13 +111,7 @@ namespace SSX3_Server.EAServer
             }
             else
             {
-                PlusMSGMessageOut plusMSGMessageOut = new PlusMSGMessageOut();
-
-                plusMSGMessageOut.N = "Mcomm";
-                plusMSGMessageOut.F = "C";
-                plusMSGMessageOut.T = client.LoadedPersona.Name + " Has Left the Room";
-
-                BroadcastAllUsers(plusMSGMessageOut);
+                McommCommands.GenerateMcommMessage(client.LoadedPersona.Name + " Has Left the Room", this);
             }
         }
 
@@ -225,9 +213,9 @@ namespace SSX3_Server.EAServer
 
         public void ProcessMessage(MesgMessageIn mesgMessageIn, EAClientManager clientManager)
         {
-            if (mesgMessageIn.TEXT.StartsWith("/") || mesgMessageIn.TEXT.StartsWith("\\"))
+            if (mesgMessageIn.TEXT.StartsWith("!"))
             {
-            
+                McommCommands.ProcessCommandRoom(clientManager, this, mesgMessageIn.TEXT);
             }
             else
             {

@@ -45,12 +45,18 @@ namespace SSX3_Server.EAClient.Messages
             }
             else
             {
-                if(client.room!=null)
+                if (client.room != null)
                 {
                     //DQUE NEEDS TO BE FIXED
                     client.Broadcast(new DQUEMessageout());
-
                     room.RemoveUser(client);
+                    client.room = null;
+                }
+                else
+                {
+                    MoveMessageIn moveMessageIn = new MoveMessageIn();
+                    moveMessageIn.SubMessage = "nrom";
+                    client.Broadcast(moveMessageIn);
                 }
             }
         }
