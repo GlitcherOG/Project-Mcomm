@@ -31,58 +31,58 @@ namespace SSX3_Server.EAClient.Messages
 
             msg.ID = ID.ToString();
 
-            if (ID == 2.ToString())
-            {
-                msg.SIZE = (client.LoadedPersona.friendEntries.Count).ToString();
+            //if (ID == 2.ToString())
+            //{
+            //    msg.SIZE = (client.LoadedPersona.friendEntries.Count).ToString();
 
-                client.BroadcastBuddy(msg);
+            //    client.BroadcastBuddy(msg);
 
-                McommDetails(client);
+            //    //McommDetails(client);
 
-                for (int i = 0; i < client.LoadedPersona.friendEntries.Count; i++)
-                {
-                    ROSTBuddyMessageOut msg2 = new ROSTBuddyMessageOut();
-                    msg2.ID = ID;
-                    msg2.USER = client.LoadedPersona.friendEntries[i].Name;
-                    msg2.GROUP = "I"; //B == Blocked?
+            //    for (int i = 0; i < client.LoadedPersona.friendEntries.Count; i++)
+            //    {
+            //        ROSTBuddyMessageOut msg2 = new ROSTBuddyMessageOut();
+            //        msg2.ID = ID;
+            //        msg2.USER = client.LoadedPersona.friendEntries[i].Name;
+            //        msg2.GROUP = "I"; //B == Blocked?
 
-                    client.BroadcastBuddy(msg2);
+            //        client.BroadcastBuddy(msg2);
 
-                    string Status = "DISC";
+            //        string Status = "DISC";
 
-                    var UserClient = EAServerManager.Instance.GetUser(client.LoadedPersona.friendEntries[i].Name);
-                    //DISC, CHAT, AWAY, XA, DND, PASS
-                    if (UserClient != null)
-                    {
-                        //UPDATE CHECK FOR PLAYER STATUS
-                        Status = "CHAT";
-                    }
+            //        var UserClient = EAServerManager.Instance.GetUser(client.LoadedPersona.friendEntries[i].Name);
+            //        //DISC, CHAT, AWAY, XA, DND, PASS
+            //        if (UserClient != null)
+            //        {
+            //            //UPDATE CHECK FOR PLAYER STATUS
+            //            Status = "CHAT";
+            //        }
 
-                    PGETBuddyMessageIn pGETBuddyMessageIn = new PGETBuddyMessageIn();
+            //        PGETBuddyMessageIn pGETBuddyMessageIn = new PGETBuddyMessageIn();
 
-                    pGETBuddyMessageIn.PROD = "S%3dSSX-PS2-2004%0aSSXID%3d3%0aLOCID%3d0%0a";
-                    pGETBuddyMessageIn.USER = client.LoadedPersona.friendEntries[i].Name;
-                    pGETBuddyMessageIn.STAT = "\"en%3d%22is playing SSX 3%22%0aP%3dssx3%0a\"";
-                    pGETBuddyMessageIn.SHOW = Status;
+            //        pGETBuddyMessageIn.PROD = "S%3dSSX-PS2-2004%0aSSXID%3d3%0aLOCID%3d0%0a";
+            //        pGETBuddyMessageIn.USER = client.LoadedPersona.friendEntries[i].Name;
+            //        pGETBuddyMessageIn.STAT = "\"en%3d%22is playing SSX 3%22%0aP%3dssx3%0a\"";
+            //        pGETBuddyMessageIn.SHOW = Status;
 
-                    client.BroadcastBuddy(pGETBuddyMessageIn);
+            //        client.BroadcastBuddy(pGETBuddyMessageIn);
 
-                    UserMessageOut msg3 = new UserMessageOut();
+            //        UserMessageOut msg3 = new UserMessageOut();
 
-                    msg3.PERS = client.LoadedPersona.friendEntries[i].Name;
-                    msg3.STAT = "9999";
-                    msg3.ADDR = "0.0.0.0";
-                    msg3.ROOM = "";
+            //        msg3.PERS = client.LoadedPersona.friendEntries[i].Name;
+            //        msg3.STAT = "9999";
+            //        msg3.ADDR = "0.0.0.0";
+            //        msg3.ROOM = "";
 
-                    client.Broadcast(msg3);
-                }
-            }
-            else
-            {
+            //        client.Broadcast(msg3);
+            //    }
+            //}
+            //else
+            //{
                 msg.SIZE = 0.ToString();
 
-                //client.BroadcastBuddy(msg);
-            }
+                client.BroadcastBuddy(msg);
+            //}
         }
 
         public void McommDetails(EAClientManager client)

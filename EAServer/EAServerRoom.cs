@@ -73,13 +73,15 @@ namespace SSX3_Server.EAServer
 
             EAServerManager.Instance.BroadcastMessage(plusPopMessageOut);
 
+            Thread.Sleep(1000);
+
             PlusMSGMessageOut plusMSGMessageOut = new PlusMSGMessageOut();
 
             plusMSGMessageOut.N = "Mcomm";
             plusMSGMessageOut.F = "C";
             plusMSGMessageOut.T = client.LoadedPersona.Name + " Has Joined the Room";
 
-            client.Broadcast(plusMSGMessageOut);
+            BroadcastAllUsers(plusMSGMessageOut);
         }
 
         public void RemoveUser(EAClientManager client, bool Quit = false)
@@ -112,6 +114,8 @@ namespace SSX3_Server.EAServer
             if (!isGlobal && Clients.Count == 0)
             {
                 //Disconnect Room
+                ConsoleManager.WriteLine("Destroying Room " + roomType + "." + roomName);
+                EAServerManager.Instance.DestroyRoom(roomId);
             }
             else
             {

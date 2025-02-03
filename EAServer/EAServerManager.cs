@@ -253,6 +253,27 @@ namespace SSX3_Server.EAServer
             }
         }
 
+        public void DestroyRoom(int ID)
+        {
+            for (int i = 0; i < rooms.Count; i++)
+            {
+                if (rooms[i].roomId == ID)
+                {
+                    var _RomMessage = rooms[i].GeneratePlusRoomInfo();
+
+                    _RomMessage.A = "";
+                    _RomMessage.N = "";
+
+                    BroadcastMessage(_RomMessage);
+
+                    rooms.RemoveAt(i);
+                    break;
+                }
+            }
+
+            GC.Collect();
+        }
+
         public void DestroyClient(int ID, bool StopTCP = false)
         {
             for (int i = 0; i < clients.Count; i++)
