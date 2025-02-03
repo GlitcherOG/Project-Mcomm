@@ -73,8 +73,6 @@ namespace SSX3_Server.EAServer
 
             EAServerManager.Instance.BroadcastMessage(plusPopMessageOut);
 
-            Thread.Sleep(1000);
-
             PlusMSGMessageOut plusMSGMessageOut = new PlusMSGMessageOut();
 
             plusMSGMessageOut.N = "Mcomm";
