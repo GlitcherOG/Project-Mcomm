@@ -109,8 +109,8 @@ namespace SSX3_Server.EAClient.Messages
         {
             SeleMessageOut seleMessageOut = new SeleMessageOut();
 
-            seleMessageOut.SLOTS = "1";
-            seleMessageOut.MORE = "2";
+            seleMessageOut.SLOTS = "0";
+            seleMessageOut.MORE = "0";
 
             client.Broadcast(seleMessageOut);
         }

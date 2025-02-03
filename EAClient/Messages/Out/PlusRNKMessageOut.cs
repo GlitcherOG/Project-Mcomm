@@ -17,7 +17,10 @@ namespace SSX3_Server.EAClient.Messages
 
         public override void AssignValues()
         {
-
+            D = stringDatas[0].Value;
+            A = stringDatas[1].Value;
+            N = stringDatas[2].Value;
+            S = stringDatas[3].Value;
         }
 
         public override void AssignValuesToString()
