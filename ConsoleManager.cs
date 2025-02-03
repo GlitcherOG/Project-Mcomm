@@ -18,7 +18,7 @@ namespace SSX3_Server
                 color = DefaultColour;
             }
 
-            Console.WriteLine("[InsetDateTime]: "+Input);
+            Console.WriteLine("["+DateTime.UtcNow.ToString()+"]: "+Input);
         }
 
     }

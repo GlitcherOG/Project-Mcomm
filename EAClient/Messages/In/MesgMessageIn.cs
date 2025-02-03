@@ -113,7 +113,7 @@ namespace SSX3_Server.EAClient.Messages
 
                         if (TEXT.Contains("lockchal"))
                         {
-                            client.Broadcast(plusMSGMessageOut); //This is wrong? Why does it work? Check If not needed remove to save data
+                            //client.Broadcast(plusMSGMessageOut); //This is wrong? Why does it work? Check If not needed remove to save data
                             ConsoleManager.WriteLine(client.LoadedPersona.Name + " Accepted Challanage from " + PRIV);
                         }
 

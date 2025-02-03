@@ -53,17 +53,17 @@ namespace SSX3_Server.EAServer
 
             client.Broadcast(plusWhoMessageOut);
 
-            PlusUserMessageOut plusUserMessageOut = new PlusUserMessageOut();
+            //PlusUserMessageOut plusUserMessageOut = new PlusUserMessageOut();
 
-            plusUserMessageOut.I = Clients.Count.ToString();
-            plusUserMessageOut.N = client.LoadedPersona.Name;
-            plusUserMessageOut.M = client.userData.Name;
-            plusUserMessageOut.A = client.GameAddress;
-            plusUserMessageOut.X = "";
-            plusUserMessageOut.G = "0";
-            plusUserMessageOut.P = client.Ping.ToString();
+            //plusUserMessageOut.I = Clients.Count.ToString();
+            //plusUserMessageOut.N = client.LoadedPersona.Name;
+            //plusUserMessageOut.M = client.userData.Name;
+            //plusUserMessageOut.A = client.GameAddress;
+            //plusUserMessageOut.X = "";
+            //plusUserMessageOut.G = "0";
+            //plusUserMessageOut.P = client.Ping.ToString();
 
-            client.Broadcast(plusUserMessageOut);
+            //client.Broadcast(plusUserMessageOut);
 
             BoradcastBackUserList();
 
@@ -80,8 +80,6 @@ namespace SSX3_Server.EAServer
             plusMSGMessageOut.T = client.LoadedPersona.Name + " Has Joined the Room";
 
             client.Broadcast(plusMSGMessageOut);
-
-            client.Broadcast(moveMessageOut);
         }
 
         public void RemoveUser(EAClientManager client, bool Quit = false)
@@ -131,10 +129,14 @@ namespace SSX3_Server.EAServer
         {
             PlusRomMessageOut _RomMessage = new PlusRomMessageOut();
 
-            _RomMessage.A = address;
+            _RomMessage.A = Address;
             _RomMessage.I = roomId.ToString();
             _RomMessage.N = roomType + "." + roomName;
             _RomMessage.H = roomHost;
+            if (roomPassword != "")
+            {
+                _RomMessage.F = "P";
+            }
             _RomMessage.T = Clients.Count.ToString() + 1;
 
             return _RomMessage;

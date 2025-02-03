@@ -46,7 +46,7 @@ namespace SSX3_Server.EAServer
                 { 28, "Pernendiculous" },
         };
 
-        public void AddScores(RankDataFile rankDataFile)
+        public void AddScores(RaceDataFile rankDataFile)
         {
             //Convert Race Track ID To Leaderboard TrackID
             //TrackID Against GameMode 
@@ -69,7 +69,7 @@ namespace SSX3_Server.EAServer
                 TempEntry.Name = "Empty";
                 TempEntry.Score = "0";
                 TempEntry.HexScore = "0";
-                TempEntry.RaceDataFile = "NULL"
+                TempEntry.RaceDataFile = "NULL";
 
                 courseEntry.Entries.Add(TempEntry);
 
