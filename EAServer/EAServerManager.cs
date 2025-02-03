@@ -55,10 +55,10 @@ namespace SSX3_Server.EAServer
 
             ConsoleManager.WriteLine("Initalised Server, Waiting For Clients...");
 
-            rooms.Add(new EAServerRoom() { roomId = 1, roomType = "Beginner", roomName = "Peak1", isGlobal = true });
-            rooms.Add(new EAServerRoom() { roomId = 2, roomType = "Advanced", roomName = "Peak2", isGlobal = true });
-            rooms.Add(new EAServerRoom() { roomId = 3, roomType = "Elite", roomName = "Peak3", isGlobal = true });
-            rooms.Add(new EAServerRoom() { roomId = 4, roomType = "Intermediate", roomName = "Peak4", isGlobal = true });
+            rooms.Add(new EAServerRoom() { roomId = 1, roomType = "Beginner", roomName = "Peak 1", isGlobal = true });
+            rooms.Add(new EAServerRoom() { roomId = 2, roomType = "Advanced", roomName = "Peak 2", isGlobal = true });
+            rooms.Add(new EAServerRoom() { roomId = 3, roomType = "Elite", roomName = "Peak 3", isGlobal = true });
+            rooms.Add(new EAServerRoom() { roomId = 4, roomType = "Intermediate", roomName = "Peak 4", isGlobal = true });
 
             RoomIDCount = 5;
 
@@ -189,6 +189,7 @@ namespace SSX3_Server.EAServer
                 }
             }
         }
+        
         public void BroadcastMessage(EAMessage message)
         {
             for (int i = 0; i < clients.Count; i++)

@@ -9,7 +9,7 @@ using static SSX3_Server.EAClient.Messages.EAMessage;
 
 namespace SSX3_Server.EAClient.Messages
 {
-    public class SeleMessageInOut : EAMessage
+    public class SeleMessageIn : EAMessage
     {
         public override string MessageType { get { return "sele"; } }
 
@@ -107,13 +107,12 @@ namespace SSX3_Server.EAClient.Messages
 
         public override void ProcessCommand(EAClientManager client, EAServerRoom room = null)
         {
-            ROOMS = EAServerManager.Instance.rooms.Count.ToString();
-            USERS = EAServerManager.Instance.clients.Count.ToString();
-            RANKS = "0";
-            MESGS = "0";
-            GAMES = "0";
+            SeleMessageOut seleMessageOut = new SeleMessageOut();
 
-            client.Broadcast(this);
+            seleMessageOut.SLOTS = "1";
+            seleMessageOut.MORE = "2";
+
+            client.Broadcast(seleMessageOut);
         }
     }
 }

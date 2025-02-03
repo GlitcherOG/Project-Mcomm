@@ -26,22 +26,14 @@ namespace SSX3_Server.EAClient.Messages
 
         public override void ProcessCommand(EAClientManager client, EAServerRoom room = null)
         {
-            //NOTE NEED TO RECREATE SO THAT IT WILL MOVE PLAYER INTO ROOM IN SYSTEM
-
-            //Send Move Out
-            //Send Who
-            //Send User to user
-            //Send user to all users in room
-            //Send Pop
-            //Send Join Message
-
-            //client.Broadcast(this);
-
             if (NAME != "")
             {
-                var TempRoom = EAServerManager.Instance.GetRoom(NAME);
+                var TempRoom = EAServerManager.Instance.GetRoom(NAME.Replace("\"",""));
 
-                TempRoom.AddUser(client);
+                if (TempRoom != null)
+                {
+                    TempRoom.AddUser(client);
+                }
             }
             else
             {

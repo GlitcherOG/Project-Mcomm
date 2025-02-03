@@ -19,7 +19,7 @@ namespace SSX3_Server.EAClient.Messages
                 { "~png", typeof(_PngMessageIn) }, //Ping Command
                 { "addr", typeof(AddrMessageIn) }, //What the game thinks its address is
                 { "skey", typeof(SkeyMessageInOut) }, 
-                { "sele", typeof(SeleMessageInOut) }, //Unused Data but send back to avoid error
+                { "sele", typeof(SeleMessageIn) }, //Unused Data but send back to avoid error
                 { "auth", typeof(AuthMessageIn) }, //Login Details
                 { "acct", typeof(AcctMessageIn) }, //Account Creation
                 { "cper", typeof(CperMessageInOut) }, //Create Persona

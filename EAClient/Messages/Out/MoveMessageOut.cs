@@ -13,7 +13,7 @@ namespace SSX3_Server.EAClient.Messages
         public string IDENT;
         public string NAME;
         public string COUNT;
-        public string FLAGS { get; set; } = "C";
+        public string FLAGS = "CK";
 
         public bool Leaving = false;
 
