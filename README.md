@@ -23,13 +23,13 @@ Rooms
 Buddies  
 
 • Searching for buddies: ✅  
-• Add as Buddy: ✅ (Show as blocked when leaving and rejoining)  
+• Add as Buddy: ✅ (Disabled currently, Show as blocked when leaving and rejoining)  
 • Removing buddies:  
 • Blocking buddies:  
 • Online Status: ✅  
 • Send & receive messages: ✅  
 • View profile: ✅  
-• Pressence info:  ✅
+• Pressence info: ✅
 
 Statistics  
 
@@ -39,7 +39,7 @@ Statistics
 
 News  
 
-• News: ✅  
+• News: ✅
 
 ## Todo
 - Fix Bug where users are blocked on buddy list when logging in
@@ -48,8 +48,7 @@ News
 - Patch Search so it gets offline personas
 - Find out Stat Struct
 - Add Edit user and lost user
-- Fix Disconnecting not working correctly
-- Fix Chal not getting user details/stats properly
+- Fix Chal not getting user details/stats properly sometimes
 - Fix Highscore not listing database scores
 - Add check to see if user is already logged in, if so disconnect and allow new connection
 - Fix Quick Match So it Works
@@ -57,10 +56,14 @@ News
 - Fix Having to DQUE to leave room (Probably due to an issue with vc)
 - Mcomm Buddy for server commands
 - Fix Passwords
+- Last 5 messages queue for rooms
+- Fix Title on rooms as it doesnt seem to be appearing
+- Ensure user cant message,block,challange,report self
 - Tunneling Service (Temp Hide IPs as well)
 
 # Todo Discord Bot
 - Discord bot able to send messages in game and to rooms
+- Set Rooms to Global
 - Discord Bot Fix Kick Messages
 - Link Ingame Account To Discord Account
 
