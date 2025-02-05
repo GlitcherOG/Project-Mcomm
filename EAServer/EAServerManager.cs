@@ -31,7 +31,10 @@ namespace SSX3_Server.EAServer
 
         public List<EAClientManager> clients = new List<EAClientManager>();
         public List<EAServerRoom> rooms = new List<EAServerRoom>();
-        
+
+        public Thread PALLoopThread;
+        public Thread NTSCLoopThread;
+
         public void InitaliseServer()
         {
             ConsoleManager.WriteLine("Initalising Server...");
@@ -63,7 +66,19 @@ namespace SSX3_Server.EAServer
             RoomIDCount = 5;
 
             ConsoleManager.WriteLine("Initalising Inital Rooms...");
-            NewClientListening();
+
+            if (config.NTSCListener)
+            {
+                ConsoleManager.WriteLine("Initalising NTSC Listener...");
+                NTSCLoopThread = new Thread(NewClientListeningNTSC);
+                NTSCLoopThread.Start();
+            }
+            if (config.PalListener)
+            {
+                ConsoleManager.WriteLine("Initalising PAL Listener...");
+                PALLoopThread = new Thread(NewClientListeningPAL);
+                PALLoopThread.Start();
+            }
         }
 
         public void GenerateRequiredFiles()
@@ -96,11 +111,21 @@ namespace SSX3_Server.EAServer
             }
         }
 
-        public void NewClientListening()
+        public void NewClientListeningNTSC()
+        {
+            NewClientListening(config.ListenerPort);
+        }
+
+        public void NewClientListeningPAL()
+        {
+            NewClientListening(config.ListenerPortPal);
+        }
+
+        public void NewClientListening(int Port)
         {
             while (true)
             {
-                TcpListener server = new TcpListener(IPAddress.Any, 11000);
+                TcpListener server = new TcpListener(IPAddress.Any, Port);
 
                 server.Start();
 
@@ -116,7 +141,7 @@ namespace SSX3_Server.EAServer
                 byte[] msg = new byte[255];     //the messages arrive as byte array
                 tcpNS.Read(msg, 0, msg.Length);
 
-                if (EAMessage.MessageCommandType(msg)=="@dir")
+                if (EAMessage.MessageCommandType(msg) == "@dir")
                 {
                     _DirMessageIn ConnectionMessage = new _DirMessageIn();
 
@@ -124,23 +149,10 @@ namespace SSX3_Server.EAServer
 
                     //Send Connection Details Back
                     _DirMessageOut ReturnMessage = new _DirMessageOut();
-                    TcpListener server1 = new TcpListener(IPAddress.None, config.GamePort);
-
-                    if (!config.DirectConnect)
-                    {
-                        //Assign Listiner
-                        server1 = new TcpListener(IPAddress.Any, config.GamePort);
-                        server1.Start();
-                        ReturnMessage.ADDR = config.GameIP;
-                        ReturnMessage.PORT = config.GamePort.ToString();
-                    }
-                    else
-                    {
-                        //Direct Connect Doesnt work this way
-                        ReturnMessage.DIRECT = "True";
-                        ReturnMessage.DOWN = "Server Currently Down";
-                    }
-
+                    TcpListener server1 = new TcpListener(IPAddress.Any, config.GamePort);
+                    server1.Start();
+                    ReturnMessage.ADDR = config.GameIP;
+                    ReturnMessage.PORT = config.GamePort.ToString();
                     ReturnMessage.SESS = GenerateSESS();
                     ReturnMessage.MASK = GenerateMASK();
 
@@ -150,31 +162,18 @@ namespace SSX3_Server.EAServer
                     TcpClient MainClient = client;
                     NetworkStream MainNS = tcpNS;
 
-                    //Add Pending Connection Check
-                    if (!config.DirectConnect)
-                    {
-                        MainClient = server1.AcceptTcpClient();
-                        MainNS = MainClient.GetStream();
-                        ConsoleManager.WriteLine("Accepted Connection From: " + client.Client.RemoteEndPoint.ToString());
-                    }
-                    else
-                    {
-                        ConsoleManager.WriteLine("Accepted Direct Connection From: " + client.Client.RemoteEndPoint.ToString());
-                    }
+                    MainClient = server1.AcceptTcpClient();
+                    MainNS = MainClient.GetStream();
+                    ConsoleManager.WriteLine("Accepted Connection From: " + client.Client.RemoteEndPoint.ToString());
 
                     //Rewrork Threading
                     clients.Add(new EAClientManager(MainClient, MainNS, IDCount, ReturnMessage.SESS, ReturnMessage.MASK));
                     IDCount++;
 
-                    server.Stop();
-
-                    if(!config.DirectConnect)
-                    {
-                        tcpNS.Dispose();
-                        tcpNS.Close();
-                        client.Dispose();
-                        client.Close();
-                    }
+                    tcpNS.Dispose();
+                    tcpNS.Close();
+                    client.Dispose();
+                    client.Close();
                     server1.Stop();
                     server.Stop();
                 }

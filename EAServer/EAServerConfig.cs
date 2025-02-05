@@ -12,13 +12,16 @@ namespace SSX3_Server.EAServer
     {
         public bool DirectConnect = false;
         public string GameIP = "192.168.0.141";
+        public bool PalListener = true;
+        public bool NTSCListener = true;
         public int ListenerPort = 11000;
+        public int ListenerPortPal = 11050;
         public int GamePort = 10901;
         public int BuddyPort = 13505;
-        public bool DiscordBot = false;
-        public string DiscordBotToken = "";
         public bool Verbose = false;
         public bool VerboseBuddy = false;
+        public bool DiscordBot = false;
+        public string DiscordBotToken = "";
 
         public void CreateJson(string path, bool Inline = false)
         {
