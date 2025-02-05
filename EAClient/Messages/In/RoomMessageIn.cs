@@ -42,15 +42,13 @@ namespace SSX3_Server.EAClient.Messages
         {
             client.Broadcast(this);
 
-            EAServerRoom NewRoom = new EAServerRoom() { roomId = EAServerManager.Instance.RoomIDCount, roomType = RoomType, roomName = NAME, isGlobal = false, roomHost = client.LoadedPersona.Name, roomPassword = PASS, Address = client.GameAddress };
+            EAServerRoom NewRoom = new EAServerRoom(EAServerManager.Instance.RoomIDCount, "0.0.0.0", RoomType, NAME, PASS, client.LoadedPersona.Name, false);
 
             NewRoom.AddUser(client);
 
             EAServerManager.Instance.BroadcastMessage(NewRoom.GeneratePlusRoomInfo());
 
             EAServerManager.Instance.rooms.Add(NewRoom);
-
-            ConsoleManager.WriteLine("New Room Created: " + RoomType+"."+ NAME);
         }
     }
 }

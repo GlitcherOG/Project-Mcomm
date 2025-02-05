@@ -83,7 +83,7 @@ namespace SSX3_Server.EAClient.Messages
                     client.TimeoutSeconds = 60;
                     client.LoggedIn = true;
 
-                    Console.WriteLine("Account Logged in: " + NAME);
+                    ConsoleManager.WriteLine("Account Logged in: " + NAME);
 
                     client.Broadcast(msg2);
 

@@ -40,6 +40,7 @@ namespace SSX3_Server.EAClient.Messages
                 {
                     client.userData.PersonaList.RemoveAt(i);
                     File.Delete(AppContext.BaseDirectory + "\\Personas\\" + PERS.ToLower() + ".json");
+                    ConsoleManager.WriteLine(client.userData.Name + " Has Deleted the Persona " + client.LoadedPersona.Name);
                     Removed = true;
                 }
             }

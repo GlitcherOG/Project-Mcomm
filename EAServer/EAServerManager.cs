@@ -56,16 +56,14 @@ namespace SSX3_Server.EAServer
                 Task.Run(() => MainBot.Main(config.DiscordBotToken));
             }
 
-            ConsoleManager.WriteLine("Initalised Server, Waiting For Clients...");
+            ConsoleManager.WriteLine("Initalising Inital Rooms...");
 
-            rooms.Add(new EAServerRoom() { roomId = 1, roomType = "Beginner", roomName = "Peak 1", isGlobal = true });
-            rooms.Add(new EAServerRoom() { roomId = 2, roomType = "Advanced", roomName = "Peak 2", isGlobal = true });
-            rooms.Add(new EAServerRoom() { roomId = 3, roomType = "Elite", roomName = "Peak 3", isGlobal = true });
-            rooms.Add(new EAServerRoom() { roomId = 4, roomType = "Intermediate", roomName = "Peak 4", isGlobal = true });
+            rooms.Add(new EAServerRoom(1,"0.0.0.0", "Beginner", "Peak 1","","Mcomm", true));
+            rooms.Add(new EAServerRoom(2, "0.0.0.0", "Advanced", "Peak 2", "", "Mcomm", true));
+            rooms.Add(new EAServerRoom(3, "0.0.0.0", "Elite", "Peak 3", "", "Mcomm", true));
+            rooms.Add(new EAServerRoom(4, "0.0.0.0", "Intermediate", "Peak 4", "", "Mcomm", true));
 
             RoomIDCount = 5;
-
-            ConsoleManager.WriteLine("Initalising Inital Rooms...");
 
             if (config.NTSCListener)
             {
@@ -79,6 +77,7 @@ namespace SSX3_Server.EAServer
                 PALLoopThread = new Thread(NewClientListeningPAL);
                 PALLoopThread.Start();
             }
+            ConsoleManager.WriteLine("Initalised Server, Waiting For Clients...");
         }
 
         public void GenerateRequiredFiles()
@@ -274,7 +273,7 @@ namespace SSX3_Server.EAServer
                     _RomMessage.N = "";
 
                     BroadcastMessage(_RomMessage);
-
+                    ConsoleManager.WriteLine("Room Destroyed " + rooms[i].roomName + " " + rooms[i].roomType);
                     rooms.RemoveAt(i);
                     break;
                 }

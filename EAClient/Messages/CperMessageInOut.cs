@@ -62,6 +62,8 @@ namespace SSX3_Server.EAClient.Messages
 
             client.userData.PersonaList.Add(NewPersona.Name);
 
+            ConsoleManager.WriteLine(client.userData.Name + " Has Created the Persona " + client.LoadedPersona.Name);
+
             client.SaveEAUserData();
 
             client.Broadcast(this);

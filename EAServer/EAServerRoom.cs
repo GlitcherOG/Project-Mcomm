@@ -25,6 +25,19 @@ namespace SSX3_Server.EAServer
         public bool isGlobal = false;
         int prevListCount = 0;
 
+        public EAServerRoom(int ID, string RoomAddress, string RoomType, string RoomName, string RoomPassword, string RoomHost, bool Global) 
+        {
+            roomId = ID;
+            Address = RoomAddress;
+            roomType = RoomType;
+            roomName = RoomName;
+            roomPassword = RoomPassword;
+            roomHost = RoomHost;
+            isGlobal = Global;
+
+            ConsoleManager.WriteLine(roomType + " " + roomName + " Room Created by " + roomHost);
+        }
+
         public void AddUser(EAClientManager client)
         {
             client.room = this;
@@ -53,18 +66,6 @@ namespace SSX3_Server.EAServer
             plusWhoMessageOut.RI = roomId.ToString();
 
             client.Broadcast(plusWhoMessageOut);
-
-            //PlusUserMessageOut plusUserMessageOut = new PlusUserMessageOut();
-
-            //plusUserMessageOut.I = Clients.Count.ToString();
-            //plusUserMessageOut.N = client.LoadedPersona.Name;
-            //plusUserMessageOut.M = client.userData.Name;
-            //plusUserMessageOut.A = client.GameAddress;
-            //plusUserMessageOut.X = "";
-            //plusUserMessageOut.G = "0";
-            //plusUserMessageOut.P = client.Ping.ToString();
-
-            //client.Broadcast(plusUserMessageOut);
 
             BoradcastBackUserList();
 
@@ -176,17 +177,7 @@ namespace SSX3_Server.EAServer
         {
             for (int i = 0; i < Clients.Count; i++)
             {
-                PlusUserMessageOut plusUserMessageOut = new PlusUserMessageOut();
-
-                plusUserMessageOut.I = (i+1).ToString();
-                plusUserMessageOut.N = Clients[i].LoadedPersona.Name;
-                plusUserMessageOut.M = Clients[i].userData.Name;
-                plusUserMessageOut.A = Clients[i].GameAddress;
-                plusUserMessageOut.X = "";
-                plusUserMessageOut.G = "0";
-                plusUserMessageOut.P = Clients[i].Ping.ToString();
-
-                BroadcastAllUsers(plusUserMessageOut);
+                BroadcastAllUsers(Clients[i].GeneratePlusUser());
             }
 
             for (int i = Clients.Count; i < prevListCount; i++)

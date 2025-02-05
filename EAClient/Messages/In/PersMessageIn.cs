@@ -71,7 +71,6 @@ namespace SSX3_Server.EAClient.Messages
             msg2.PLAST = client.LoadedPersona.Last;
             msg2.SINCE = client.userData.Since;
             msg2.LKEY = "3fcf27540c92935b0a66fd3b0000283c";
-            ConsoleManager.WriteLine(client.userData.Name + " Has Created the Persona " + client.LoadedPersona.Name);
             client.Broadcast(msg2);
 
         }

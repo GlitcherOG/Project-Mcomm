@@ -256,7 +256,7 @@ namespace SSX3_Server.EAClient
             plusUserMessageOut.I = ID.ToString();
             plusUserMessageOut.N = LoadedPersona.Name;
             plusUserMessageOut.M = userData.Name;
-            plusUserMessageOut.A = RealAddress;
+            plusUserMessageOut.A = "0.0.0.0";//RealAddress;
             plusUserMessageOut.X = "";
             plusUserMessageOut.G = "0";
             plusUserMessageOut.P = Ping.ToString();
