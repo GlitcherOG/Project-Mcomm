@@ -80,7 +80,6 @@ namespace SSX3_Server.EAClient.Messages
                     msg2.SPAM = UserData.Spam;
                     msg2.SINCE = UserData.Since;
 
-                    client.TimeoutSeconds = 60;
                     client.LoggedIn = true;
 
                     ConsoleManager.WriteLine("Account Logged in: " + NAME);

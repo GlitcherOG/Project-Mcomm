@@ -47,13 +47,13 @@ namespace SSX3_Server.EAClient
         public TcpClient BuddyClient = null;
         NetworkStream BuddyNS = null;
 
-        //30 seconds to start till proper connection establised
-        //ping every 1 min if failed ping close connection
         public bool LoggedIn = false;
-        public int TimeoutSeconds = 20;
+        public int TimeoutSeconds = 300;
+        public int PingTimeout = 60;
 
         DateTime LastSend;
         DateTime LastRecive;
+        DateTime LastRecivePing;
         DateTime LastPing;
         public int Ping = 20;
 
@@ -78,6 +78,7 @@ namespace SSX3_Server.EAClient
             LastRecive = DateTime.Now;
             LastSend = DateTime.Now;
             LastPing = DateTime.Now;
+            LastRecivePing = DateTime.Now;
 
             LoopThread = new Thread(MainListen);
             LoopThread.Start();
@@ -98,8 +99,6 @@ namespace SSX3_Server.EAClient
 
                         if (msg[0] != 0)
                         {
-                            LastRecive = DateTime.Now;
-                            LastPing = DateTime.Now;
                             ProcessMessage(msg);
                         }
                     }
@@ -146,8 +145,9 @@ namespace SSX3_Server.EAClient
                         }
                     }
 
-                    if ((DateTime.Now - LastRecive).TotalSeconds >= TimeoutSeconds)
+                    if ((DateTime.Now - LastRecive).TotalSeconds >= TimeoutSeconds || (DateTime.Now - LastRecivePing).TotalSeconds >= PingTimeout)
                     {
+                        ConsoleManager.WriteLine(RealAddress + " Timing Out..." + (DateTime.Now - LastRecive).TotalSeconds + " " + (DateTime.Now - LastRecivePing).TotalSeconds);
                         //If no response from server for timeout break
                         break;
                     }
@@ -168,6 +168,8 @@ namespace SSX3_Server.EAClient
             {
                 //Disconnect and Destroy
                 ConsoleManager.WriteLine(RealAddress + " Client Disconnecting...");
+                SaveEAUserData();
+                SaveEAUserPersona();
                 CloseConnection();
                 EAServerManager.Instance.DestroyClient(ID);
             }
@@ -182,6 +184,14 @@ namespace SSX3_Server.EAClient
                 byte[] Data = EAMessage.GetData(array, i);
 
                 string InMessageType = EAMessage.MessageCommandType(Data, 0);
+                if (InMessageType == "~png")
+                {
+                    LastRecivePing = DateTime.Now;
+                }
+                else
+                {
+                    LastRecive = DateTime.Now;
+                }
 
                 Type c;
                 if (!EAMessage.InNameToClass.TryGetValue(InMessageType, out c))
