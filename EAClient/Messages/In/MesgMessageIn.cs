@@ -120,6 +120,14 @@ namespace SSX3_Server.EAClient.Messages
                         if (TEXT.Contains("abortChal"))
                         {
                             ChalMessageIn.RemoveChallange(client, this);
+
+                            if (client.room != null)
+                            {
+                                DQUEMessageout dQUEMessageout = new DQUEMessageout();
+
+                                client.Broadcast(dQUEMessageout);
+                            }
+
                             ConsoleManager.WriteLine(client.LoadedPersona.Name + " Aborted Challanage from " + PRIV);
                         }
                     }

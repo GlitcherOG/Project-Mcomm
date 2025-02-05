@@ -30,6 +30,7 @@ namespace SSX3_Server.EAClient.Messages
         {
             client.GameAddress = ADDR;
             client.GamePort = PORT;
+            client.Broadcast(this);
         }
     }
 }

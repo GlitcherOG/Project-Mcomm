@@ -11,16 +11,22 @@ namespace SSX3_Server.EAClient.Messages
     {
         public override string MessageType { get { return "~png"; } }
 
-        public string TIME;
+        public string TIME="";
 
         public override void AssignValues()
         {
-            TIME = stringDatas[0].Value;
+            if (stringDatas.Count==1)
+            {
+                TIME = stringDatas[0].Value;
+            }
         }
 
         public override void ProcessCommand(EAClientManager client, EAServerRoom room = null)
         {
-            client.Ping = int.Parse(TIME);
+            if (TIME!="")
+            {
+                client.Ping = int.Parse(TIME);
+            }
         }
     }
 }

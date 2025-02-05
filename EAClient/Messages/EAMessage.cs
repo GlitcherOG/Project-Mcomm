@@ -1,4 +1,6 @@
-﻿using SSX3_Server.EAServer;
+﻿using Microsoft.VisualBasic;
+using Newtonsoft.Json.Linq;
+using SSX3_Server.EAServer;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.SymbolStore;
@@ -121,9 +123,43 @@ namespace SSX3_Server.EAClient.Messages
             return buffer.ToArray();
         }
 
-        public static string MessageCommandType(byte[] Data)
+        public static string MessageCommandType(byte[] Data, int Message)
         {
             return ByteUtil.ReadString(Data, 0, 4).Trim('\0');
+        }
+
+        public static int MessageCount(byte[] Data)
+        {
+            int count = 0;
+            int index = 0;
+            while (true)
+            {
+                int Size = ByteUtil.ReadInt32(Data, 8 + index);
+                index += Size;
+                if (Size == 0)
+                {
+                    break;
+                }
+                count++;
+            }
+            return count;
+        }
+
+        public static byte[] GetData(byte[] Data,int Index)
+        {
+            int index = 0;
+            int Size = 0;
+            for (int i = 0; i < Index; i++)
+            {
+                Size = ByteUtil.ReadInt32(Data, 8 + index);
+                index += Size;
+            }
+            Size = ByteUtil.ReadInt32(Data, 8 + index);
+            byte[] NewData = new byte[Size];
+
+            Buffer.BlockCopy(Data, index, NewData, 0, Size);
+
+            return NewData;
         }
 
         public virtual void AssignValues()

@@ -140,7 +140,7 @@ namespace SSX3_Server.EAServer
                 byte[] msg = new byte[255];     //the messages arrive as byte array
                 tcpNS.Read(msg, 0, msg.Length);
 
-                if (EAMessage.MessageCommandType(msg) == "@dir")
+                if (EAMessage.MessageCommandType(msg, 0) == "@dir")
                 {
                     _DirMessageIn ConnectionMessage = new _DirMessageIn();
 
@@ -159,24 +159,24 @@ namespace SSX3_Server.EAServer
                     msg = ReturnMessage.GenerateData();
                     tcpNS.Write(msg, 0, msg.Length);
 
-                    var TCPWait = server1.AcceptTcpClientAsync();
+                    //var TCPWait = server1.AcceptTcpClientAsync();
 
-                    if (TCPWait.Wait(5000))
-                    {
-                        TcpClient MainClient = client;
-                        NetworkStream MainNS = tcpNS;
-                        MainClient = TCPWait.Result;
-                        MainNS = MainClient.GetStream();
-                        ConsoleManager.WriteLine("Accepted Connection From: " + client.Client.RemoteEndPoint.ToString());
+                    //if (TCPWait.Wait(5000))
+                    //{
+                    TcpClient MainClient = client;
+                    NetworkStream MainNS = tcpNS;
+                    MainClient = server1.AcceptTcpClient(); /*TCPWait.Result;*/
+                    MainNS = MainClient.GetStream();
+                    ConsoleManager.WriteLine("Accepted Connection From: " + client.Client.RemoteEndPoint.ToString());
 
-                        //Rewrork Threading
-                        clients.Add(new EAClientManager(MainClient, MainNS, IDCount, ReturnMessage.SESS, ReturnMessage.MASK));
-                        IDCount++;
-                    }
-                    else
-                    {
-                        ConsoleManager.WriteLine("Timed Out Connection From: " + client.Client.RemoteEndPoint.ToString());
-                    }
+                    //Rewrork Threading
+                    clients.Add(new EAClientManager(MainClient, MainNS, IDCount, ReturnMessage.SESS, ReturnMessage.MASK));
+                    IDCount++;
+                    //}
+                    //else
+                    //{
+                    //    ConsoleManager.WriteLine("Timed Out Connection From: " + client.Client.RemoteEndPoint.ToString());
+                    //}
 
                     tcpNS.Dispose();
                     tcpNS.Close();

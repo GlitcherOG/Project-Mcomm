@@ -28,7 +28,7 @@ namespace SSX3_Server.EAClient.Messages
         {
             client.Broadcast(this);
 
-            var Room = EAServerManager.Instance.GetRoom(NAME);
+            var Room = EAServerManager.Instance.GetRoom(NAME.Replace("\"",""));
 
             if (Room != null)
             {

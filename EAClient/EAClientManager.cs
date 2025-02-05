@@ -50,7 +50,7 @@ namespace SSX3_Server.EAClient
         //30 seconds to start till proper connection establised
         //ping every 1 min if failed ping close connection
         public bool LoggedIn = false;
-        public int TimeoutSeconds = 30;
+        public int TimeoutSeconds = 20;
 
         DateTime LastSend;
         DateTime LastRecive;
@@ -70,7 +70,7 @@ namespace SSX3_Server.EAClient
             MainClient = tcpClient;
             MainNS = NSClient;
 
-            MainClient.ReceiveBufferSize = 2048;
+            MainClient.ReceiveBufferSize = 1024*3;
 
             IPEndPoint remoteIpEndPoint = MainClient.Client.RemoteEndPoint as IPEndPoint;
             RealAddress = remoteIpEndPoint.Address.ToString();
@@ -85,6 +85,7 @@ namespace SSX3_Server.EAClient
 
         public void MainListen()
         {
+            ConsoleManager.WriteLine("Main Thread Started for " + RealAddress);
             while (MainClient.Connected)  //while the client is connected, we look for incoming messages
             {
                 try
@@ -174,37 +175,52 @@ namespace SSX3_Server.EAClient
 
         public void ProcessMessage(byte[] array)
         {
-            string InMessageType = EAMessage.MessageCommandType(array);
+            int Count = EAMessage.MessageCount(array);
 
-            Type c;
-            if (!EAMessage.InNameToClass.TryGetValue(InMessageType, out c))
+            for (int i = 0; i < Count; i++)
             {
-                ConsoleManager.WriteLine("Unknown Message " + InMessageType);
-                ConsoleManager.WriteLine(System.Text.Encoding.UTF8.GetString(array));
-                return;
+                byte[] Data = EAMessage.GetData(array, i);
+
+                string InMessageType = EAMessage.MessageCommandType(Data, 0);
+
+                Type c;
+                if (!EAMessage.InNameToClass.TryGetValue(InMessageType, out c))
+                {
+                    ConsoleManager.WriteLine("Unknown Message " + InMessageType);
+                    ConsoleManager.WriteLine(System.Text.Encoding.UTF8.GetString(Data));
+                    return;
+                }
+
+                var msg = (EAMessage)Activator.CreateInstance(c);
+                msg.PraseData(Data, EAServerManager.Instance.config.Verbose, RealAddress + " Main Server");
+
+                msg.ProcessCommand(this, room);
             }
-
-            var msg = (EAMessage)Activator.CreateInstance(c);
-            msg.PraseData(array, EAServerManager.Instance.config.Verbose, RealAddress + " Main Server");
-
-            msg.ProcessCommand(this, room);
         }
 
         public void ProcessBuddyMessage(byte[] array)
         {
-            string InMessageType = EAMessage.MessageCommandType(array);
-            Type c;
-            if (!EAMessage.BuddyInNameToClass.TryGetValue(InMessageType, out c))
+            int Count = EAMessage.MessageCount(array);
+
+            for (int i = 0; i < Count; i++)
             {
-                ConsoleManager.WriteLine("Unknown Message " + InMessageType);
-                ConsoleManager.WriteLine(System.Text.Encoding.UTF8.GetString(array));
-                return;
+                byte[] Data = EAMessage.GetData(array, i);
+
+                string InMessageType = EAMessage.MessageCommandType(Data, 0);
+
+                Type c;
+                if (!EAMessage.BuddyInNameToClass.TryGetValue(InMessageType, out c))
+                {
+                    ConsoleManager.WriteLine("Unknown Message " + InMessageType);
+                    ConsoleManager.WriteLine(System.Text.Encoding.UTF8.GetString(Data));
+                    return;
+                }
+
+                var msg = (EAMessage)Activator.CreateInstance(c);
+                msg.PraseData(Data, EAServerManager.Instance.config.VerboseBuddy, RealAddress + " Buddy Server");
+
+                msg.ProcessCommand(this, room);
             }
-
-            var msg = (EAMessage)Activator.CreateInstance(c);
-            msg.PraseData(array, EAServerManager.Instance.config.VerboseBuddy, RealAddress + " Buddy Server");
-
-            msg.ProcessCommand(this, room);
         }
 
         public void Broadcast(EAMessage msg)
@@ -253,7 +269,7 @@ namespace SSX3_Server.EAClient
         {
             PlusUserMessageOut plusUserMessageOut = new PlusUserMessageOut();
 
-            plusUserMessageOut.I = ID.ToString();
+            plusUserMessageOut.I = (ID+1).ToString();
             plusUserMessageOut.N = LoadedPersona.Name;
             plusUserMessageOut.M = userData.Name;
             plusUserMessageOut.A = "0.0.0.0";//RealAddress;
