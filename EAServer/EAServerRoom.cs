@@ -218,7 +218,7 @@ namespace SSX3_Server.EAServer
 
                 BroadcastAllUsers(plusMSGMessageOut);
 
-                Console.WriteLine("("+ roomType+"."+roomName +")" + clientManager.LoadedPersona.Name + ":"+ mesgMessageIn.TEXT);
+                ConsoleManager.WriteLine("("+ roomType+"."+roomName +")" + clientManager.LoadedPersona.Name + ":"+ mesgMessageIn.TEXT);
             }
         }
 
