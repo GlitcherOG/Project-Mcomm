@@ -25,6 +25,8 @@ namespace SSX3_Server.EAServer
         public bool isGlobal = false;
         int prevListCount = 0;
 
+        public List<PlusMSGMessageOut> plusMSGMessageOuts = new List<PlusMSGMessageOut>();
+
         public EAServerRoom(int ID, string RoomAddress, string RoomType, string RoomName, string RoomPassword, string RoomHost, bool Global) 
         {
             roomId = ID;
@@ -74,6 +76,11 @@ namespace SSX3_Server.EAServer
             plusPopMessageOut.Z = roomId + "/" + Clients.Count;
 
             EAServerManager.Instance.BroadcastMessage(plusPopMessageOut);
+
+            for (int i = 0; i < plusMSGMessageOuts.Count; i++)
+            {
+                client.Broadcast(plusMSGMessageOuts[i]);
+            }
 
             McommCommands.GenerateMcommMessage(client.LoadedPersona.Name + " Has Joined the Room", this);
         }
@@ -215,6 +222,13 @@ namespace SSX3_Server.EAServer
                 plusMSGMessageOut.N = clientManager.LoadedPersona.Name;
                 plusMSGMessageOut.T = mesgMessageIn.TEXT;
                 plusMSGMessageOut.F = "C";
+
+                plusMSGMessageOuts.Add(plusMSGMessageOut);
+
+                if(plusMSGMessageOuts.Count>6)
+                {
+                    plusMSGMessageOuts.RemoveAt(0);
+                }
 
                 BroadcastAllUsers(plusMSGMessageOut);
 

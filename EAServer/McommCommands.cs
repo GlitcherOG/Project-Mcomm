@@ -42,6 +42,13 @@ namespace SSX3_Server.EAServer
             plusMSGMessageOut.T = Text;
             plusMSGMessageOut.F = "C";
 
+            room.plusMSGMessageOuts.Add(plusMSGMessageOut);
+
+            if (room.plusMSGMessageOuts.Count > 6)
+            {
+                room.plusMSGMessageOuts.RemoveAt(0);
+            }
+
             room.BroadcastAllUsers(plusMSGMessageOut);
         }
     }
