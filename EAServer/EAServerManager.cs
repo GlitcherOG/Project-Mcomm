@@ -121,7 +121,7 @@ namespace SSX3_Server.EAServer
             NewClientListening(config.ListenerPortPal);
         }
 
-        public void NewClientListening(int Port)
+        public async void NewClientListening(int Port)
         {
             while (true)
             {
@@ -148,9 +148,10 @@ namespace SSX3_Server.EAServer
                     ConnectionMessage.PraseData(msg, config.Verbose, (client.Client.RemoteEndPoint as IPEndPoint).Address + " Main Server");
 
                     //Send Connection Details Back
-                    _DirMessageOut ReturnMessage = new _DirMessageOut();
-                    TcpListener server1 = new TcpListener(IPAddress.Any, config.GamePort);
+                    TcpListener server1 = new TcpListener(IPAddress.Any, config.GamePort+1);
                     server1.Start();
+
+                    _DirMessageOut ReturnMessage = new _DirMessageOut();
                     ReturnMessage.ADDR = config.GameIP;
                     ReturnMessage.PORT = config.GamePort.ToString();
                     ReturnMessage.SESS = GenerateSESS();
@@ -159,16 +160,24 @@ namespace SSX3_Server.EAServer
                     msg = ReturnMessage.GenerateData();
                     tcpNS.Write(msg, 0, msg.Length);
 
-                    TcpClient MainClient = client;
-                    NetworkStream MainNS = tcpNS;
+                    var TCPWait = server1.AcceptTcpClientAsync();
 
-                    MainClient = server1.AcceptTcpClient();
-                    MainNS = MainClient.GetStream();
-                    ConsoleManager.WriteLine("Accepted Connection From: " + client.Client.RemoteEndPoint.ToString());
+                    if (TCPWait.Wait(5000))
+                    {
+                        TcpClient MainClient = client;
+                        NetworkStream MainNS = tcpNS;
+                        MainClient = TCPWait.Result;
+                        MainNS = MainClient.GetStream();
+                        ConsoleManager.WriteLine("Accepted Connection From: " + client.Client.RemoteEndPoint.ToString());
 
-                    //Rewrork Threading
-                    clients.Add(new EAClientManager(MainClient, MainNS, IDCount, ReturnMessage.SESS, ReturnMessage.MASK));
-                    IDCount++;
+                        //Rewrork Threading
+                        clients.Add(new EAClientManager(MainClient, MainNS, IDCount, ReturnMessage.SESS, ReturnMessage.MASK));
+                        IDCount++;
+                    }
+                    else
+                    {
+                        ConsoleManager.WriteLine("Ditched Connection From: " + client.Client.RemoteEndPoint.ToString());
+                    }
 
                     tcpNS.Dispose();
                     tcpNS.Close();
@@ -187,6 +196,11 @@ namespace SSX3_Server.EAServer
                     server.Stop();
                 }
             }
+        }
+
+        public void AcceptConnection()
+        {
+
         }
         
         public void BroadcastMessage(EAMessage message)
