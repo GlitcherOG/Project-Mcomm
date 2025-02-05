@@ -148,7 +148,7 @@ namespace SSX3_Server.EAServer
                     ConnectionMessage.PraseData(msg, config.Verbose, (client.Client.RemoteEndPoint as IPEndPoint).Address + " Main Server");
 
                     //Send Connection Details Back
-                    TcpListener server1 = new TcpListener(IPAddress.Any, config.GamePort+1);
+                    TcpListener server1 = new TcpListener(IPAddress.Any, config.GamePort);
                     server1.Start();
 
                     _DirMessageOut ReturnMessage = new _DirMessageOut();
@@ -176,7 +176,7 @@ namespace SSX3_Server.EAServer
                     }
                     else
                     {
-                        ConsoleManager.WriteLine("Ditched Connection From: " + client.Client.RemoteEndPoint.ToString());
+                        ConsoleManager.WriteLine("Timed Out Connection From: " + client.Client.RemoteEndPoint.ToString());
                     }
 
                     tcpNS.Dispose();
@@ -196,11 +196,6 @@ namespace SSX3_Server.EAServer
                     server.Stop();
                 }
             }
-        }
-
-        public void AcceptConnection()
-        {
-
         }
         
         public void BroadcastMessage(EAMessage message)

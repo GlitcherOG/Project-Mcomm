@@ -50,7 +50,7 @@ namespace SSX3_Server.EAClient.Messages
 
             EAServerManager.Instance.rooms.Add(NewRoom);
 
-            Console.WriteLine("New Room Created: " + RoomType+"."+ NAME);
+            ConsoleManager.WriteLine("New Room Created: " + RoomType+"."+ NAME);
         }
     }
 }

@@ -187,5 +187,25 @@ namespace SSX3_Server.DiscordBot
                 await ctx.RespondAsync("Unable to Find User");
             }
         }
+
+        [Command("global")]
+        public async Task GlobalCommand(CommandContext ctx)
+        {
+            int ClientID = -1;
+            for (int i = 0; i < EAServerManager.Instance.clients.Count; i++)
+            {
+                if (EAServerManager.Instance.clients[i].LoadedPersona.Name == ctx.RawArgumentString)
+                {
+                    ClientID = EAServerManager.Instance.clients[i].ID;
+                    EAServerManager.Instance.DestroyClient(ClientID, true);
+                    await ctx.RespondAsync("Kicking Persona" + ctx.RawArgumentString);
+                }
+            }
+
+            if (ClientID == -1)
+            {
+                await ctx.RespondAsync("Unable to Find Room");
+            }
+        }
     }
 }

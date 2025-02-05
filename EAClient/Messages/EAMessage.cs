@@ -81,7 +81,7 @@ namespace SSX3_Server.EAClient.Messages
             if (Verbose)
             {
                 Encoding encorder = new UTF8Encoding();
-                Console.WriteLine(Location + " In:\n" + encorder.GetString(Data));
+                ConsoleManager.WriteLine(Location + " In:\n" + encorder.GetString(Data));
             }
 
             AssignValues();
@@ -115,7 +115,7 @@ namespace SSX3_Server.EAClient.Messages
             if (Verbose)
             {
                 Encoding encorder = new UTF8Encoding();
-                Console.WriteLine(Location + " OUT:\n" + encorder.GetString(buffer));
+                ConsoleManager.WriteLine(Location + " OUT:\n" + encorder.GetString(buffer));
             }
 
             return buffer.ToArray();
