@@ -60,6 +60,8 @@ News
 - Fix Title on rooms as it doesnt seem to be appearing
 - Ensure user cant message,block,challange,report self
 - Tunneling Service (Temp Hide IPs as well)
+- Fix room Title
+- Redo messager so it doenst missout on ends of messages
 
 # Todo Discord Bot
 - Discord bot able to send messages in game and to rooms
@@ -104,3 +106,6 @@ Rule Type: Custom -> Program: This Program Path -> Browse... -> PCSX2 PS2 Emulat
 Protocol and Ports -> Protocol Type: UDP  
 Name: PCSX2 UDP -> Finish  
 Repeat but for TCP (select Protocol Type: TCP)  
+
+## FAQ
+- PAL and NTSC Cant play together at this stage
