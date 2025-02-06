@@ -1,0 +1,5 @@
+[SSX 3 PAL Online Server Address]
+patch=0,EE,004801E8,word,322E3434
+patch=0,EE,004801EC,word,322E3232
+patch=0,EE,004801F0,word,31312E30
+patch=0,EE,004801F4,word,00000037

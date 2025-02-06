@@ -147,7 +147,7 @@ namespace SSX3_Server.EAClient
 
                     if ((DateTime.Now - LastRecive).TotalSeconds >= TimeoutSeconds || (DateTime.Now - LastRecivePing).TotalSeconds >= PingTimeout)
                     {
-                        ConsoleManager.WriteLine(RealAddress + " Timing Out..." + (DateTime.Now - LastRecive).TotalSeconds + " " + (DateTime.Now - LastRecivePing).TotalSeconds);
+                        ConsoleManager.WriteLine(RealAddress + " Timing Out...");
                         //If no response from server for timeout break
                         break;
                     }

@@ -38,7 +38,7 @@ namespace SSX3_Server.EAClient.Messages
                 client.BuddyListener.Start();
             }
 
-            msg2.BUDDYSERVERNAME = "ps2ssx04.ea.com";
+            msg2.BUDDYSERVERNAME = EAServerManager.Instance.config.GameIP;
             msg2.BUDDYPORT = EAServerManager.Instance.config.BuddyPort.ToString();
 
             msg2.NEWS = EAServerManager.Instance.News;
