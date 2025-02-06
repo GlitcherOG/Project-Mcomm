@@ -13,6 +13,7 @@ namespace SSX3_Server.EAServer
     {
         public string WHEN;
         public string REPT;
+        public string AUTH;
         public string COMMERR;
         public string SCOMERR;
         public string PINGRSLT;
@@ -113,7 +114,8 @@ namespace SSX3_Server.EAServer
         {
             WHEN= rankMessageIn.WHEN;
             REPT= rankMessageIn.REPT;
-            COMMERR= rankMessageIn.COMMERR;
+            AUTH = rankMessageIn.AUTH;
+            COMMERR = rankMessageIn.COMMERR;
             SCOMERR= rankMessageIn.SCOMERR;
             PINGRSLT= rankMessageIn.PINGRSLT;
             STALLCNT= rankMessageIn.STALLCNT;

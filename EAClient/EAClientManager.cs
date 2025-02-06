@@ -9,6 +9,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace SSX3_Server.EAClient
 {
@@ -94,8 +95,19 @@ namespace SSX3_Server.EAClient
                     //Read Main Network Stream
                     if (MainClient.Available > 0)
                     {
-                        byte[] msg = new byte[2048];     //the messages arrive as byte array
-                        MainNS.Read(msg, 0, msg.Length);   //the same networkstream reads the message sent by the client
+                        byte[] Header = new byte[4];
+                        MainNS.Read(Header, 0, 4);
+
+                        if(System.Text.Encoding.UTF8.GetString(Header) == "rank")
+                        {
+                            Thread.Sleep(500);
+                        }
+
+                        byte[] msg = new byte[MainClient.ReceiveBufferSize];     //the messages arrive as byte array
+
+                        Buffer.BlockCopy(Header, 0, msg, 0, 4);
+
+                        MainNS.Read(msg, 4, MainClient.ReceiveBufferSize-4);   //the same networkstream reads the message sent by the client
 
                         if (msg[0] != 0)
                         {
@@ -107,7 +119,7 @@ namespace SSX3_Server.EAClient
                     {
                         if (BuddyClient.Available > 0)
                         {
-                            byte[] msg = new byte[65535];     //the messages arrive as byte array
+                            byte[] msg = new byte[1024];     //the messages arrive as byte array
                             BuddyNS.Read(msg, 0, msg.Length);   //the same networkstream reads the message sent by the client
                             if (msg[0] != 0)
                             {
@@ -148,6 +160,16 @@ namespace SSX3_Server.EAClient
                     if ((DateTime.Now - LastRecive).TotalSeconds >= TimeoutSeconds || (DateTime.Now - LastRecivePing).TotalSeconds >= PingTimeout)
                     {
                         ConsoleManager.WriteLine(RealAddress + " Timing Out...");
+
+                        if((DateTime.Now - LastRecive).TotalSeconds >= TimeoutSeconds)
+                        {
+                            _PngMessageIn msg = new _PngMessageIn();
+
+                            msg.SubMessage = "time";
+
+                            Broadcast(msg);
+                        }
+
                         //If no response from server for timeout break
                         break;
                     }

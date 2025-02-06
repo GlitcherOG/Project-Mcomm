@@ -1,4 +1,5 @@
 [SSX 3 Online Server Address]
+author=GlitcherOG(Archy)
 patch=0,EE,004807D8,word,322E3434
 patch=0,EE,004807DC,word,322E3232
 patch=0,EE,004807E0,word,31312E30
