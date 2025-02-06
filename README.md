@@ -61,7 +61,6 @@ News
 - Ensure user cant message,block,challange,report self
 - Tunneling Service (Temp Hide IPs as well)
 - Fix room Title
-- Redo messager so it doenst missout on ends of messages
 
 # Todo Discord Bot
 - Discord bot able to send messages in game and to rooms
@@ -76,16 +75,16 @@ News
 
 ## Setting Up Client PCSX2
 1. Using DNAS Patcher 21 bypass the DNAS Checks using mode 1 and 3 to generate an iso to bypass dnas check
-2. In Emulator go to network settings swap DNS1 Address to Internal
+2. (If using pnatch go to step 5) In Emulator go to network settings swap DNS1 Address to Internal
 3. Go to Internal DNS
 4. Add a new entry for URL ps2ssx04.ea.com to go to the ip address of the server and ensure its enabled
 5. Configure the Emulator to Use PCAP Switched or PCAP Bridged (See Below)
 6. Port Forward UDP 3658-3659 for Gameplay, UDP 6000-6001 for Voice Chat to the emulator PS2 Address you set for PCAP
 
 ## PCAP Switched (Ethernet) / PCAP Bridged (WiFi)
-Download NPCAP
-Note: PCAP Switched is the most reliable option for connecting with others.
-Note: PCAP options treat PCSX2 as its own device on your network. So, we need to create an address for it (PS2 Address)
+Download NPCAP  
+Note: PCAP Switched is the most reliable option for connecting with others.  
+Note: PCAP options treat PCSX2 as its own device on your network. So, we need to create an address for it (PS2 Address)  
 1. In PCSX2, open Settings / Network & HDD.
 2. Under Ethernet Device Type, choose the PCAP option that fits your connection type.
 3. Enable Intercept DHCP & find the PS2 Address Box.
