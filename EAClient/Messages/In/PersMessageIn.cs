@@ -73,6 +73,7 @@ namespace SSX3_Server.EAClient.Messages
             msg2.LKEY = "3fcf27540c92935b0a66fd3b0000283c";
             client.Broadcast(msg2);
 
+            ConsoleManager.WriteLine(client.userData.Name + " Has Logged in with Persona " + client.LoadedPersona.Name);
         }
     }
 }

@@ -82,7 +82,7 @@ namespace SSX3_Server.EAClient.Messages
 
                     client.LoggedIn = true;
 
-                    ConsoleManager.WriteLine("Account Logged in: " + NAME);
+                    ConsoleManager.WriteLine(NAME + " Logged in from " + client.IPAddress);
 
                     client.Broadcast(msg2);
 
@@ -90,6 +90,7 @@ namespace SSX3_Server.EAClient.Messages
                 }
                 else
                 {
+                    ConsoleManager.WriteLine(client.IPAddress + " Sent a Invalid Login");
                     msg2.SubMessage = "imst";
                     client.Broadcast(msg2);
                 }

@@ -100,7 +100,7 @@ namespace SSX3_Server.EAClient.Messages
                 Temp.Since = ClientTime;
                 Temp.Last = ClientTime;
 
-                ConsoleManager.WriteLine("New Account Created " + NAME);
+                ConsoleManager.WriteLine(client.IPAddress +  "Created a new account " + NAME);
 
                 Temp.CreateJson(AppContext.BaseDirectory + "\\Users\\" + NAME.ToLower() + ".json");
             }

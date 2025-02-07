@@ -232,7 +232,7 @@ namespace SSX3_Server.EAServer
 
                 BroadcastAllUsers(plusMSGMessageOut);
 
-                ConsoleManager.WriteLine("("+ roomType+"."+roomName +")" + clientManager.LoadedPersona.Name + ":"+ mesgMessageIn.TEXT);
+                ConsoleManager.WriteLine("("+ roomType+"."+roomName +") " + clientManager.LoadedPersona.Name + ": "+ mesgMessageIn.TEXT);
             }
         }
 
