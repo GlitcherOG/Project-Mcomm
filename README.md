@@ -107,5 +107,6 @@ __Inbound Rules__
 
 ## FAQ
 - PAL and NTSC Cant play together at this stage
-- Without Port Forwarding you can still play however it will be limited. You will only be able to challange people who have port forwarded and wont be able to receive challanges
+- Without Port Forwarding for UDP 3658-3659 you can still play however it will be limited. You will only be able to challange people who have port forwarded and wont be able to receive challanges
+- You wont be able to challange people who havent port forwarded UDP 3658-3659
 - gateway address is the address for your router on the local network (e.g. 192.168.0.1) can be found out using the cmd and ipconfig command
