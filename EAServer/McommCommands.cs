@@ -18,8 +18,9 @@ namespace SSX3_Server.EAServer
         public static void ProcessCommandRoom(EAClientManager client, EAServerRoom room, string Text)
         {
             Text = Text.TrimStart('!');
+            string[] split = Text.Split(' ');
 
-            if(Text.ToLower()=="global")
+            if (split[0].ToLower()=="global")
             {
                 room.isGlobal = !room.isGlobal;
 
@@ -30,6 +31,50 @@ namespace SSX3_Server.EAServer
                 else
                 {
                     GenerateMcommMessage("Room is now removed from global", room);
+                }
+            }
+            if (split[0].ToLower()== "ftrack")
+            {
+                if(split.Length>1)
+                {
+                    try
+                    {
+                        int ID = int.Parse(split[1]);
+
+                        client.ForceTrackID = ID;
+                        GenerateMcommMessageUser("Track ID Set", client);
+                    }
+                    catch
+                    {
+                        GenerateMcommMessageUser("Invalid ID",client);
+                    }
+                }
+                else
+                {
+                    GenerateMcommMessageUser("Please add track id", client);
+                }
+            }
+
+            if (split[0].ToLower() == "fevent")
+            {
+                if (split.Length > 1)
+                {
+                    try
+                    {
+                        int ID = int.Parse(split[1]);
+
+                        client.ForceGamemodeID = ID;
+
+                        GenerateMcommMessageUser("Event ID Set", client);
+                    }
+                    catch
+                    {
+                        GenerateMcommMessageUser("Invalid ID", client);
+                    }
+                }
+                else
+                {
+                    GenerateMcommMessageUser("Please add event id", client);
                 }
             }
         }
@@ -50,6 +95,17 @@ namespace SSX3_Server.EAServer
             }
 
             room.BroadcastAllUsers(plusMSGMessageOut);
+        }
+
+        public static void GenerateMcommMessageUser(string Text, EAClientManager client)
+        {
+            PlusMSGMessageOut plusMSGMessageOut = new PlusMSGMessageOut();
+
+            plusMSGMessageOut.N = "Mcomm";
+            plusMSGMessageOut.T = Text;
+            plusMSGMessageOut.F = "C";
+
+            client.Broadcast(plusMSGMessageOut);
         }
     }
 }

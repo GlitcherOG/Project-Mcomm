@@ -63,6 +63,9 @@ namespace SSX3_Server.EAClient
         public EAServerRoom room;
         public MesgMessageIn.Challange challange;
 
+        public int ForceTrackID = -1;
+        public int ForceGamemodeID = -1;
+
         public EAClientManager(TcpClient tcpClient, NetworkStream NSClient, int InID, string SESSin, string MASKin, bool PAL)
         {
             Pal = PAL;

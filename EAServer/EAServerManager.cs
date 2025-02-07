@@ -189,6 +189,7 @@ namespace SSX3_Server.EAServer
                 }
                 else
                 {
+                    ConsoleManager.WriteLine("Abort Connection from " + client.Client.RemoteEndPoint.ToString());
                     //Abort Connection
                     tcpNS.Dispose();
                     tcpNS.Close();

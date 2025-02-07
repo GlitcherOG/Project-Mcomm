@@ -35,7 +35,7 @@ Statistics
 
 • Leaderboards:  
 • Rider Stats:  
-• Ranked Play:  
+• Ranked Play: ✅  
 
 News  
 

@@ -211,9 +211,9 @@ namespace SSX3_Server.EAServer
 
         public void ProcessMessage(MesgMessageIn mesgMessageIn, EAClientManager clientManager)
         {
-            if (mesgMessageIn.TEXT.StartsWith("!"))
+            if (mesgMessageIn.TEXT.TrimStart('\"').StartsWith("!"))
             {
-                McommCommands.ProcessCommandRoom(clientManager, this, mesgMessageIn.TEXT);
+                McommCommands.ProcessCommandRoom(clientManager, this, mesgMessageIn.TEXT.TrimEnd('\"').TrimStart('\"'));
             }
             else
             {
