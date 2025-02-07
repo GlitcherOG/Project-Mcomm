@@ -11,18 +11,18 @@ namespace SSX3_Server.EAClient.Messages
         public override string MessageType { get { return "+ses"; } }
 
         public string NAME = "session";
-        public string SELF = "testPer";
-        public string HOST = "1";
-        public string OPPO ="2";
+        public string SELF;
+        public string HOST;
+        public string OPPO;
         public string P1;
         public string P2;
         public string P3;
         public string P4;
         public string AUTH;
-        public string ADDR = "192.168.0.141";
+        public string ADDR;
         public string FROM; //Wants an IP Address
         public string SEED;
-        public string WHEN = "2003.12.8 15:52:54";
+        public string WHEN;
 
         public override void AssignValues()
         {

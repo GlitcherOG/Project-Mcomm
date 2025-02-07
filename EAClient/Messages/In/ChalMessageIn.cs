@@ -94,15 +94,25 @@ namespace SSX3_Server.EAClient.Messages
                        var HostClient = EAServerManager.Instance.GetUser(HostEntry.FromPlayer);
                        var OtherUser = EAServerManager.Instance.GetUser(OppoEntry.FromPlayer);
 
+                       string HostIP = HostClient.RealAddress;
+                       string OtherIP = OtherUser.RealAddress;
+
+                       if(HostIP==OtherIP)
+                       {
+                            //Assume Same Network so try local connection
+                            HostIP = HostClient.GameAddress;
+                            OtherIP = OtherUser.GameAddress;
+                       }
+
                        PlusSesMessageOut plusSesMessageOut = new PlusSesMessageOut();
 
                        plusSesMessageOut.NAME = "session";
                        plusSesMessageOut.SELF = HostClient.LoadedPersona.Name;
                        plusSesMessageOut.HOST = HostClient.LoadedPersona.Name;
-                       plusSesMessageOut.FROM = HostClient.RealAddress;
+                       plusSesMessageOut.FROM = HostIP;
 
                        plusSesMessageOut.OPPO = OtherUser.LoadedPersona.Name;
-                       plusSesMessageOut.ADDR = OtherUser.RealAddress;
+                       plusSesMessageOut.ADDR = OtherIP;
 
                        plusSesMessageOut.P1 = HostClient.challange.TrackID;/*HostClient.ID.ToString();*/
                        plusSesMessageOut.P2 = HostClient.challange.Gamemode2;/*OtherUser.ID.ToString();*/
@@ -114,9 +124,10 @@ namespace SSX3_Server.EAClient.Messages
 
                        HostClient.Broadcast(plusSesMessageOut);
 
+                       //Double Check This Data Something might be wrong to cause a abort
                         plusSesMessageOut.SELF = OtherUser.LoadedPersona.Name;
                         plusSesMessageOut.OPPO = HostClient.LoadedPersona.Name;
-                        plusSesMessageOut.ADDR = HostClient.RealAddress;
+                        plusSesMessageOut.ADDR = HostIP;
 
                        OtherUser.Broadcast(plusSesMessageOut);
 
