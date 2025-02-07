@@ -36,6 +36,7 @@ namespace SSX3_Server.EAServer
         public string DISC0;
         public string CHARACTER0;
         public string SCORE0;
+        public string RACETIM0;
         public string SPINDEG0;
         public string FLIPDEG0;
         public string NUMGRAB0;
@@ -72,6 +73,7 @@ namespace SSX3_Server.EAServer
         public string PLOSTRE0;
         public string CHARACTER1;
         public string SCORE1;
+        public string RACETIM1;
         public string NAME1;
         public string QUIT1;
         public string CHEAT1;
@@ -137,7 +139,8 @@ namespace SSX3_Server.EAServer
             DISC0= rankMessageIn.DISC0;
             CHARACTER0= rankMessageIn.CHARACTER0;
             SCORE0= rankMessageIn.SCORE0;
-            SPINDEG0= rankMessageIn.SPINDEG0;
+            RACETIM0 = rankMessageIn.RACETIM0;
+            SPINDEG0 = rankMessageIn.SPINDEG0;
             FLIPDEG0= rankMessageIn.FLIPDEG0;
             NUMGRAB0= rankMessageIn.NUMGRAB0;
             NUMRAIL0= rankMessageIn.NUMRAIL0;
@@ -173,7 +176,8 @@ namespace SSX3_Server.EAServer
             PLOSTRE0= rankMessageIn.PLOSTRE0;
             CHARACTER1= rankMessageIn.CHARACTER1;
             SCORE1= rankMessageIn.SCORE1;
-            NAME1= rankMessageIn.NAME1;
+            RACETIM1 = rankMessageIn.RACETIM1;
+            NAME1 = rankMessageIn.NAME1;
             QUIT1= rankMessageIn.QUIT1;
             CHEAT1= rankMessageIn.CHEAT1;
             DISC1= rankMessageIn.DISC1;

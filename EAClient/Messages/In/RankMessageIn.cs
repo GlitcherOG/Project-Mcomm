@@ -36,6 +36,7 @@ namespace SSX3_Server.EAClient.Messages
         public string DISC0;
         public string CHARACTER0;
         public string SCORE0;
+        public string RACETIM0;
         public string SPINDEG0;
         public string FLIPDEG0;
         public string NUMGRAB0;
@@ -72,6 +73,7 @@ namespace SSX3_Server.EAClient.Messages
         public string PLOSTRE0;
         public string CHARACTER1;
         public string SCORE1;
+        public string RACETIM1;
         public string NAME1;
         public string QUIT1;
         public string CHEAT1;
@@ -140,6 +142,7 @@ namespace SSX3_Server.EAClient.Messages
                 DISC0 = GetStringData("DISC0");
                 CHARACTER0 = GetStringData("CHARACTER0");
                 SCORE0 = GetStringData("SCORE0");
+                RACETIM0 = GetStringData("RACETIM0");
                 SPINDEG0 = GetStringData("SPINDEG0");
                 FLIPDEG0 = GetStringData("FLIPDEG0");
                 NUMGRAB0 = GetStringData("NUMGRAB0");
@@ -176,6 +179,7 @@ namespace SSX3_Server.EAClient.Messages
                 PLOSTRE0 = GetStringData("PLOSTRE0");
                 CHARACTER1 = GetStringData("CHARACTER1");
                 SCORE1 = GetStringData("SCORE1");
+                RACETIM1 = GetStringData("RACETIM1");
                 NAME1 = GetStringData("NAME1");
                 QUIT1 = GetStringData("QUIT1");
                 CHEAT1 = GetStringData("CHEAT1");
@@ -217,6 +221,7 @@ namespace SSX3_Server.EAClient.Messages
             }
             catch
             {
+
             }
         }
 
