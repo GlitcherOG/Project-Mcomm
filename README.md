@@ -55,10 +55,10 @@ News
 - Fix Having to DQUE to leave room (Probably due to an issue with vc)
 - Mcomm Buddy for server commands
 - Fix Passwords
-- Last 5 messages queue for rooms
 - Fix Title on rooms as it doesnt seem to be appearing
 - Ensure user cant message,block,challange,report self
 - Tunneling Service (Temp Hide IPs as well)
+- PAL and NTSC Prefix for accounts
 
 # Todo Discord Bot
 - Discord bot able to send messages in game and to rooms
@@ -106,7 +106,8 @@ __Inbound Rules__
 6. Repeat but for TCP (select Protocol Type: TCP)  
 
 ## FAQ
-- PAL and NTSC Cant play together at this stage
+- PAL and NTSC Crossplay doesn't work.
 - Without Port Forwarding for UDP 3658-3659 you can still play however it will be limited. You will only be able to challange people who have port forwarded and wont be able to receive challanges
 - You wont be able to challange people who havent port forwarded UDP 3658-3659
-- gateway address is the address for your router on the local network (e.g. 192.168.0.1) can be found out using the cmd and ipconfig command
+- Gateway address is the address for your router on the local network (e.g. 192.168.0.1) can be found out using the cmd and ipconfig command
+- 2 Players on the same network can play together when connected to the same network.
