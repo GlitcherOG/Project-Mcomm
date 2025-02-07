@@ -37,11 +37,12 @@ namespace SSX3_Server.EAServer
 
         public void InitaliseServer()
         {
-            ConsoleManager.WriteLine("Initalising Server...");
             Instance = this;
             clients = new List<EAClientManager>();
             MainBot = new MainBot();
             config = EAServerConfig.Load(AppContext.BaseDirectory + "\\ServerConfig.cfg");
+
+            ConsoleManager.WriteLine("Initalising Server...");
 
             highscoreDatabase = HighscoreDatabase.Load(AppContext.BaseDirectory + "\\Highscore.json");
 
@@ -85,7 +86,8 @@ namespace SSX3_Server.EAServer
             Directory.CreateDirectory(AppContext.BaseDirectory + "\\Users");
             Directory.CreateDirectory(AppContext.BaseDirectory + "\\Personas");
             Directory.CreateDirectory(AppContext.BaseDirectory + "\\Races");
-            
+            Directory.CreateDirectory(AppContext.BaseDirectory + "\\Logs");
+
             if (config == null)
             {
                 config = new EAServerConfig();
@@ -112,15 +114,15 @@ namespace SSX3_Server.EAServer
 
         public void NewClientListeningNTSC()
         {
-            NewClientListening(config.ListenerPort);
+            NewClientListening(config.ListenerPort, false);
         }
 
         public void NewClientListeningPAL()
         {
-            NewClientListening(config.ListenerPortPal);
+            NewClientListening(config.ListenerPortPal, true);
         }
 
-        public async void NewClientListening(int Port)
+        public async void NewClientListening(int Port, bool PAL)
         {
             while (true)
             {
@@ -170,7 +172,7 @@ namespace SSX3_Server.EAServer
                         ConsoleManager.WriteLine("Accepted Connection From: " + client.Client.RemoteEndPoint.ToString());
 
                         //Rewrork Threading
-                        clients.Add(new EAClientManager(MainClient, MainNS, IDCount, ReturnMessage.SESS, ReturnMessage.MASK));
+                        clients.Add(new EAClientManager(MainClient, MainNS, IDCount, ReturnMessage.SESS, ReturnMessage.MASK, PAL));
                         IDCount++;
                     }
                     else

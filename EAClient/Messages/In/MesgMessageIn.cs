@@ -78,7 +78,7 @@ namespace SSX3_Server.EAClient.Messages
                         TempChallange.Powerups = TempString[6];
                         TempChallange.AI = TempString[7];
                         TempChallange.PointIcons = TempString[8];
-                        TempChallange.U0 = TempString[9];
+                        TempChallange.GameVersion = TempString[9];
                         TempChallange.U1 = TempString[10];
                         TempChallange.U2 = TempString[11];
                         TempChallange.U3 = TempString[12];
@@ -88,8 +88,23 @@ namespace SSX3_Server.EAClient.Messages
 
                         PlusMSGMessageOut plusMSGMessageOut = new PlusMSGMessageOut();
 
+                        if (EAServerManager.Instance.config.AllowCrossPlay)
+                        {
+                            if (TempClient.Pal && TempChallange.GameVersion == "NA_R_F004")
+                            {
+                                TempChallange.GameVersion = "EU_R_F004";
+                            }
+
+                            if (!TempClient.Pal && TempChallange.GameVersion == "EU_R_F004")
+                            {
+                                TempChallange.GameVersion = "NA_R_F004";
+                            }
+                        }
+
                         plusMSGMessageOut.N = client.LoadedPersona.Name;
-                        plusMSGMessageOut.T = TEXT;
+                        plusMSGMessageOut.T = "\"challenge " + TempChallange.TrackID + " " + TempChallange.Gamemode1 + " " + TempChallange.Gamemode2 + " " + TempChallange.Ranked 
+                            + " " + TempChallange.Multipliers + " " + TempChallange.Powerups + " " + TempChallange.AI + " " + TempChallange.PointIcons + " " + TempChallange.GameVersion + " " +
+                            TempChallange.U1 + " " + TempChallange.U2 + " " + TempChallange.U3 + " " + TempChallange.U4 + "\"";
                         plusMSGMessageOut.F = "P3";
 
                         TempClient.Broadcast(plusMSGMessageOut);
@@ -152,7 +167,7 @@ namespace SSX3_Server.EAClient.Messages
             public string Powerups;
             public string AI;
             public string PointIcons;
-            public string U0;
+            public string GameVersion;
             public string U1;
             public string U2;
             public string U3;

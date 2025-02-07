@@ -58,12 +58,15 @@ namespace SSX3_Server.EAClient
         public int Ping = 20;
 
         public int PrevPeekCount = 0;
+        public bool Pal;
 
         public EAServerRoom room;
         public MesgMessageIn.Challange challange;
 
-        public EAClientManager(TcpClient tcpClient, NetworkStream NSClient, int InID, string SESSin, string MASKin)
+        public EAClientManager(TcpClient tcpClient, NetworkStream NSClient, int InID, string SESSin, string MASKin, bool PAL)
         {
+            Pal = PAL;
+
             ID = InID;
             SESS = SESSin;
             MASK = MASKin;
@@ -223,7 +226,7 @@ namespace SSX3_Server.EAClient
                 }
 
                 var msg = (EAMessage)Activator.CreateInstance(c);
-                msg.PraseData(Data, EAServerManager.Instance.config.Verbose, IPAddress + " Main Server");
+                msg.PraseData(Data, false, IPAddress + ":" + GamePort + " Main Server");
 
                 msg.ProcessCommand(this, room);
             }
@@ -248,7 +251,7 @@ namespace SSX3_Server.EAClient
                 }
 
                 var msg = (EAMessage)Activator.CreateInstance(c);
-                msg.PraseData(Data, EAServerManager.Instance.config.VerboseBuddy, IPAddress + " Buddy Server");
+                msg.PraseData(Data, true, IPAddress+":"+GamePort + " Buddy Server");
 
                 msg.ProcessCommand(this, room);
             }

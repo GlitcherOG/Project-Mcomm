@@ -32,7 +32,7 @@ namespace SSX3_Server.EAClient.Messages
             }
         }
 
-        public override byte[] GenerateData(bool Override = false, bool Verbose = false, string Location = "ERROR")
+        public override byte[] GenerateData(bool Override = false, bool Buddy = false, string Location = "ERROR")
         {
             MemoryStream data = new MemoryStream();
             AssignValuesToString();
@@ -53,11 +53,9 @@ namespace SSX3_Server.EAClient.Messages
             byte[] buffer = new byte[data.Length];
             data.Read(buffer, 0, (int)data.Length);
 
-            if (Verbose)
-            {
-                Encoding encorder = new UTF8Encoding();
-                Console.WriteLine(Location + " OUT:\n" + encorder.GetString(buffer));
-            }
+
+            Encoding encorder = new UTF8Encoding();
+            ConsoleManager.WriteLineVerbose(Location + " OUT:\n" + encorder.GetString(buffer), Buddy);
 
             return buffer.ToArray();
         }

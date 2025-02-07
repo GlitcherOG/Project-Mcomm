@@ -58,7 +58,7 @@ namespace SSX3_Server.EAClient.Messages
 
         public List<StringData> stringDatas = new List<StringData>();
 
-        public virtual void PraseData(byte[] Data, bool Verbose, string Location)
+        public virtual void PraseData(byte[] Data, bool Buddy, string Location)
         {
             SubMessage = ByteUtil.ReadString(Data, 4, 4).Trim('\0');
             Size = ByteUtil.ReadInt32(Data, 8);
@@ -80,16 +80,13 @@ namespace SSX3_Server.EAClient.Messages
                 stringDatas.Add(NewStringData);
             }
 
-            if (Verbose)
-            {
-                Encoding encorder = new UTF8Encoding();
-                ConsoleManager.WriteLine(Location + " In:\n" + encorder.GetString(Data));
-            }
+            Encoding encorder = new UTF8Encoding();
+            ConsoleManager.WriteLineVerbose(Location + " In:\n" + encorder.GetString(Data), Buddy);
 
             AssignValues();
         }
 
-        public virtual byte[] GenerateData(bool Override = false, bool Verbose = false, string Location = "ERROR")
+        public virtual byte[] GenerateData(bool Override = false, bool Buddy = false, string Location = "ERROR")
         {
             if (!Override)
             {
@@ -114,11 +111,8 @@ namespace SSX3_Server.EAClient.Messages
             byte[] buffer = new byte[data.Length];
             data.Read(buffer, 0, (int)data.Length);
 
-            if (Verbose)
-            {
-                Encoding encorder = new UTF8Encoding();
-                ConsoleManager.WriteLine(Location + " OUT:\n" + encorder.GetString(buffer));
-            }
+            Encoding encorder = new UTF8Encoding();
+            ConsoleManager.WriteLineVerbose(Location + " OUT:\n" + encorder.GetString(buffer), Buddy);
 
             return buffer.ToArray();
         }

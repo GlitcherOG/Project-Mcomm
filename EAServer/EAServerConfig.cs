@@ -14,12 +14,15 @@ namespace SSX3_Server.EAServer
         public string GameIP = "192.168.0.141";
         public bool PalListener = true;
         public bool NTSCListener = true;
+        public bool AllowCrossPlay = false;
         public int ListenerPort = 11000;
         public int ListenerPortPal = 11050;
         public int GamePort = 10901;
         public int BuddyPort = 13505;
         public bool Verbose = false;
         public bool VerboseBuddy = false;
+        public bool Logs = false;
+        public bool VerboseLogs = false;
         public bool DiscordBot = false;
         public string DiscordBotToken = "";
 
