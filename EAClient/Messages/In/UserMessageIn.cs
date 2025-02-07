@@ -36,7 +36,7 @@ namespace SSX3_Server.EAClient.Messages
                 userMessageOut.PERS = TempUser.LoadedPersona.Name;
                 userMessageOut.STAT = TempUser.LoadedPersona.GenerateStat();
                 userMessageOut.RANK = TempUser.LoadedPersona.GenerateRank();
-                userMessageOut.ADDR = TempUser.RealAddress;
+                userMessageOut.ADDR = "0.0.0.0";//TempUser.IPAddress;
                 userMessageOut.ROOM = "";
 
                 if (TempUser.room!=null)

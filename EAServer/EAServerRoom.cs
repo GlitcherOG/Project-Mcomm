@@ -61,7 +61,7 @@ namespace SSX3_Server.EAServer
             plusWhoMessageOut.I = Clients.Count.ToString();
             plusWhoMessageOut.N = client.LoadedPersona.Name;
             plusWhoMessageOut.M = client.userData.Name;
-            plusWhoMessageOut.A = client.GameAddress;
+            plusWhoMessageOut.A = client.LocalIP;
             plusWhoMessageOut.X = "";
             plusWhoMessageOut.S = "1";
             plusWhoMessageOut.R = roomType+"."+roomName;

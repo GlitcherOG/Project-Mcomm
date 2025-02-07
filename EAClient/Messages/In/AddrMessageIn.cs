@@ -28,7 +28,7 @@ namespace SSX3_Server.EAClient.Messages
 
         public override void ProcessCommand(EAClientManager client, EAServerRoom room = null)
         {
-            client.GameAddress = ADDR;
+            client.LocalIP = ADDR;
             client.GamePort = PORT;
             client.Broadcast(this);
         }

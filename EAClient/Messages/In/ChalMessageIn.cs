@@ -86,56 +86,62 @@ namespace SSX3_Server.EAClient.Messages
                        }
                    }
 
-                   //Generate host and send to player
-                   if (Host && Oppo)
-                   {
-                       string Seed = (new Random()).Next().ToString();
+                    //Generate host and send to player
+                    if (Host && Oppo)
+                    {
+                        string Seed = (new Random()).Next().ToString();
 
-                       var HostClient = EAServerManager.Instance.GetUser(HostEntry.FromPlayer);
-                       var OtherUser = EAServerManager.Instance.GetUser(OppoEntry.FromPlayer);
+                        var HostClient = EAServerManager.Instance.GetUser(HostEntry.FromPlayer);
+                        var OtherUser = EAServerManager.Instance.GetUser(OppoEntry.FromPlayer);
 
-                       string HostIP = HostClient.RealAddress;
-                       string OtherIP = OtherUser.RealAddress;
+                        string HostIP = HostClient.IPAddress;
+                        string OtherIP = OtherUser.IPAddress;
 
-                       if(HostIP==OtherIP)
-                       {
+                        bool IPTest = false;
+                        if (HostIP == OtherIP)
+                        {
+                            IPTest = true;
                             //Assume Same Network so try local connection
-                            HostIP = HostClient.GameAddress;
-                            OtherIP = OtherUser.GameAddress;
-                       }
+                            HostIP = HostClient.LocalIP;
+                            OtherIP = OtherUser.LocalIP;
+                        }
 
-                       PlusSesMessageOut plusSesMessageOut = new PlusSesMessageOut();
+                        PlusSesMessageOut plusSesMessageOut = new PlusSesMessageOut();
 
-                       plusSesMessageOut.NAME = "session";
-                       plusSesMessageOut.SELF = HostClient.LoadedPersona.Name;
-                       plusSesMessageOut.HOST = HostClient.LoadedPersona.Name;
-                       plusSesMessageOut.FROM = HostIP;
+                        plusSesMessageOut.NAME = "session";
+                        plusSesMessageOut.SELF = HostClient.LoadedPersona.Name;
+                        plusSesMessageOut.HOST = HostClient.LoadedPersona.Name;
+                        plusSesMessageOut.FROM = HostIP;
 
-                       plusSesMessageOut.OPPO = OtherUser.LoadedPersona.Name;
-                       plusSesMessageOut.ADDR = OtherIP;
+                        plusSesMessageOut.OPPO = OtherUser.LoadedPersona.Name;
+                        plusSesMessageOut.ADDR = OtherIP;
 
-                       plusSesMessageOut.P1 = HostClient.challange.TrackID;/*HostClient.ID.ToString();*/
-                       plusSesMessageOut.P2 = HostClient.challange.Gamemode2;/*OtherUser.ID.ToString();*/
-                       plusSesMessageOut.P3 = "0"; //Not Used
-                       plusSesMessageOut.P4 = "0"; //Not Used
-                       plusSesMessageOut.AUTH = ""; //Unknown
-                       plusSesMessageOut.SEED = Seed;
-                       plusSesMessageOut.WHEN = DateTime.Now.ToString("yyyy.MM.dd hh:mm:ss");
+                        plusSesMessageOut.P1 = HostClient.challange.TrackID;/*HostClient.ID.ToString();*/
+                        plusSesMessageOut.P2 = HostClient.challange.Gamemode2;/*OtherUser.ID.ToString();*/
+                        plusSesMessageOut.P3 = "0"; //Not Used
+                        plusSesMessageOut.P4 = "0"; //Not Used
+                        plusSesMessageOut.AUTH = ""; //Unknown
+                        plusSesMessageOut.SEED = Seed;
+                        plusSesMessageOut.WHEN = DateTime.Now.ToString("yyyy.MM.dd hh:mm:ss");
 
-                       HostClient.Broadcast(plusSesMessageOut);
+                        HostClient.Broadcast(plusSesMessageOut);
 
-                       //Double Check This Data Something might be wrong to cause a abort
+                        //Double Check This Data Something might be wrong to cause a abort
                         plusSesMessageOut.SELF = OtherUser.LoadedPersona.Name;
                         plusSesMessageOut.OPPO = HostClient.LoadedPersona.Name;
                         plusSesMessageOut.ADDR = HostIP;
 
-                       OtherUser.Broadcast(plusSesMessageOut);
+                        OtherUser.Broadcast(plusSesMessageOut);
 
-                       chalMessageIns.Remove(HostEntry);
-                       chalMessageIns.Remove(OppoEntry);
+                        chalMessageIns.Remove(HostEntry);
+                        chalMessageIns.Remove(OppoEntry);
 
-                       ConsoleManager.WriteLine(HostClient.LoadedPersona.Name + " Started Session with " + OtherUser.LoadedPersona.Name);
-                   }
+                        ConsoleManager.WriteLine(HostClient.LoadedPersona.Name + " Started Session with " + OtherUser.LoadedPersona.Name);
+                        if (IPTest)
+                        {
+                            ConsoleManager.WriteLine(HostClient.LoadedPersona.Name + " and " + OtherUser.LoadedPersona.Name + " Have Same Global IP Sent Local IP instead");
+                        }
+                    }
                 }
             }
         }

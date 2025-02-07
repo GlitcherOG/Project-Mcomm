@@ -19,10 +19,9 @@ namespace SSX3_Server.EAClient
         public string SESS;
         public string MASK;
 
-        public string GameAddress;
+        public string LocalIP;
+        public string IPAddress;
         public string GamePort;
-
-        public string RealAddress;
 
         public string SKEY;
 
@@ -74,7 +73,7 @@ namespace SSX3_Server.EAClient
             MainClient.ReceiveBufferSize = 1024*3;
 
             IPEndPoint remoteIpEndPoint = MainClient.Client.RemoteEndPoint as IPEndPoint;
-            RealAddress = remoteIpEndPoint.Address.ToString();
+            IPAddress = remoteIpEndPoint.Address.ToString();
 
             LastRecive = DateTime.Now;
             LastSend = DateTime.Now;
@@ -87,7 +86,7 @@ namespace SSX3_Server.EAClient
 
         public void MainListen()
         {
-            ConsoleManager.WriteLine("Main Thread Started for " + RealAddress);
+            ConsoleManager.WriteLine("Main Thread Started for " + IPAddress);
             while (MainClient.Connected)  //while the client is connected, we look for incoming messages
             {
                 try
@@ -159,7 +158,7 @@ namespace SSX3_Server.EAClient
 
                     if ((DateTime.Now - LastRecive).TotalSeconds >= TimeoutSeconds || (DateTime.Now - LastRecivePing).TotalSeconds >= PingTimeout)
                     {
-                        ConsoleManager.WriteLine(RealAddress + " Timing Out...");
+                        ConsoleManager.WriteLine(IPAddress + " Timing Out...");
 
                         if((DateTime.Now - LastRecive).TotalSeconds >= TimeoutSeconds)
                         {
@@ -178,7 +177,7 @@ namespace SSX3_Server.EAClient
                 {
                     //Unknown Connection Error
                     //Most Likely Game has crashed
-                    ConsoleManager.WriteLine(RealAddress + " Connection Ended, Disconnecting...");
+                    ConsoleManager.WriteLine(IPAddress + " Connection Ended, Disconnecting...");
                     SaveEAUserData();
                     SaveEAUserPersona();
                     CloseConnection();
@@ -189,7 +188,7 @@ namespace SSX3_Server.EAClient
             if(!Closing)
             {
                 //Disconnect and Destroy
-                ConsoleManager.WriteLine(RealAddress + " Client Disconnecting...");
+                ConsoleManager.WriteLine(IPAddress + " Client Disconnecting...");
                 SaveEAUserData();
                 SaveEAUserPersona();
                 CloseConnection();
@@ -224,7 +223,7 @@ namespace SSX3_Server.EAClient
                 }
 
                 var msg = (EAMessage)Activator.CreateInstance(c);
-                msg.PraseData(Data, EAServerManager.Instance.config.Verbose, RealAddress + " Main Server");
+                msg.PraseData(Data, EAServerManager.Instance.config.Verbose, IPAddress + " Main Server");
 
                 msg.ProcessCommand(this, room);
             }
@@ -249,7 +248,7 @@ namespace SSX3_Server.EAClient
                 }
 
                 var msg = (EAMessage)Activator.CreateInstance(c);
-                msg.PraseData(Data, EAServerManager.Instance.config.VerboseBuddy, RealAddress + " Buddy Server");
+                msg.PraseData(Data, EAServerManager.Instance.config.VerboseBuddy, IPAddress + " Buddy Server");
 
                 msg.ProcessCommand(this, room);
             }
@@ -262,12 +261,12 @@ namespace SSX3_Server.EAClient
                 try
                 {
                     LastSend = DateTime.Now;
-                    byte[] bytes = msg.GenerateData(false, EAServerManager.Instance.config.Verbose, RealAddress + " Main Server");
+                    byte[] bytes = msg.GenerateData(false, EAServerManager.Instance.config.Verbose, IPAddress + " Main Server");
                     MainNS.Write(bytes, 0, bytes.Length);
                 }
                 catch
                 {
-                    ConsoleManager.WriteLine(RealAddress + " Connection Ended, Disconnecting...");
+                    ConsoleManager.WriteLine(IPAddress + " Connection Ended, Disconnecting...");
                     SaveEAUserData();
                     SaveEAUserPersona();
                     CloseConnection();
@@ -283,12 +282,12 @@ namespace SSX3_Server.EAClient
                 try
                 {
                     LastSend = DateTime.Now;
-                    byte[] bytes = msg.GenerateData(false, EAServerManager.Instance.config.VerboseBuddy, RealAddress + " Buddy Server");
+                    byte[] bytes = msg.GenerateData(false, EAServerManager.Instance.config.VerboseBuddy, IPAddress + " Buddy Server");
                     BuddyNS.Write(bytes, 0, bytes.Length);
                 }
                 catch
                 {
-                    ConsoleManager.WriteLine(RealAddress + " Connection Ended, Disconnecting...");
+                    ConsoleManager.WriteLine(IPAddress + " Connection Ended, Disconnecting...");
                     SaveEAUserData();
                     SaveEAUserPersona();
                     CloseConnection();
