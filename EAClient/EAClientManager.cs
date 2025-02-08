@@ -66,6 +66,8 @@ namespace SSX3_Server.EAClient
         public int ForceTrackID = -1;
         public int ForceGamemodeID = -1;
 
+        public bool EnteringChal;
+
         public EAClientManager(TcpClient tcpClient, NetworkStream NSClient, int InID, string SESSin, string MASKin, bool PAL)
         {
             Pal = PAL;
@@ -218,6 +220,7 @@ namespace SSX3_Server.EAClient
                 else
                 {
                     LastRecive = DateTime.Now;
+                    EnteringChal = false;
                 }
 
                 Type c;

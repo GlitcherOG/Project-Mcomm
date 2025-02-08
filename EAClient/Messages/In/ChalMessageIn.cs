@@ -134,6 +134,9 @@ namespace SSX3_Server.EAClient.Messages
                             plusSesMessageOut.P1 = HostClient.ForceTrackID.ToString();
                         }
 
+                        HostClient.EnteringChal = true;
+                        OtherUser.EnteringChal = true;
+
                         HostClient.Broadcast(plusSesMessageOut);
 
                         //Double Check This Data Something might be wrong to cause a abort

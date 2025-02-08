@@ -111,3 +111,4 @@ __Inbound Rules__
 - You wont be able to challange people who havent port forwarded UDP 3658-3659
 - Gateway address is the address for your router on the local network (e.g. 192.168.0.1) can be found out using the cmd and ipconfig command
 - 2 Players on the same network can play together when connected to the same network.
+- User has declined your challange. It is a bug that happens with the game however if it soon doesnt launch into the challange check port forwarding

@@ -124,7 +124,10 @@ namespace SSX3_Server.EAClient.Messages
                         plusMSGMessageOut.T = TEXT;
                         plusMSGMessageOut.F = "P3";
 
-                        TempClient.Broadcast(plusMSGMessageOut);
+                        if (!(TEXT == "decline" && client.EnteringChal))
+                        {
+                            TempClient.Broadcast(plusMSGMessageOut);
+                        }
 
                         if (TEXT.Contains("lockchal"))
                         {
