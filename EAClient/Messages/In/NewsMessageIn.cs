@@ -38,6 +38,7 @@ namespace SSX3_Server.EAClient.Messages
                 client.BuddyListener.Start();
             }
 
+            msg2.BUDDYUSERNAME = client.LoadedPersona.Name;
             msg2.BUDDYSERVERNAME = EAServerManager.Instance.config.GameIP;
             msg2.BUDDYPORT = EAServerManager.Instance.config.BuddyPort.ToString();
 

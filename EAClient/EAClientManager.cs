@@ -267,7 +267,7 @@ namespace SSX3_Server.EAClient
                 try
                 {
                     LastSend = DateTime.Now;
-                    byte[] bytes = msg.GenerateData(false, EAServerManager.Instance.config.Verbose, IPAddress + " Main Server");
+                    byte[] bytes = msg.GenerateData(false, false, IPAddress + " Main Server");
                     MainNS.Write(bytes, 0, bytes.Length);
                 }
                 catch
@@ -288,7 +288,7 @@ namespace SSX3_Server.EAClient
                 try
                 {
                     LastSend = DateTime.Now;
-                    byte[] bytes = msg.GenerateData(false, EAServerManager.Instance.config.VerboseBuddy, IPAddress + " Buddy Server");
+                    byte[] bytes = msg.GenerateData(false, true, IPAddress + " Buddy Server");
                     BuddyNS.Write(bytes, 0, bytes.Length);
                 }
                 catch

@@ -93,6 +93,26 @@ namespace SSX3_Server.EAServer
 
                 EAServerManager.Instance.config.CreateJson(AppContext.BaseDirectory + "\\ServerConfig.cfg");
             }
+
+            if (split[0].ToLower() == "password")
+            {
+                if (split.Length==2)
+                {
+                    room.roomPassword = split[1];
+                    GenerateMcommMessageUser("Room Password Changed", client);
+                    EAServerManager.Instance.BroadcastMessage(room.GeneratePlusRoomInfo());
+                }
+                else if (split.Length == 1)
+                {
+                    room.roomPassword = "";
+                    GenerateMcommMessageUser("Room Password Removed", client);
+                    EAServerManager.Instance.BroadcastMessage(room.GeneratePlusRoomInfo());
+                }
+                else
+                {
+                    GenerateMcommMessageUser("Password must not have a space", client);
+                }    
+            }
         }
 
         public static void GenerateMcommMessage(string Text, EAServerRoom room)

@@ -14,6 +14,7 @@ namespace SSX3_Server.EAClient.Messages
         public string BUDDYSERVERNAME;
         public string BUDDYPORT = "13505";
         public string BUDDYRESOURCE = "SSX-PS2-2004";
+        public string BUDDYUSERNAME = "";
         public string BUDDYMSGTIMEOUT = "864000";
 
         public override void AssignValues()
@@ -27,7 +28,8 @@ namespace SSX3_Server.EAClient.Messages
             {
                 AddStringData("BUDDYSERVERNAME", BUDDYSERVERNAME);
                 AddStringData("BUDDYPORT", BUDDYPORT);
-                AddStringData("BUDDYUSERNAME", BUDDYRESOURCE);
+                AddStringData("BUDDYRESOURCE", BUDDYRESOURCE);
+                AddStringData("BUDDYUSERNAME", BUDDYUSERNAME);
                 AddStringData("BUDDYMSGTIMEOUT", BUDDYMSGTIMEOUT);
             }
         }
@@ -52,6 +54,7 @@ namespace SSX3_Server.EAClient.Messages
 
             byte[] buffer = new byte[data.Length];
             data.Read(buffer, 0, (int)data.Length);
+
 
             Encoding encorder = new UTF8Encoding();
             ConsoleManager.WriteLineVerbose(Location + " OUT:\n" + encorder.GetString(buffer), Buddy);
