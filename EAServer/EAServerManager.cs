@@ -59,10 +59,10 @@ namespace SSX3_Server.EAServer
 
             ConsoleManager.WriteLine("Initalising Inital Rooms...");
 
-            rooms.Add(new EAServerRoom(1,"0.0.0.0", "Beginner", "Peak 1", "1","Mcomm", true));
-            rooms.Add(new EAServerRoom(2, "0.0.0.0", "Advanced", "Peak 2", "2", "Mcomm", true));
-            rooms.Add(new EAServerRoom(3, "0.0.0.0", "Elite", "Peak 3", "3", "Mcomm", true));
-            rooms.Add(new EAServerRoom(4, "0.0.0.0", "Intermediate", "Peak 4", "4", "Mcomm", true));
+            rooms.Add(new EAServerRoom(1,"0.0.0.0", "Beginner", "Peak 1", "","Mcomm", true));
+            rooms.Add(new EAServerRoom(2, "0.0.0.0", "Advanced", "Peak 2", "", "Mcomm", true));
+            rooms.Add(new EAServerRoom(3, "0.0.0.0", "Elite", "Peak 3", "", "Mcomm", true));
+            rooms.Add(new EAServerRoom(4, "0.0.0.0", "Intermediate", "Peak 4", "", "Mcomm", true));
 
             RoomIDCount = 5;
 
