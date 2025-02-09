@@ -77,6 +77,22 @@ namespace SSX3_Server.EAServer
                     GenerateMcommMessageUser("Please add event id", client);
                 }
             }
+
+            if (split[0].ToLower() == "crossregion")
+            {
+                EAServerManager.Instance.config.AllowCrossPlay = !EAServerManager.Instance.config.AllowCrossPlay;
+
+                if(EAServerManager.Instance.config.AllowCrossPlay)
+                {
+                    GenerateMcommMessageUser("Cross-Region is now enabled", client);
+                }
+                else
+                {
+                    GenerateMcommMessageUser("Cross-Region is now disabled", client);
+                }
+
+                EAServerManager.Instance.config.CreateJson(AppContext.BaseDirectory + "\\ServerConfig.cfg");
+            }
         }
 
         public static void GenerateMcommMessage(string Text, EAServerRoom room)

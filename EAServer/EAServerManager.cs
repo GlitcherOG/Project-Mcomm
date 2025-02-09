@@ -126,76 +126,86 @@ namespace SSX3_Server.EAServer
         {
             while (true)
             {
-                TcpListener server = new TcpListener(IPAddress.Any, Port);
-
-                server.Start();
-
-                TcpClient client = server.AcceptTcpClient();
-
-                NetworkStream tcpNS = client.GetStream();
-
-                ConsoleManager.WriteLine("Connection From: " + client.Client.RemoteEndPoint.ToString());
-
-                //tcpClient.ReceiveTimeout = 20;
-
-                //Read Incomming Message
-                byte[] msg = new byte[255];     //the messages arrive as byte array
-                tcpNS.Read(msg, 0, msg.Length);
-
-                if (EAMessage.MessageCommandType(msg, 0) == "@dir")
+                try
                 {
-                    _DirMessageIn ConnectionMessage = new _DirMessageIn();
+                    TcpListener server = new TcpListener(IPAddress.Any, Port);
 
-                    ConnectionMessage.PraseData(msg, config.Verbose, (client.Client.RemoteEndPoint as IPEndPoint).Address + " Main Server");
+                    server.Start();
 
-                    //Send Connection Details Back
-                    TcpListener server1 = new TcpListener(IPAddress.Any, config.GamePort);
-                    server1.Start();
+                    TcpClient client = server.AcceptTcpClient();
 
-                    _DirMessageOut ReturnMessage = new _DirMessageOut();
-                    ReturnMessage.ADDR = config.GameIP;
-                    ReturnMessage.PORT = config.GamePort.ToString();
-                    ReturnMessage.SESS = GenerateSESS();
-                    ReturnMessage.MASK = GenerateMASK();
+                    NetworkStream tcpNS = client.GetStream();
 
-                    msg = ReturnMessage.GenerateData();
-                    tcpNS.Write(msg, 0, msg.Length);
+                    ConsoleManager.WriteLine("Connection From: " + client.Client.RemoteEndPoint.ToString());
 
-                    var TCPWait = server1.AcceptTcpClientAsync();
+                    //tcpClient.ReceiveTimeout = 20;
 
-                    if (TCPWait.Wait(5000))
+                    //Read Incomming Message
+                    byte[] msg = new byte[255];     //the messages arrive as byte array
+                    tcpNS.Read(msg, 0, msg.Length);
+
+                    if (EAMessage.MessageCommandType(msg, 0) == "@dir")
                     {
-                        TcpClient MainClient = client;
-                        NetworkStream MainNS = tcpNS;
-                        MainClient = /*server1.AcceptTcpClient();*/ TCPWait.Result;
-                        MainNS = MainClient.GetStream();
-                        ConsoleManager.WriteLine("Accepted Connection From: " + client.Client.RemoteEndPoint.ToString());
+                        _DirMessageIn ConnectionMessage = new _DirMessageIn();
 
-                        //Rewrork Threading
-                        clients.Add(new EAClientManager(MainClient, MainNS, IDCount, ReturnMessage.SESS, ReturnMessage.MASK, PAL));
-                        IDCount++;
+                        ConnectionMessage.PraseData(msg, config.Verbose, (client.Client.RemoteEndPoint as IPEndPoint).Address + " Main Server");
+
+                        //Send Connection Details Back
+                        TcpListener server1 = new TcpListener(IPAddress.Any, config.GamePort);
+                        server1.Start();
+
+                        _DirMessageOut ReturnMessage = new _DirMessageOut();
+                        ReturnMessage.ADDR = config.GameIP;
+                        ReturnMessage.PORT = config.GamePort.ToString();
+                        ReturnMessage.SESS = GenerateSESS();
+                        ReturnMessage.MASK = GenerateMASK();
+
+                        msg = ReturnMessage.GenerateData();
+                        tcpNS.Write(msg, 0, msg.Length);
+
+                        var TCPWait = server1.AcceptTcpClientAsync();
+
+                        if (TCPWait.Wait(5000))
+                        {
+                            TcpClient MainClient = client;
+                            NetworkStream MainNS = tcpNS;
+                            MainClient = /*server1.AcceptTcpClient();*/ TCPWait.Result;
+                            MainNS = MainClient.GetStream();
+                            ConsoleManager.WriteLine("Accepted Connection From: " + client.Client.RemoteEndPoint.ToString());
+
+                            //Rewrork Threading
+                            clients.Add(new EAClientManager(MainClient, MainNS, IDCount, ReturnMessage.SESS, ReturnMessage.MASK, PAL));
+                            IDCount++;
+                        }
+                        else
+                        {
+                            ConsoleManager.WriteLine("Timed Out Connection From: " + client.Client.RemoteEndPoint.ToString());
+                        }
+
+                        tcpNS.Dispose();
+                        tcpNS.Close();
+                        client.Dispose();
+                        client.Close();
+                        server1.Stop();
+                        server.Stop();
+                        GC.Collect();
                     }
                     else
                     {
-                        ConsoleManager.WriteLine("Timed Out Connection From: " + client.Client.RemoteEndPoint.ToString());
+                        ConsoleManager.WriteLine("Abort Connection from " + client.Client.RemoteEndPoint.ToString());
+                        //Abort Connection
+                        tcpNS.Dispose();
+                        tcpNS.Close();
+                        client.Dispose();
+                        client.Close();
+                        server.Stop();
+                        GC.Collect();
                     }
-
-                    tcpNS.Dispose();
-                    tcpNS.Close();
-                    client.Dispose();
-                    client.Close();
-                    server1.Stop();
-                    server.Stop();
                 }
-                else
+                catch
                 {
-                    ConsoleManager.WriteLine("Abort Connection from " + client.Client.RemoteEndPoint.ToString());
-                    //Abort Connection
-                    tcpNS.Dispose();
-                    tcpNS.Close();
-                    client.Dispose();
-                    client.Close();
-                    server.Stop();
+                    GC.Collect();
+                    ConsoleManager.WriteLine("Listener Thread Crashed... Rebooting Thread");
                 }
             }
         }

@@ -34,10 +34,7 @@ namespace SSX3_Server.EAClient
         public string HWIDFLAG;
         public string HWMASK;
 
-        public string PROD;
         public string VERS;
-        public string LANG;
-        public string SLUS;
 
         public Thread LoopThread;
         public TcpClient MainClient = null;
@@ -78,7 +75,7 @@ namespace SSX3_Server.EAClient
             MainClient = tcpClient;
             MainNS = NSClient;
 
-            MainClient.ReceiveBufferSize = 1024*3;
+            MainClient.ReceiveBufferSize = 1024 * 3;
 
             IPEndPoint remoteIpEndPoint = MainClient.Client.RemoteEndPoint as IPEndPoint;
             IPAddress = remoteIpEndPoint.Address.ToString();
@@ -105,7 +102,7 @@ namespace SSX3_Server.EAClient
                         byte[] Header = new byte[4];
                         MainNS.Read(Header, 0, 4);
 
-                        if(System.Text.Encoding.UTF8.GetString(Header) == "rank")
+                        if (System.Text.Encoding.UTF8.GetString(Header) == "rank")
                         {
                             Thread.Sleep(500);
                         }
@@ -114,7 +111,7 @@ namespace SSX3_Server.EAClient
 
                         Buffer.BlockCopy(Header, 0, msg, 0, 4);
 
-                        MainNS.Read(msg, 4, MainClient.ReceiveBufferSize-4);   //the same networkstream reads the message sent by the client
+                        MainNS.Read(msg, 4, MainClient.ReceiveBufferSize - 4);   //the same networkstream reads the message sent by the client
 
                         if (msg[0] != 0)
                         {
@@ -168,7 +165,7 @@ namespace SSX3_Server.EAClient
                     {
                         ConsoleManager.WriteLine(IPAddress + " Timing Out...");
 
-                        if((DateTime.Now - LastRecive).TotalSeconds >= TimeoutSeconds)
+                        if ((DateTime.Now - LastRecive).TotalSeconds >= TimeoutSeconds)
                         {
                             _PngMessageIn msg = new _PngMessageIn();
 
@@ -193,7 +190,7 @@ namespace SSX3_Server.EAClient
                 }
             }
 
-            if(!Closing)
+            if (!Closing)
             {
                 //Disconnect and Destroy
                 ConsoleManager.WriteLine(IPAddress + " Client Disconnecting...");
@@ -257,7 +254,7 @@ namespace SSX3_Server.EAClient
                 }
 
                 var msg = (EAMessage)Activator.CreateInstance(c);
-                msg.PraseData(Data, true, IPAddress+":"+GamePort + " Buddy Server");
+                msg.PraseData(Data, true, IPAddress + ":" + GamePort + " Buddy Server");
 
                 msg.ProcessCommand(this, room);
             }
@@ -309,7 +306,7 @@ namespace SSX3_Server.EAClient
         {
             PlusUserMessageOut plusUserMessageOut = new PlusUserMessageOut();
 
-            plusUserMessageOut.I = (ID+1).ToString();
+            plusUserMessageOut.I = (ID + 1).ToString();
             plusUserMessageOut.N = LoadedPersona.Name;
             plusUserMessageOut.M = userData.Name;
             plusUserMessageOut.A = "0.0.0.0";//RealAddress;
@@ -461,5 +458,15 @@ namespace SSX3_Server.EAClient
                 ChalMessageIn.RemoveChallange(this);
             }
         }
+
+        public static Dictionary<string, string> VersionCodes { get; } =
+        new Dictionary<string, string>()
+        {
+                { "PS2/Beta 1.04-Sep 17 2003", "NA_R_F004" }, //NTSC
+                { "PS2/Beta 1.04EU-Sep 21 2003", "EU_R_F004" }, //PAL
+                { "PS2/Alpha 1.4EU-Sep 11 2003", "EU_R_A310" }, //PAL Review Copy
+        };
+
+
     }
 }

@@ -56,6 +56,8 @@ namespace SSX3_Server.EAClient.Messages
         public override void ProcessCommand(EAClientManager client, EAServerRoom room = null)
         {
             //Apply AUTH Data
+            client.VERS = VERS.Replace("\"", "");
+
 
             //Confirm Auth Data with saves
             var UserData = EAClientManager.GetUserData(NAME);

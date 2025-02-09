@@ -90,15 +90,7 @@ namespace SSX3_Server.EAClient.Messages
 
                         if (EAServerManager.Instance.config.AllowCrossPlay)
                         {
-                            if (TempClient.Pal && TempChallange.GameVersion == "NA_R_F004")
-                            {
-                                TempChallange.GameVersion = "EU_R_F004";
-                            }
-
-                            if (!TempClient.Pal && TempChallange.GameVersion == "EU_R_F004")
-                            {
-                                TempChallange.GameVersion = "NA_R_F004";
-                            }
+                            TempChallange.GameVersion = EAClientManager.VersionCodes[TempClient.VERS];
                         }
 
                         plusMSGMessageOut.N = client.LoadedPersona.Name;
