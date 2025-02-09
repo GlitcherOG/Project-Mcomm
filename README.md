@@ -73,10 +73,13 @@ News
 3. Edit the config file to contain the IP Address for your server
 
 ## Setting Up Client PCSX2
-1. Download the Patch from the Patches folder and apply to pcsx2 (Currently NTSC Fully works with only the pnatch, others require more setup)
-2. Configure the Emulator to Use PCAP Switched or PCAP Bridged (See Below)
-3. Port Forward UDP 3658-3659 for Gameplay, UDP 6000-6001 for Voice Chat to the emulator PS2 Address you set for PCAP on your router (See FAQ for more details)
-4. Setup network configration in game. When creating the settings to use are Not Required, Auto, Auto.
+1. Using DNAS Patcher 21 bypass (Found on the ssx modding server) the DNAS Checks using mode 1 and 3 to generate an iso to bypass dnas check
+2. (If using pnatch for server address go to step 5 and leave dns1 on auto) In Emulator go to network settings swap DNS1 Address to Internal
+3. Go to Internal DNS
+4. Add a new entry for URL ps2ssx04.ea.com to go to the ip address of the server and ensure its enabled
+5. Configure the Emulator to Use PCAP Switched or PCAP Bridged (See Below)
+6. Port Forward UDP 3658-3659 for Gameplay, UDP 6000-6001 for Voice Chat to the emulator PS2 Address you set for PCAP on your router (See FAQ for more details)
+7. Setup network configration in game. When creating the settings to use are Not Required, Auto, Auto.
 
 ## PCAP Switched (Ethernet) / PCAP Bridged (WiFi)
 Download NPCAP  
