@@ -64,7 +64,7 @@ namespace SSX3_Server.EAServer
             plusWhoMessageOut.A = client.LocalIP;
             plusWhoMessageOut.X = "";
             plusWhoMessageOut.S = "1";
-            plusWhoMessageOut.R = roomType+"."+roomName;
+            plusWhoMessageOut.R = roomName;
             plusWhoMessageOut.RI = roomId.ToString();
 
             client.Broadcast(plusWhoMessageOut);
@@ -182,22 +182,21 @@ namespace SSX3_Server.EAServer
 
         public void BoradcastBackUserList()
         {
-            for (int i = 0; i < Clients.Count; i++)
-            {
-                BroadcastAllUsers(Clients[i].GeneratePlusUser());
-            }
-
             for (int i = Clients.Count; i < prevListCount; i++)
             {
                 var TempUser = new PlusUserMessageOut();
 
-                TempUser.I = (i + 1).ToString();
-
+                TempUser.I = (i+1).ToString();
+                TempUser.P = "0";
                 TempUser.N = "";
 
                 BroadcastAllUsers(TempUser);
             }
 
+            for (int i = 0; i < Clients.Count; i++)
+            {
+                BroadcastAllUsers(Clients[i].GeneratePlusUser(i+1));
+            }
             prevListCount = Clients.Count;
         }
 

@@ -11,8 +11,7 @@ namespace SSX3_Server
     public static class ConsoleManager
     {
         static Color DefaultColour = Color.White;
-        static bool Editing = false;
-
+        private readonly static object _lock = new object();
         public static void WriteLine(string Input = "", Color? color = null)
         {
             if (color == null)
@@ -22,24 +21,16 @@ namespace SSX3_Server
 
             Console.WriteLine("[" + DateTime.UtcNow.ToString() + "]: " + Input);
 
-            //if (EAServerManager.Instance.config.Logs)
-            //{
-            //    while (Editing)
-            //    {
-            //        //Redo
-            //        //Waiting
-            //    }
-
-            //    Editing = true;
-
-            //    //if (!File.Exists(AppContext.BaseDirectory + "Logs\\" + DateTime.UtcNow.Day.ToString() + "." + DateTime.UtcNow.Month.ToString() + "." + DateTime.UtcNow.Year.ToString() + ".txt"))
-            //    //{
-            //    //    File.WriteAllText(AppContext.BaseDirectory + "Logs\\" + DateTime.UtcNow.Day.ToString()+ "." + DateTime.UtcNow.Month.ToString() + "." + DateTime.UtcNow.Year.ToString() + ".txt", "");
-            //    //}
-
-            //    File.AppendText(AppContext.BaseDirectory + "Logs\\" + DateTime.UtcNow.Day.ToString() + "." + DateTime.UtcNow.Month.ToString() + "." + DateTime.UtcNow.Year.ToString() + ".txt").WriteLine("[" + DateTime.UtcNow.ToString() + "]: " + Input);
-            //    Editing = false;
-            //}
+            if (EAServerManager.Instance.config.Logs)
+            {
+                lock (_lock)
+                {
+                    StreamWriter sw = new StreamWriter(AppContext.BaseDirectory + "Logs\\" + DateTime.UtcNow.Day.ToString() + "." + DateTime.UtcNow.Month.ToString() + "." + DateTime.UtcNow.Year.ToString() + ".txt", true);
+                    sw.WriteLine(string.Format("{0:u} {1}", DateTime.Now, "[" + DateTime.UtcNow.ToString() + "]: " + Input));
+                    sw.Flush();
+                    sw.Close();
+                }
+            }
         }
 
         public static void WriteLineVerbose(string Input = "", bool Buddy = false, Color? color = null)
@@ -64,23 +55,16 @@ namespace SSX3_Server
                 }
             }
 
-            //if (EAServerManager.Instance.config.VerboseLogs)
-            //{
-            //    while (Editing)
-            //    {
-            //        //Redo
-            //        //Waiting
-            //    }
-            //    Editing = true;
-
-            //    if (!File.Exists(AppContext.BaseDirectory + "Logs\\" + DateTime.UtcNow.Day.ToString() + "." + DateTime.UtcNow.Month.ToString() + "." + DateTime.UtcNow.Year.ToString() + ".txt"))
-            //    {
-            //        File.WriteAllText(AppContext.BaseDirectory + "Logs\\" + DateTime.UtcNow.Day.ToString() + "." + DateTime.UtcNow.Month.ToString() + "." + DateTime.UtcNow.Year.ToString() + ".txt", "");
-            //    }
-
-            //    File.AppendText(AppContext.BaseDirectory + "Logs\\" + DateTime.UtcNow.Day.ToString() + "." + DateTime.UtcNow.Month.ToString() + "." + DateTime.UtcNow.Year.ToString() + ".txt").WriteLine("[" + DateTime.UtcNow.ToString() + "]: " + Input);
-            //    Editing = false;
-            //}
+            if (EAServerManager.Instance.config.VerboseLogs)
+            {
+                lock (_lock)
+                {
+                    StreamWriter sw = new StreamWriter(AppContext.BaseDirectory + "Logs\\" + DateTime.UtcNow.Day.ToString() + "." + DateTime.UtcNow.Month.ToString() + "." + DateTime.UtcNow.Year.ToString() + ".txt", true);
+                    sw.WriteLine(string.Format("{0:u} {1}", DateTime.Now, "[" + DateTime.UtcNow.ToString() + "]: " + Input));
+                    sw.Flush();
+                    sw.Close();
+                }
+            }
         }
 
     }

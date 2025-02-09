@@ -302,11 +302,18 @@ namespace SSX3_Server.EAClient
             }
         }
 
-        public PlusUserMessageOut GeneratePlusUser()
+        public PlusUserMessageOut GeneratePlusUser(int index = -1)
         {
             PlusUserMessageOut plusUserMessageOut = new PlusUserMessageOut();
 
-            plusUserMessageOut.I = (ID + 1).ToString();
+            if (index == -1)
+            {
+                plusUserMessageOut.I = (ID + 1).ToString();
+            }
+            else
+            {
+                plusUserMessageOut.I = index.ToString();
+            }    
             plusUserMessageOut.N = LoadedPersona.Name;
             plusUserMessageOut.M = userData.Name;
             plusUserMessageOut.A = "0.0.0.0";//RealAddress;
