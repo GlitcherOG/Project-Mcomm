@@ -17,6 +17,7 @@ namespace SSX3_Server.EAClient.Messages
         public override void AssignValues()
         {
             NAME = stringDatas[0].Value;
+            PASS = GetStringData("PASS");
         }
 
         public override void AssignValuesToString()
@@ -32,7 +33,29 @@ namespace SSX3_Server.EAClient.Messages
 
                 if (TempRoom != null)
                 {
-                    TempRoom.AddUser(client);
+                    if (TempRoom.roomPassword == "" && PASS != "")
+                    {
+                        TempRoom.AddUser(client);
+                    }
+                    else if(PASS != "" && PASS != TempRoom.roomPassword)
+                    {
+                        MoveMessageIn moveMessageOut = new MoveMessageIn();
+
+                        moveMessageOut.NAME = TempRoom.roomName;
+                        moveMessageOut.SubMessage = "pass";
+
+                        client.Broadcast(moveMessageOut);
+                    }
+                    else if(PASS == TempRoom.roomPassword)
+                    {
+                        TempRoom.AddUser(client);
+                    }
+                    else
+                    {
+                        MoveMessageIn moveMessageIn = new MoveMessageIn();
+                        moveMessageIn.SubMessage = "pass";
+                        client.Broadcast(moveMessageIn);
+                    }
                 }
             }
             else

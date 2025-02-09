@@ -40,9 +40,11 @@ namespace SSX3_Server.EAClient.Messages
 
         public override void ProcessCommand(EAClientManager client, EAServerRoom room = null)
         {
-            client.Broadcast(this);
+            MesgMessageIn message = new MesgMessageIn();
 
-            if(ATTR=="N3")
+            client.Broadcast(message);
+
+            if (ATTR=="N3")
             {
                 if(PRIV=="Mcomm")
                 {

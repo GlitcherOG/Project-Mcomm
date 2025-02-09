@@ -53,7 +53,6 @@ namespace SSX3_Server.EAClient.Messages
             byte[] buffer = new byte[data.Length];
             data.Read(buffer, 0, (int)data.Length);
 
-
             Encoding encorder = new UTF8Encoding();
             ConsoleManager.WriteLineVerbose(Location + " OUT:\n" + encorder.GetString(buffer), Buddy);
 

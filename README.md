@@ -18,7 +18,7 @@ Rooms
 • Text Chat: ✅  
 • Voice Chat:  
 • Kick player:  
-• Password-locked rooms:  
+• Password-locked rooms: ✅
 
 Buddies  
 

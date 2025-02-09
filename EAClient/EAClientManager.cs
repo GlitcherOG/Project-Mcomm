@@ -94,7 +94,7 @@ namespace SSX3_Server.EAClient
             ConsoleManager.WriteLine("Main Thread Started for " + IPAddress);
             while (MainClient.Connected)  //while the client is connected, we look for incoming messages
             {
-                try
+                //try
                 {
                     //Read Main Network Stream
                     if (MainClient.Available > 0)
@@ -178,16 +178,16 @@ namespace SSX3_Server.EAClient
                         break;
                     }
                 }
-                catch
-                {
-                    //Unknown Connection Error
-                    //Most Likely Game has crashed
-                    ConsoleManager.WriteLine(IPAddress + " Connection Ended, Disconnecting...");
-                    SaveEAUserData();
-                    SaveEAUserPersona();
-                    CloseConnection();
-                    EAServerManager.Instance.DestroyClient(ID);
-                }
+                //catch
+                //{
+                //    //Unknown Connection Error
+                //    //Most Likely Game has crashed
+                //    ConsoleManager.WriteLine(IPAddress + " Connection Ended, Disconnecting...");
+                //    SaveEAUserData();
+                //    SaveEAUserPersona();
+                //    CloseConnection();
+                //    EAServerManager.Instance.DestroyClient(ID);
+                //}
             }
 
             if (!Closing)
