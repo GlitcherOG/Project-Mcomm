@@ -50,6 +50,7 @@ namespace SSX3_Server.DiscordBot
 
         private static Task Client_Ready(DiscordClient sender, ReadyEventArgs args)
         {
+            ConsoleManager.WriteLine("Discord Bot Online");
             return Task.CompletedTask;
         }
     }

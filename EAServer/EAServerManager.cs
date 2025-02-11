@@ -35,8 +35,11 @@ namespace SSX3_Server.EAServer
         public Thread PALLoopThread;
         public Thread NTSCLoopThread;
 
+        AppDomain currentDomain = AppDomain.CurrentDomain;
+
         public void InitaliseServer()
         {
+            currentDomain.UnhandledException += new UnhandledExceptionEventHandler(MyHandler);
             Instance = this;
             clients = new List<EAClientManager>();
             MainBot = new MainBot();
@@ -312,6 +315,13 @@ namespace SSX3_Server.EAServer
             }
 
             GC.Collect();
+        }
+
+        static void MyHandler(object sender, UnhandledExceptionEventArgs args)
+        {
+            Exception e = (Exception)args.ExceptionObject;
+            ConsoleManager.WriteLine("Crash Handler caught : " + e.Message);
+            ConsoleManager.WriteLine("Runtime terminating: " + args.IsTerminating);
         }
     }
 }
