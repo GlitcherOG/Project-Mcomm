@@ -132,7 +132,7 @@ namespace SSX3_Server.DiscordBot
 
             for (int i = 0; i < Database.Entries.Count; i++)
             {
-                strings.Add(Database.Entries[i].Rank + " - " + Database.Entries[i].Name + " - " + Database.Entries[i].Score);
+                strings.Add(i + " - " + Database.Entries[i].Name + " - " + Database.Entries[i].Score);
             }
 
             DiscordEmbedBuilder embed = new DiscordEmbedBuilder();

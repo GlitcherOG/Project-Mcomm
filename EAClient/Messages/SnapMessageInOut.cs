@@ -40,10 +40,33 @@ namespace SSX3_Server.EAClient.Messages
             client.Broadcast(this);
 
             //NOTE CHANGE TO PULL FROM DATABASE
+            lock (EAServerManager.Instance.highscoreDatabase.courseEntries)
+            {
+                var TempCourse = EAServerManager.Instance.highscoreDatabase.courseEntries[int.Parse(INDEX)];
 
-            PlusSnapMessageOut plusSnapMessageOut = new PlusSnapMessageOut();
+                int Range = int.Parse(RANGE);
+                int Start = int.Parse(START);
 
-            client.Broadcast(plusSnapMessageOut);
+                if(Range + Start > TempCourse.Entries.Count- Start)
+                {
+                    Range = TempCourse.Entries.Count;
+                }
+
+
+                for (global::System.Int32 i = 0; i < Range; i++)
+                {
+                    PlusSnapMessageOut plusSnapMessageOut = new PlusSnapMessageOut();
+
+                    plusSnapMessageOut.N = TempCourse.Entries[i].Name;
+                    plusSnapMessageOut.R = i.ToString();
+                    plusSnapMessageOut.S = TempCourse.Entries[i].HexScore;
+                    plusSnapMessageOut.P = i.ToString();
+
+                    client.Broadcast(plusSnapMessageOut);
+                }
+
+
+            }
         }
     }
 }

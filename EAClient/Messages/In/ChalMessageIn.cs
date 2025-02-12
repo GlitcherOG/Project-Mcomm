@@ -120,7 +120,7 @@ namespace SSX3_Server.EAClient.Messages
                         plusSesMessageOut.P2 = HostClient.challange.Gamemode2; /*OtherUser.ID.ToString();*/
                         plusSesMessageOut.P3 = "0"; //Not Used
                         plusSesMessageOut.P4 = "0"; //Not Used
-                        plusSesMessageOut.AUTH = ""; //Unknown
+                        plusSesMessageOut.AUTH = HostClient.challange.Ranked; //Unknown
                         plusSesMessageOut.SEED = Seed;
                         plusSesMessageOut.WHEN = DateTime.Now.ToString("yyyy.MM.dd hh:mm:ss");
 

@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Formats.Asn1.AsnWriter;
 
 namespace SSX3_Server.EAServer
 {
@@ -46,10 +47,64 @@ namespace SSX3_Server.EAServer
                 { 28, "Pernendiculous" },
         };
 
-        public void AddScores(RaceDataFile rankDataFile)
+        public static Dictionary<string, int> RankToHighscore { get; } =
+        new Dictionary<string, int>()
         {
-            //Convert Race Track ID To Leaderboard TrackID
-            //TrackID Against GameMode 
+                { "0,0", 4 }, //Snow Jam Race
+                { "1,0", 5 }, //Metro Race
+                { "2,0", 6 }, //Ruthless Ridge Race
+                { "3,0", 7 }, //Intimidator Race
+                { "4,0", 8 }, //Gravitude Race
+                { "14,0", 9 }, //Happiness Race Rival
+                { "15,0", 10 }, //Ruthless Race Rival
+                { "16,0", 11 }, //The Throne Race Rival
+                { "5,1", 12 }, //R&N SlopeStyle
+                { "6,1", 13 }, //Style Mile SlopeStyle
+                { "7,1", 14 }, //Kick Doubt SlopeStyle
+                { "14,1", 20 }, //Happiness SlopeStyle Rival
+                { "15,1", 21 }, //Ruthless SlopeStyle Rival
+                { "16,1", 22 }, //The Throne SlopeStyle Rival
+                { "8,2", 23 }, //Crows Nest Big Air
+                { "9,2", 24 }, //Launch Time Big Air
+                { "10,2", 25 }, //Much-2-Much Big Air
+                { "11,2", 26 }, //The Junction Super Pipe
+                { "12,2", 27 }, //Schiophrenia Super Pipe
+                { "13,2", 28 }, //Pernendiculous Super Pipe
+        };
+
+        public void AddScores(RaceDataFile rankDataFile, RaceDataFile raceDataFile)
+        {
+            if(rankDataFile.AUTH!="1")
+            {
+                return;
+            }
+
+
+            string Player0 = rankDataFile.NAME0;
+            string Player1 = rankDataFile.NAME1;
+
+            if (rankDataFile.RACEEVE0=="0")
+            {
+                int Time0 = int.Parse(rankDataFile.RACETIM0);
+                int Time1 = int.Parse(rankDataFile.RACETIM0);
+            }
+            else
+            {
+                int Score0 = int.Parse(rankDataFile.SCORE0);
+                int Score1 = int.Parse(rankDataFile.SCORE1);
+            }
+
+            int HighscoreID = RankToHighscore[rankDataFile.RACETRA0+","+ rankDataFile.RACEEVE0];
+
+            var TempEntry = courseEntries[HighscoreID];
+
+
+            //Add
+
+            //Sort
+
+            //TempEntry.Entries.Add();
+
         }
 
         public void CreateBlankDatabase()
@@ -65,7 +120,6 @@ namespace SSX3_Server.EAServer
                 courseEntry.Entries = new List<ScoreEntry>();
 
                 ScoreEntry TempEntry = new ScoreEntry();
-                TempEntry.Rank = 1;
                 TempEntry.Name = "Empty";
                 TempEntry.Score = "0";
                 TempEntry.HexScore = "0";
@@ -113,7 +167,6 @@ namespace SSX3_Server.EAServer
 
         public struct ScoreEntry
         {
-            public int Rank;
             public string Name;
             public string Score;
             public string HexScore;
