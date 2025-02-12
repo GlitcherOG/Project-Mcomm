@@ -113,3 +113,6 @@ __Inbound Rules__
 - Gateway address is the address for your router on the local network (e.g. 192.168.0.1) can be found out using the cmd and ipconfig command
 - 2 Players on the same network can play together when connected to the same network.
 - User has declined your challange. It is a bug that happens with the game however if it soon doesnt launch into the challange check port forwarding
+
+## Donate
+[![Donate](https://www.paypalobjects.com/en_AU/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/donate/?business=VT6TG8KKZM98E&no_recurring=0&currency_code=AUD)
