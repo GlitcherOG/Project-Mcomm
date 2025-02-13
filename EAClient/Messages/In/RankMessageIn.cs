@@ -240,10 +240,12 @@ namespace SSX3_Server.EAClient.Messages
             rankDataFile.CreateJson(AppContext.BaseDirectory + "\\Races\\"+client.LoadedPersona.Name+"."+WHEN.Replace(":",".")+".json");
 
             //Check if other users race data is there if not dont process
-            if(client.LoadedPersona.Name==rankDataFile.NAME0)
-            {
+            if(client.LoadedPersona.Name == rankDataFile.NAME0)
+            { 
                 if(File.Exists(AppContext.BaseDirectory + "\\Races\\" + rankDataFile.NAME1 + "." + WHEN.Replace(":", ".") + ".json"))
                 {
+                    Thread.Sleep(1000);
+
                     RaceDataFile raceDataFile1 = RaceDataFile.Load(AppContext.BaseDirectory + "\\Races\\" + rankDataFile.NAME1 + "." + WHEN.Replace(":", ".") + ".json");
 
                     EAServerManager.Instance.highscoreDatabase.AddScores(rankDataFile, raceDataFile1);
@@ -254,6 +256,8 @@ namespace SSX3_Server.EAClient.Messages
             {
                 if (File.Exists(AppContext.BaseDirectory + "\\Races\\" + rankDataFile.NAME0 + "." + WHEN.Replace(":", ".") + ".json"))
                 {
+                    Thread.Sleep(1000);
+
                     RaceDataFile raceDataFile1 = RaceDataFile.Load(AppContext.BaseDirectory + "\\Races\\" + rankDataFile.NAME0 + "." + WHEN.Replace(":", ".") + ".json");
 
                     EAServerManager.Instance.highscoreDatabase.AddScores(rankDataFile, raceDataFile1);

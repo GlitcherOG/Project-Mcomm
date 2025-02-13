@@ -87,7 +87,7 @@ namespace SSX3_Server.EAServer
             if (rankDataFile.RACEEVE0=="0")
             {
                 Score0 = rankDataFile.RACETIM0;
-                Score1 = rankDataFile.RACETIM0;
+                Score1 = rankDataFile.RACETIM1;
             }
             else
             {
@@ -100,6 +100,16 @@ namespace SSX3_Server.EAServer
             int HighscoreID = RankToHighscore[rankDataFile.RACETRA0+","+ rankDataFile.RACEEVE0];
 
             var TempEntry = courseEntries[HighscoreID];
+
+            //Check if Empty
+            if(TempEntry.Entries.Count==1)
+            {
+                if (TempEntry.Entries[0].Name =="Empty")
+                {
+                    TempEntry.Entries.RemoveAt(0);
+                }
+            }
+
 
             //Add
 

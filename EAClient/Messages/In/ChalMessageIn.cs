@@ -150,8 +150,8 @@ namespace SSX3_Server.EAClient.Messages
 
                         //Double Check This Data Something might be wrong to cause a abort
                         plusSesMessageOut.SELF = OtherUser.LoadedPersona.Name;
-                        plusSesMessageOut.OPPO = HostClient.LoadedPersona.Name;
-                        plusSesMessageOut.ADDR = HostIP;
+                        //plusSesMessageOut.OPPO = HostClient.LoadedPersona.Name;
+                        //plusSesMessageOut.ADDR = HostIP;
 
                         OtherUser.Broadcast(plusSesMessageOut);
 

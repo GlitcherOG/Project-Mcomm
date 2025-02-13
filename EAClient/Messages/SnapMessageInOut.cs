@@ -58,14 +58,14 @@ namespace SSX3_Server.EAClient.Messages
                     PlusSnapMessageOut plusSnapMessageOut = new PlusSnapMessageOut();
 
                     plusSnapMessageOut.N = TempCourse.Entries[i].Name;
-                    plusSnapMessageOut.R = i.ToString();
+                    plusSnapMessageOut.R = (i+1).ToString();
 
                     byte[] data = BitConverter.GetBytes(int.Parse(TempCourse.Entries[i].Score));
                     data = data.Reverse().ToArray();
-                    string Score = BitConverter.ToString(data).Replace("-", "").TrimStart('0').ToLower();
+                    string Score = BitConverter.ToString(data).Replace("-", "");
 
                     plusSnapMessageOut.S = Score;
-                    plusSnapMessageOut.P = i.ToString();
+                    plusSnapMessageOut.P = (i+1).ToString();
 
                     client.Broadcast(plusSnapMessageOut);
                 }
