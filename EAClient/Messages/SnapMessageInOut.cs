@@ -59,7 +59,12 @@ namespace SSX3_Server.EAClient.Messages
 
                     plusSnapMessageOut.N = TempCourse.Entries[i].Name;
                     plusSnapMessageOut.R = i.ToString();
-                    plusSnapMessageOut.S = TempCourse.Entries[i].HexScore;
+
+                    byte[] data = BitConverter.GetBytes(int.Parse(TempCourse.Entries[i].Score));
+                    data = data.Reverse().ToArray();
+                    string Score = BitConverter.ToString(data).Replace("-", "").TrimStart('0').ToLower();
+
+                    plusSnapMessageOut.S = Score;
                     plusSnapMessageOut.P = i.ToString();
 
                     client.Broadcast(plusSnapMessageOut);

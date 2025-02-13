@@ -79,32 +79,59 @@ namespace SSX3_Server.EAServer
                 return;
             }
 
-
             string Player0 = rankDataFile.NAME0;
             string Player1 = rankDataFile.NAME1;
+            string Score0 = "0";
+            string Score1 = "0";
 
             if (rankDataFile.RACEEVE0=="0")
             {
-                int Time0 = int.Parse(rankDataFile.RACETIM0);
-                int Time1 = int.Parse(rankDataFile.RACETIM0);
+                Score0 = rankDataFile.RACETIM0;
+                Score1 = rankDataFile.RACETIM0;
             }
             else
             {
-                int Score0 = int.Parse(rankDataFile.SCORE0);
-                int Score1 = int.Parse(rankDataFile.SCORE1);
+                Score0 = rankDataFile.SCORE0;
+                Score1 = rankDataFile.SCORE1;
             }
+
+            //Add Checking Files
 
             int HighscoreID = RankToHighscore[rankDataFile.RACETRA0+","+ rankDataFile.RACEEVE0];
 
             var TempEntry = courseEntries[HighscoreID];
 
-
             //Add
 
+            var NewEntry = new ScoreEntry();
+
+            NewEntry.Name = Player0;
+            NewEntry.Score = Score0;
+            NewEntry.RaceDataFile = rankDataFile.NAME0 + " " + rankDataFile.WHEN;
+
+            TempEntry.Entries.Add(NewEntry);
+
+            NewEntry = new ScoreEntry();
+
+            NewEntry.Name = Player1;
+            NewEntry.Score = Score1;
+            NewEntry.RaceDataFile = Player1 + " " + rankDataFile.WHEN;
+
+            TempEntry.Entries.Add(NewEntry);
+
             //Sort
+            if (rankDataFile.RACEEVE0 == "0")
+            {
+                TempEntry.Entries.OrderBy(x => x.Score);
+            }
+            else
+            {
+                TempEntry.Entries.OrderByDescending(x => x.Score);
+            }
 
-            //TempEntry.Entries.Add();
+            courseEntries[HighscoreID] = TempEntry;
 
+            CreateJson(AppContext.BaseDirectory + "\\Highscore.json");
         }
 
         public void CreateBlankDatabase()
@@ -122,7 +149,6 @@ namespace SSX3_Server.EAServer
                 ScoreEntry TempEntry = new ScoreEntry();
                 TempEntry.Name = "Empty";
                 TempEntry.Score = "0";
-                TempEntry.HexScore = "0";
                 TempEntry.RaceDataFile = "NULL";
 
                 courseEntry.Entries.Add(TempEntry);
@@ -169,7 +195,6 @@ namespace SSX3_Server.EAServer
         {
             public string Name;
             public string Score;
-            public string HexScore;
             public string RaceDataFile;
         }
     }
