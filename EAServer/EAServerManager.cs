@@ -111,7 +111,7 @@ namespace SSX3_Server.EAServer
 
             if (!File.Exists(AppContext.BaseDirectory + "\\Names.txt"))
             {
-                File.WriteAllText(AppContext.BaseDirectory + "\\Names.txt", "Mcomm\nZoe\nElise\nMac\nKaori\nJP\nMoby\nHiro\nEddie\nJurgen\nSeeiah\nLuther\nPsymon\nBrodi\nMarty\nAllegra\nGriff\nNate\nViggo");
+                File.WriteAllText(AppContext.BaseDirectory + "\\Names.txt", "Mcomm\nZoe\nElise\nMac\nKaori\nJP\nMoby\nHiro\nEddie\nJurgen\nSeeiah\nLuther\nPsymon\nBrodi\nMarty\nAllegra\nGriff\nNate\nViggo\nEmpty\nNull");
             }
         }
 
@@ -215,9 +215,12 @@ namespace SSX3_Server.EAServer
         
         public void BroadcastMessage(EAMessage message)
         {
-            for (int i = 0; i < clients.Count; i++)
+            lock (clients)
             {
-                clients[i].Broadcast(message);
+                for (int i = 0; i < clients.Count; i++)
+                {
+                    clients[i].Broadcast(message);
+                }
             }
         }
 
@@ -243,17 +246,20 @@ namespace SSX3_Server.EAServer
 
         public EAClientManager GetUser(string Name)
         {
-            for (int i = 0; i < clients.Count; i++)
+            lock (clients)
             {
-                if (clients[i].LoadedPersona != null)
+                for (int i = 0; i < clients.Count; i++)
                 {
-                    if (clients[i].LoadedPersona.Name == Name)
+                    if (clients[i].LoadedPersona != null)
                     {
-                        return clients[i];
+                        if (clients[i].LoadedPersona.Name == Name)
+                        {
+                            return clients[i];
+                        }
                     }
                 }
+                return null;
             }
-            return null;
         }
 
         public EAServerRoom GetRoom(string Name)
@@ -300,17 +306,20 @@ namespace SSX3_Server.EAServer
 
         public void DestroyClient(int ID, bool StopTCP = false)
         {
-            for (int i = 0; i < clients.Count; i++)
+            lock (clients)
             {
-                if (clients[i].ID==ID)
+                for (int i = 0; i < clients.Count; i++)
                 {
-                    if(StopTCP)
+                    if (clients[i].ID == ID)
                     {
-                        clients[i].CloseConnection();
+                        if (StopTCP)
+                        {
+                            clients[i].CloseConnection();
+                        }
+                        clients[i] = null;
+                        clients.RemoveAt(i);
+                        break;
                     }
-                    clients[i] = null;
-                    clients.RemoveAt(i);
-                    break;
                 }
             }
 
