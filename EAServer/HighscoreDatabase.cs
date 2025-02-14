@@ -79,6 +79,11 @@ namespace SSX3_Server.EAServer
                 return;
             }
 
+            if(rankDataFile.DIDQUIT0=="1"|| rankDataFile.DIDQUIT1 == "1")
+            {
+                return;
+            }
+
             string Player0 = rankDataFile.NAME0;
             string Player1 = rankDataFile.NAME1;
             string Score0 = "0";
