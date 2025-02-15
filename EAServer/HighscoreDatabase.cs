@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static System.Formats.Asn1.AsnWriter;
 
 namespace SSX3_Server.EAServer
 {
@@ -103,6 +102,12 @@ namespace SSX3_Server.EAServer
             //Add Checking Files
 
             int HighscoreID = RankToHighscore[rankDataFile.RACETRA0+","+ rankDataFile.RACEEVE0];
+            Type c;
+            if (!EAMessage.InNameToClass.TryGetValue(rankDataFile.RACETRA0 + "," + rankDataFile.RACEEVE0, out c))
+            {
+                ConsoleManager.WriteLine("Unknown Highscore Entry " + rankDataFile.RACETRA0 + "," + rankDataFile.RACEEVE0);
+                return;
+            }
 
             var TempEntry = courseEntries[HighscoreID];
 
@@ -205,6 +210,8 @@ namespace SSX3_Server.EAServer
                 {
                     TempEntry.Entries[Index1] = NewEntry;
                 }
+
+                ConsoleManager.WriteLine("Added Highscore Entry " + rankDataFile.RACETRA0 + "," + rankDataFile.RACEEVE0);
             }
 
             //Sort

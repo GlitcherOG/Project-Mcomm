@@ -42,6 +42,13 @@ namespace SSX3_Server.EAClient.Messages
         {
             MesgMessageIn message = new MesgMessageIn();
 
+            if (message.PRIV == client.LoadedPersona.Name)
+            {
+                message.SubMessage = "self";
+                client.Broadcast(message);
+                return;
+            }
+
             client.Broadcast(message);
 
             if (ATTR=="N3")

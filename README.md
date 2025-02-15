@@ -33,7 +33,7 @@ Buddies
 
 Statistics  
 
-• Leaderboards:  
+• Leaderboards: ✅ (Overall score missing)
 • Rider Stats:  
 • Ranked Play: ✅  
 
@@ -49,7 +49,7 @@ News
 - Patch Search so it gets offline personas
 - Find out Stat Struct
 - Add Edit user and lost user
-- Fix Highscore not listing database scores
+- Fix Highscore not sorting
 - Add check to see if user is already logged in, if so disconnect and allow new connection
 - Fix Quick Match So it Works
 - Persona Generator for Duplicate Personas
@@ -57,7 +57,7 @@ News
 - Mcomm Buddy for server commands
 - Fix Passwords
 - Fix Title on rooms as it doesnt seem to be appearing
-- Ensure user cant message,block,challange,report self
+- Ensure user cant block,report self
 - Tunneling Service (Temp Hide IPs as well)
 - PAL and NTSC Prefix for accounts
 

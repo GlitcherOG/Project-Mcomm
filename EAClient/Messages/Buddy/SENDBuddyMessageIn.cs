@@ -34,7 +34,14 @@ namespace SSX3_Server.EAClient.Messages
         {
             var TempUser = EAServerManager.Instance.GetUser(USER);
 
-            if(TempUser!=null)
+            if (USER == client.LoadedPersona.Name)
+            {
+                SubMessage = "self";
+                client.Broadcast(this);
+                return;
+            }
+
+            if (TempUser!=null)
             {
                 ADMNBuddyMessageOut aDMNBuddyMessageOut = new ADMNBuddyMessageOut();
 
