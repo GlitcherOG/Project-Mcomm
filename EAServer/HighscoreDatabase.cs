@@ -100,10 +100,8 @@ namespace SSX3_Server.EAServer
             }
 
             //Add Checking Files
-
-            int HighscoreID = RankToHighscore[rankDataFile.RACETRA0+","+ rankDataFile.RACEEVE0];
-            Type c;
-            if (!EAMessage.InNameToClass.TryGetValue(rankDataFile.RACETRA0 + "," + rankDataFile.RACEEVE0, out c))
+            int HighscoreID = -1;
+            if (!RankToHighscore.TryGetValue(rankDataFile.RACETRA0 + "," + rankDataFile.RACEEVE0, out HighscoreID))
             {
                 ConsoleManager.WriteLine("Unknown Highscore Entry " + rankDataFile.RACETRA0 + "," + rankDataFile.RACEEVE0);
                 return;
