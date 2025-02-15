@@ -38,7 +38,7 @@ namespace SSX3_Server.EAClient.Messages
                 { "mesg", typeof(MesgMessageIn) }, //Base Message
                 { "room", typeof(RoomMessageIn) }, //Create Room
                 { "rank", typeof(RankMessageIn) }, //Rank Details
-                
+                { "rept", typeof(RankMessageIn) }, //Report
         };
 
         public static Dictionary<string, Type> BuddyInNameToClass { get; } =

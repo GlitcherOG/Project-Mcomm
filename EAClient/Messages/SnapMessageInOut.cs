@@ -60,7 +60,7 @@ namespace SSX3_Server.EAClient.Messages
                     plusSnapMessageOut.N = TempCourse.Entries[i].Name;
                     plusSnapMessageOut.R = (i+1).ToString();
 
-                    byte[] data = BitConverter.GetBytes(int.Parse(TempCourse.Entries[i].Score));
+                    byte[] data = BitConverter.GetBytes(TempCourse.Entries[i].Score);
                     data = data.Reverse().ToArray();
                     string Score = BitConverter.ToString(data).Replace("-", "");
 

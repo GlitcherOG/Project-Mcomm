@@ -85,18 +85,18 @@ namespace SSX3_Server.EAServer
 
             string Player0 = rankDataFile.NAME0;
             string Player1 = rankDataFile.NAME1;
-            string Score0 = "0";
-            string Score1 = "0";
+            int Score0 = 0;
+            int Score1 = 0;
 
             if (rankDataFile.RACEEVE0=="0")
             {
-                Score0 = rankDataFile.RACETIM0;
-                Score1 = rankDataFile.RACETIM1;
+                Score0 = int.Parse(rankDataFile.RACETIM0);
+                Score1 = int.Parse(rankDataFile.RACETIM1);
             }
             else
             {
-                Score0 = rankDataFile.SCORE0;
-                Score1 = rankDataFile.SCORE1;
+                Score0 = int.Parse(rankDataFile.SCORE0);
+                Score1 = int.Parse(rankDataFile.SCORE1);
             }
 
             //Add Checking Files
@@ -126,40 +126,50 @@ namespace SSX3_Server.EAServer
             bool Add0 = true;
             bool Add1 = true;
 
+            if(rankDataFile.DNF0=="1")
+            {
+                Add0 = false;
+            }
+
+            if (rankDataFile.DNF1 == "1")
+            {
+                Add1 = false;
+            }
+
             for (int i = 0; i < TempEntry.Entries.Count; i++)
             {
-                if (TempEntry.Entries[i].Name==Player0)
+                if (TempEntry.Entries[i].Name==Player0 && Add0 == true)
                 {
                     Index0 = i;
 
                     if (rankDataFile.RACEEVE0 == "0")
                     {
-                        if (int.Parse(Score0) > int.Parse(TempEntry.Entries[i].Score))
+                        if (Score0 > TempEntry.Entries[i].Score)
                         {
                             Add0 = false;
                         }    
                     }
                     else
                     {
-                        if (int.Parse(Score0) < int.Parse(TempEntry.Entries[i].Score))
+                        if (Score0 < TempEntry.Entries[i].Score)
                         {
                             Add0 = false;
                         }
                     }
                 }
-                if (TempEntry.Entries[i].Name == Player1)
+                if (TempEntry.Entries[i].Name == Player1 && Add1 == true)
                 {
                     Index1 = i;
                     if (rankDataFile.RACEEVE0 == "0")
                     {
-                        if (int.Parse(Score1) > int.Parse(TempEntry.Entries[i].Score))
+                        if (Score1 > TempEntry.Entries[i].Score)
                         {
                             Add1 = false;
                         }
                     }
                     else
                     {
-                        if (int.Parse(Score1) < int.Parse(TempEntry.Entries[i].Score))
+                        if (Score1 < TempEntry.Entries[i].Score)
                         {
                             Add1 = false;
                         }
@@ -192,6 +202,8 @@ namespace SSX3_Server.EAServer
                 {
                     TempEntry.Entries[Index0] = NewEntry;
                 }
+
+                ConsoleManager.WriteLine("Added Highscore Entry " + NewEntry.Name + " " + NewEntry.Score + " " + rankDataFile.RACETRA0 + "," + rankDataFile.RACEEVE0);
             }
 
             if (Add1)
@@ -211,17 +223,17 @@ namespace SSX3_Server.EAServer
                     TempEntry.Entries[Index1] = NewEntry;
                 }
 
-                ConsoleManager.WriteLine("Added Highscore Entry " + rankDataFile.RACETRA0 + "," + rankDataFile.RACEEVE0);
+                ConsoleManager.WriteLine("Added Highscore Entry " + NewEntry.Name + " " + NewEntry.Score + " " + rankDataFile.RACETRA0 + "," + rankDataFile.RACEEVE0);
             }
 
             //Sort
             if (rankDataFile.RACEEVE0 == "0")
             {
-                TempEntry.Entries.OrderBy(x => int.Parse(x.Score));
+                TempEntry.Entries = TempEntry.Entries.OrderBy(x => x.Score).ToList();
             }
             else
             {
-                TempEntry.Entries.OrderByDescending(x => int.Parse(x.Score));
+                TempEntry.Entries = TempEntry.Entries.OrderByDescending(x => x.Score).ToList();
             }
 
             courseEntries[HighscoreID] = TempEntry;
@@ -243,7 +255,7 @@ namespace SSX3_Server.EAServer
 
                 ScoreEntry TempEntry = new ScoreEntry();
                 TempEntry.Name = "Empty";
-                TempEntry.Score = "0";
+                TempEntry.Score = 0;
                 TempEntry.RaceDataFile = "NULL";
 
                 courseEntry.Entries.Add(TempEntry);
@@ -289,7 +301,7 @@ namespace SSX3_Server.EAServer
         public struct ScoreEntry
         {
             public string Name;
-            public string Score;
+            public int Score;
             public string RaceDataFile;
         }
     }
