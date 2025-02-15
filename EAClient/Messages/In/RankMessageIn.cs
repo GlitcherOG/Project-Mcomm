@@ -247,8 +247,10 @@ namespace SSX3_Server.EAClient.Messages
                     Thread.Sleep(1000);
 
                     RaceDataFile raceDataFile1 = RaceDataFile.Load(AppContext.BaseDirectory + "\\Races\\" + rankDataFile.NAME1 + "." + WHEN.Replace(":", ".") + ".json");
-
-                    EAServerManager.Instance.highscoreDatabase.AddScores(rankDataFile, raceDataFile1);
+                    lock (EAServerManager.Instance.highscoreDatabase)
+                    {
+                        EAServerManager.Instance.highscoreDatabase.AddScores(rankDataFile, raceDataFile1);
+                    }
                 }
             }
 
@@ -260,7 +262,10 @@ namespace SSX3_Server.EAClient.Messages
 
                     RaceDataFile raceDataFile1 = RaceDataFile.Load(AppContext.BaseDirectory + "\\Races\\" + rankDataFile.NAME0 + "." + WHEN.Replace(":", ".") + ".json");
 
-                    EAServerManager.Instance.highscoreDatabase.AddScores(rankDataFile, raceDataFile1);
+                    lock (EAServerManager.Instance.highscoreDatabase)
+                    {
+                        EAServerManager.Instance.highscoreDatabase.AddScores(rankDataFile, raceDataFile1);
+                    }
                 }
             }
 

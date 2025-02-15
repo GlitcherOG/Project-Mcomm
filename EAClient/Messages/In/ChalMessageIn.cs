@@ -124,11 +124,11 @@ namespace SSX3_Server.EAClient.Messages
                         plusSesMessageOut.SEED = Seed;
                         plusSesMessageOut.WHEN = DateTime.Now.ToString("yyyy.MM.dd hh:mm:ss");
 
-                        if(HostClient.challange.TrackID==5.ToString())
+                        if(HostClient.challange.Gamemode2==4.ToString())
                         {
                             plusSesMessageOut.P2 = 0.ToString();
                         }
-                        if (HostClient.challange.TrackID == 4.ToString())
+                        if (HostClient.challange.Gamemode2 == 5.ToString())
                         {
                             plusSesMessageOut.P2 = 1.ToString();
                         }

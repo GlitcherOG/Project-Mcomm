@@ -64,9 +64,9 @@ namespace SSX3_Server.EAServer
                 { "14,1", 20 }, //Happiness SlopeStyle Rival
                 { "15,1", 21 }, //Ruthless SlopeStyle Rival
                 { "16,1", 22 }, //The Throne SlopeStyle Rival
-                { "8,2", 23 }, //Crows Nest Big Air
-                { "9,2", 24 }, //Launch Time Big Air
-                { "10,2", 25 }, //Much-2-Much Big Air
+                { "8,3", 23 }, //Crows Nest Big Air
+                { "9,3", 24 }, //Launch Time Big Air
+                { "10,3", 25 }, //Much-2-Much Big Air
                 { "11,2", 26 }, //The Junction Super Pipe
                 { "12,2", 27 }, //Schiophrenia Super Pipe
                 { "13,2", 28 }, //Pernendiculous Super Pipe
@@ -79,10 +79,10 @@ namespace SSX3_Server.EAServer
                 return;
             }
 
-            if(rankDataFile.DIDQUIT0=="1"|| rankDataFile.DIDQUIT1 == "1")
-            {
-                return;
-            }
+            //if(rankDataFile.DIDQUIT0=="1"|| rankDataFile.DIDQUIT1 == "1")
+            //{
+            //    return;
+            //}
 
             string Player0 = rankDataFile.NAME0;
             string Player1 = rankDataFile.NAME1;

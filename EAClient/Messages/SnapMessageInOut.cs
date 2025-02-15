@@ -40,7 +40,7 @@ namespace SSX3_Server.EAClient.Messages
             client.Broadcast(this);
 
             //NOTE CHANGE TO PULL FROM DATABASE
-            lock (EAServerManager.Instance.highscoreDatabase.courseEntries)
+            lock (EAServerManager.Instance.highscoreDatabase)
             {
                 var TempCourse = EAServerManager.Instance.highscoreDatabase.courseEntries[int.Parse(INDEX)];
 
