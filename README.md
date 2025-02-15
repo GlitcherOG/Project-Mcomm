@@ -44,7 +44,6 @@ News
 ## Todo
 - Fix Bug where users are blocked on buddy list when logging in
 - Add Remove Buddy
-- Fix abuse report
 - Send Online Details before displaying Search
 - Patch Search so it gets offline personas
 - Find out Stat Struct
