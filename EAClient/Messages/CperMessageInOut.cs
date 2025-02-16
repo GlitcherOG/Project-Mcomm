@@ -21,7 +21,7 @@ namespace SSX3_Server.EAClient.Messages
 
         public override void AssignValues()
         {
-            PERS = stringDatas[0].Value;
+            PERS = stringDatas[0].Value.Replace("\"", "");
         }
 
         public override void AssignValuesToString()

@@ -43,6 +43,7 @@ News
 
 ## Todo
 - Fix Bug where users are blocked on buddy list when logging in
+- !last to list stats for last game
 - Add Remove Buddy
 - Send Online Details before displaying Search
 - Patch Search so it gets offline personas

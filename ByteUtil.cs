@@ -111,10 +111,10 @@ namespace SSX3_Server
         //        return $result;
         //    }
 
-        public static string CreateMD5(string input)
+        public static string CreateSHA256(string input)
         {
             // Use input string to calculate MD5 hash
-            using (System.Security.Cryptography.MD5 md5 = System.Security.Cryptography.MD5.Create())
+            using (System.Security.Cryptography.SHA256 md5 = System.Security.Cryptography.SHA256.Create())
             {
                 byte[] inputBytes = System.Text.Encoding.ASCII.GetBytes(input);
                 byte[] hashBytes = md5.ComputeHash(inputBytes);
