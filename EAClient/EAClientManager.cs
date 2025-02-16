@@ -1,15 +1,11 @@
 ﻿using SSX3_Server.EAClient.Messages;
 using SSX3_Server.EAServer;
 using System;
-using System.Diagnostics.CodeAnalysis;
-using System.Drawing;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
-using System.Xml.Linq;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace SSX3_Server.EAClient
 {
@@ -40,7 +36,6 @@ namespace SSX3_Server.EAClient
         public TcpClient MainClient = null;
         NetworkStream MainNS = null;
 
-        public TcpListener BuddyListener;
         public TcpClient BuddyClient = null;
         NetworkStream BuddyNS = null;
 
@@ -64,6 +59,7 @@ namespace SSX3_Server.EAClient
         public int ForceGamemodeID = -1;
 
         public bool EnteringChal;
+        private readonly static object _lock = new object();
 
         public EAClientManager(TcpClient tcpClient, NetworkStream NSClient, int InID, string SESSin, string MASKin, bool PAL)
         {
@@ -89,12 +85,21 @@ namespace SSX3_Server.EAClient
             LoopThread.Start();
         }
 
+        public void AddBuddy(TcpClient buddyClient, NetworkStream buddyNS)
+        {
+            lock (_lock)
+            {
+                BuddyClient = buddyClient;
+                BuddyNS = buddyNS;
+            }
+        }
+
         public void MainListen()
         {
             ConsoleManager.WriteLine("Main Thread Started for " + IPAddress);
             while (MainClient.Connected)  //while the client is connected, we look for incoming messages
             {
-                //try
+                try
                 {
                     //Read Main Network Stream
                     if (MainClient.Available > 0)
@@ -119,31 +124,21 @@ namespace SSX3_Server.EAClient
                         }
                     }
 
-                    if (BuddyClient != null)
+                    lock (_lock)
                     {
-                        if (BuddyClient.Available > 0)
+                        if (BuddyClient != null)
                         {
-                            byte[] msg = new byte[1024];     //the messages arrive as byte array
-                            BuddyNS.Read(msg, 0, msg.Length);   //the same networkstream reads the message sent by the client
-                            if (msg[0] != 0)
+                            if (BuddyClient.Available > 0)
                             {
-                                //LastRecive = DateTime.Now;
-                                //LastPing = DateTime.Now;
-                                ProcessBuddyMessage(msg);
+                                byte[] msg = new byte[1024];     //the messages arrive as byte array
+                                BuddyNS.Read(msg, 0, msg.Length);   //the same networkstream reads the message sent by the client
+                                if (msg[0] != 0)
+                                {
+                                    //LastRecive = DateTime.Now;
+                                    //LastPing = DateTime.Now;
+                                    ProcessBuddyMessage(msg);
+                                }
                             }
-                        }
-                    }
-
-                    //If Buddy Listener Connection Pending
-                    if (BuddyListener != null)
-                    {
-                        if (BuddyListener.Pending())
-                        {
-                            BuddyClient = BuddyListener.AcceptTcpClient();
-                            ConsoleManager.WriteLine("Buddy Connection From: " + BuddyClient.Client.RemoteEndPoint.ToString());
-                            BuddyNS = BuddyClient.GetStream();
-                            BuddyListener.Stop();
-                            BuddyListener = null;
                         }
                     }
 
@@ -178,16 +173,16 @@ namespace SSX3_Server.EAClient
                         break;
                     }
                 }
-                //catch
-                //{
-                //    //Unknown Connection Error
-                //    //Most Likely Game has crashed
-                //    ConsoleManager.WriteLine(IPAddress + " Connection Ended, Disconnecting...");
-                //    SaveEAUserData();
-                //    SaveEAUserPersona();
-                //    CloseConnection();
-                //    EAServerManager.Instance.DestroyClient(ID);
-                //}
+                catch
+                {
+                    //Unknown Connection Error
+                    //Most Likely Game has crashed
+                    ConsoleManager.WriteLine(IPAddress + " Connection Ended, Disconnecting...");
+                    SaveEAUserData();
+                    SaveEAUserPersona();
+                    CloseConnection();
+                    EAServerManager.Instance.DestroyClient(ID);
+                }
             }
 
             if (!Closing)
@@ -440,22 +435,14 @@ namespace SSX3_Server.EAClient
                     MainNS.Close();
                     MainClient.Close();
                 }
-                if (BuddyListener == null)
+                if (BuddyClient != null)
                 {
-                    if (BuddyClient != null)
+                    if (BuddyClient.Connected)
                     {
-                        if (BuddyClient.Connected)
-                        {
-                            BuddyClient.Close();
-                            BuddyNS.Close();
-                        }
+                        BuddyClient.Close();
+                        BuddyNS.Close();
                     }
                 }
-                else
-                {
-                    BuddyListener.Stop();
-                }
-
                 //Delete Room if in one
                 if (room != null)
                 {

@@ -34,6 +34,7 @@ namespace SSX3_Server.EAServer
 
         public Thread PALLoopThread;
         public Thread NTSCLoopThread;
+        public Thread BuddyLoopThread;
 
         AppDomain currentDomain = AppDomain.CurrentDomain;
 
@@ -81,6 +82,10 @@ namespace SSX3_Server.EAServer
                 PALLoopThread = new Thread(NewClientListeningPAL);
                 PALLoopThread.Start();
             }
+            ConsoleManager.WriteLine("Initalising Buddy Listener...");
+            BuddyLoopThread = new Thread(NewBuddyListening);
+            BuddyLoopThread.Start();
+
             ConsoleManager.WriteLine("Initalised Server, Waiting For Clients...");
         }
 
@@ -212,7 +217,79 @@ namespace SSX3_Server.EAServer
                 }
             }
         }
-        
+
+        public async void NewBuddyListening()
+        {
+            while (true)
+            {
+                try
+                {
+                    TcpListener server = new TcpListener(IPAddress.Any, config.BuddyPort);
+
+                    server.Start();
+
+                    TcpClient client = server.AcceptTcpClient();
+
+                    NetworkStream tcpNS = client.GetStream();
+
+                    ConsoleManager.WriteLine("Buddy Connection From: " + client.Client.RemoteEndPoint.ToString());
+
+                    //tcpClient.ReceiveTimeout = 20;
+
+                    //Read Incomming Message
+                    byte[] msg = new byte[255];     //the messages arrive as byte array
+                    tcpNS.Read(msg, 0, msg.Length);
+
+                    Thread.Sleep(1000);
+
+                    if (EAMessage.MessageCommandType(msg, 0) == "AUTH")
+                    {
+                        AUTHBuddyMessageIn ConnectionMessage = new AUTHBuddyMessageIn();
+
+                        ConnectionMessage.PraseData(msg, config.VerboseBuddy, (client.Client.RemoteEndPoint as IPEndPoint).Address + " Buddy Server");
+
+                        msg = ConnectionMessage.GenerateData();
+                        tcpNS.Write(msg, 0, msg.Length);
+
+                        var User = GetUser(ConnectionMessage.USER.Split("/")[0]);
+
+                        if(User!=null)
+                        {
+                            User.AddBuddy(client, tcpNS);
+                            server.Stop();
+                            GC.Collect();
+                        }
+                        else
+                        {
+                            ConsoleManager.WriteLine("Abort Connection from Buddy Failed to Find User " + ConnectionMessage.USER.Split("/")[0] + " "+ client.Client.RemoteEndPoint.ToString());
+                            tcpNS.Dispose();
+                            tcpNS.Close();
+                            client.Dispose();
+                            client.Close();
+                            server.Stop();
+                            GC.Collect();
+                        }
+                    }
+                    else
+                    {
+                        ConsoleManager.WriteLine("Abort Connection from Buddy " + client.Client.RemoteEndPoint.ToString());
+                        //Abort Connection
+                        tcpNS.Dispose();
+                        tcpNS.Close();
+                        client.Dispose();
+                        client.Close();
+                        server.Stop();
+                        GC.Collect();
+                    }
+                }
+                catch
+                {
+                    GC.Collect();
+                    ConsoleManager.WriteLine("Listener Thread Crashed... Rebooting Thread");
+                }
+            }
+        }
+
         public void BroadcastMessage(EAMessage message)
         {
             lock (clients)

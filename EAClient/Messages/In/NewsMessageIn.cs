@@ -32,12 +32,6 @@ namespace SSX3_Server.EAClient.Messages
 
             msg2.SubMessage = "new" + NAME;
 
-            if (NAME == "0")
-            {
-                client.BuddyListener = new TcpListener(IPAddress.Any/*(client.MainClient.Client.RemoteEndPoint as IPEndPoint).Address*/, 13505);
-                client.BuddyListener.Start();
-            }
-
             msg2.BUDDYUSERNAME = client.LoadedPersona.Name;
             msg2.BUDDYSERVERNAME = EAServerManager.Instance.config.GameIP;
             msg2.BUDDYPORT = EAServerManager.Instance.config.BuddyPort.ToString();
