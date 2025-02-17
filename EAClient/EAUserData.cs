@@ -30,6 +30,8 @@ namespace SSX3_Server.EAClient
 
         public bool Bypass;
         public bool Banned;
+        public bool Admin;
+        public bool TrustLevel;
 
         public int DiscordID;
 

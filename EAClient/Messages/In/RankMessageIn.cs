@@ -268,17 +268,6 @@ namespace SSX3_Server.EAClient.Messages
                     }
                 }
             }
-
-            //If there process and add both users to leaderboard if ranked
-
-            PlusRNKMessageOut plusRNKMessageOut = new PlusRNKMessageOut();
-
-            plusRNKMessageOut.D = "1";
-            plusRNKMessageOut.A = "0";
-            plusRNKMessageOut.N = client.LoadedPersona.Name;
-            plusRNKMessageOut.S = "0";
-
-            client.Broadcast(plusRNKMessageOut);
         }
     }
 }

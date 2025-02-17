@@ -71,17 +71,22 @@ namespace SSX3_Server.EAServer
                 { "13,2", 28 }, //Pernendiculous Super Pipe
         };
 
-        public void AddScores(RaceDataFile rankDataFile, RaceDataFile raceDataFile)
+        public void AddScores(RaceDataFile rankDataFile, RaceDataFile rankDataFile1)
         {
+            //Check If Race
+            //Note Replace
             if(rankDataFile.AUTH!="1")
             {
                 return;
             }
 
-            //if(rankDataFile.DIDQUIT0=="1"|| rankDataFile.DIDQUIT1 == "1")
+            //Reported 1 Player Didnt Finish the race 
+            //if(rankDataFile.DIDQUIT0=="0"|| rankDataFile.DIDQUIT1 == "0" || rankDataFile1.DIDQUIT0=="0"|| rankDataFile1.DIDQUIT1 == "0")
             //{
-            //    return;
+                //return;
             //}
+
+            
 
             string Player0 = rankDataFile.NAME0;
             string Player1 = rankDataFile.NAME1;

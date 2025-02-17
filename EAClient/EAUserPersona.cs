@@ -16,6 +16,12 @@ namespace SSX3_Server.EAClient
         public string Since = "";
         public string Last = "";
 
+        public int Rank;
+        public int Games;
+        public int Wins;
+        public int Loss;
+        public int Disconnects;
+
         public List<FriendEntry> friendEntries = new List<FriendEntry>();
 
         public void CreateJson(string path, bool Inline = false)
