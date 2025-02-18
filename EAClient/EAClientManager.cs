@@ -343,7 +343,14 @@ namespace SSX3_Server.EAClient
         {
             string StringPersonas = "";
 
-            for (int i = 0; i < userData.PersonaList.Count; i++)
+            int Count = userData.PersonaList.Count;
+
+            if(Count>4)
+            {
+                Count=4;
+            }
+
+            for (int i = 0; i < Count; i++)
             {
                 if (i == 0)
                 {
