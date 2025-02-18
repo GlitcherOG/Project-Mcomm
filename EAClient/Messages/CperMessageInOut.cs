@@ -46,6 +46,13 @@ namespace SSX3_Server.EAClient.Messages
                 return;
             }
 
+            if(client.userData.Persona.Count >=4)
+            {
+                SubMessage = "maxp";
+                client.Broadcast(this);
+                return;
+            }
+
             //Create Persona
 
             EAUserPersona NewPersona = new EAUserPersona();
