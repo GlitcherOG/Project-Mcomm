@@ -461,6 +461,13 @@ namespace SSX3_Server.EAClient
                 { "PS2/Alpha 1.4EU-Sep 11 2003", "EU_R_A310" }, //PAL Review Copy
         };
 
+        public static Dictionary<string, string> VersionPrefix { get; } =
+        new Dictionary<string, string>()
+        {
+                { "PS2/Beta 1.04-Sep 17 2003", "NSTC" }, //NTSC
+                { "PS2/Beta 1.04EU-Sep 21 2003", "PAL" }, //PAL
+                { "PS2/Alpha 1.4EU-Sep 11 2003", "PALR" }, //PAL Review Copy
+        };
 
     }
 }

@@ -85,13 +85,15 @@ namespace SSX3_Server.EAServer
             //{
                 //return;
             //}
-
-            
+            var Client0 = EAServerManager.Instance.GetUser(rankDataFile.NAME0);
+            var Client1 = EAServerManager.Instance.GetUser(rankDataFile.NAME1);
 
             string Player0 = rankDataFile.NAME0;
             string Player1 = rankDataFile.NAME1;
             int Score0 = 0;
             int Score1 = 0;
+            string Version0 = Client0.VersionPrefix[Client0.VERS];
+            string Version1 = Client1.VersionPrefix[Client1.VERS];
 
             if (rankDataFile.RACEEVE0=="0")
             {
@@ -194,6 +196,7 @@ namespace SSX3_Server.EAServer
             if (Add0)
             {
                 NewEntry.Name = Player0;
+                NewEntry.GameVersion = Version0;
                 NewEntry.Score = Score0;
                 NewEntry.RaceDataFile = rankDataFile.NAME0 + " " + rankDataFile.WHEN;
 
@@ -214,6 +217,7 @@ namespace SSX3_Server.EAServer
                 NewEntry = new ScoreEntry();
 
                 NewEntry.Name = Player1;
+                NewEntry.GameVersion = Version1;
                 NewEntry.Score = Score1;
                 NewEntry.RaceDataFile = Player1 + " " + rankDataFile.WHEN;
 
@@ -303,6 +307,7 @@ namespace SSX3_Server.EAServer
 
         public struct ScoreEntry
         {
+            public string GameVersion;
             public string Name;
             public int Score;
             public string RaceDataFile;
