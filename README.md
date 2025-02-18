@@ -2,7 +2,7 @@
 
 ## Status
 General  
-• Challanaging Player: ✅  
+• Challenging Player: ✅  
 • Quick Play:  
 
 Accounts  
