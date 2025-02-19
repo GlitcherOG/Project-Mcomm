@@ -58,6 +58,13 @@ namespace SSX3_Server.EAClient.Messages
                     PlusSnapMessageOut plusSnapMessageOut = new PlusSnapMessageOut();
 
                     plusSnapMessageOut.N = TempCourse.Entries[i].Name;
+                    var Temp = EAClientManager.VersionPrefix[client.VERS];
+                    if (Temp != TempCourse.Entries[i].GameVersion)
+                    {
+                        plusSnapMessageOut.N = "[" + TempCourse.Entries[i].GameVersion  + "] " + TempCourse.Entries[i].Name;
+                    }
+
+
                     plusSnapMessageOut.R = (i+1).ToString();
 
                     byte[] data = BitConverter.GetBytes(TempCourse.Entries[i].Score);

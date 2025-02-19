@@ -464,16 +464,18 @@ namespace SSX3_Server.EAClient
         new Dictionary<string, string>()
         {
                 { "PS2/Beta 1.04-Sep 17 2003", "NA_R_F004" }, //NTSC
-                { "PS2/Beta 1.04EU-Sep 21 2003", "EU_R_F004" }, //PAL
                 { "PS2/Alpha 1.4EU-Sep 11 2003", "EU_R_A310" }, //PAL Review Copy
+                { "PS2/Beta 1.04EU-Sep 17 2003", "EU_R_F004" }, //PAL 1.0
+                { "PS2/Beta 1.04EU-Sep 21 2003", "EU_R_F004" }, //PAL 2.0
         };
 
         public static Dictionary<string, string> VersionPrefix { get; } =
         new Dictionary<string, string>()
         {
-                { "PS2/Beta 1.04-Sep 17 2003", "NSTC" }, //NTSC
-                { "PS2/Beta 1.04EU-Sep 21 2003", "PAL" }, //PAL
-                { "PS2/Alpha 1.4EU-Sep 11 2003", "PALR" }, //PAL Review Copy
+                { "PS2/Beta 1.04-Sep 17 2003", "NTSC" }, //NTSC
+                { "PS2/Alpha 1.4EU-Sep 11 2003", "PAL R" }, //PAL Review Copy
+                { "PS2/Beta 1.04EU-Sep 17 2003", "PAL 1.0" }, //PAL 1.0
+                { "PS2/Beta 1.04EU-Sep 21 2003", "PAL 2.0" }, //PAL 2.0
         };
 
     }
