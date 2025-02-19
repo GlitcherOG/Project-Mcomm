@@ -146,6 +146,11 @@ namespace SSX3_Server.EAServer
             {
                 var TempUser = Clients[i].GeneratePlusUser();
 
+                //if (TempUser.N.Contains("[" + EAClientManager.VersionPrefix[Clients[i].VERS] + "]"))
+                //{
+                //    TempUser.N = TempUser.N.Replace("[" + EAClientManager.VersionPrefix[Clients[i].VERS] + "] ", "");
+                //}
+
                 TempUser.I = (i + 1).ToString();
 
                 client.Broadcast(TempUser);
@@ -204,6 +209,18 @@ namespace SSX3_Server.EAServer
         {
             for (int i = 0; i < Clients.Count; i++)
             {
+                //if(message.MessageType=="+usr")
+                //{
+                //    var TempUser = (PlusUserMessageOut)message;
+
+                //    if (TempUser.N.Contains("[" + EAClientManager.VersionPrefix[Clients[i].VERS] + "]"))
+                //    {
+                //        TempUser.N = TempUser.N.Replace("[" + EAClientManager.VersionPrefix[Clients[i].VERS] + "] ", "");
+                //    }
+
+                //    message = (EAMessage)TempUser;
+                //}
+
                 Clients[i].Broadcast(message);
             }
         }

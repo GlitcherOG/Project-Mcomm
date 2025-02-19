@@ -309,7 +309,7 @@ namespace SSX3_Server.EAClient
             {
                 plusUserMessageOut.I = index.ToString();
             }    
-            plusUserMessageOut.N = LoadedPersona.Name;
+            plusUserMessageOut.N = /*"["+VersionPrefix[VERS] +"] " + */LoadedPersona.Name;
             plusUserMessageOut.M = userData.Name;
             plusUserMessageOut.A = "0.0.0.0";//RealAddress;
             plusUserMessageOut.X = "";

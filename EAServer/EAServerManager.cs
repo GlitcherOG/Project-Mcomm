@@ -323,6 +323,10 @@ namespace SSX3_Server.EAServer
 
         public EAClientManager GetUser(string Name)
         {
+            //if(Name.Contains("]"))
+            //{
+            //    Name = Name.Split("] ")[1];
+            //}
             lock (clients)
             {
                 for (int i = 0; i < clients.Count; i++)
