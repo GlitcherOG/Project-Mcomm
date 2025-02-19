@@ -46,7 +46,7 @@ namespace SSX3_Server.EAClient.Messages
                 return;
             }
 
-            if(client.userData.Persona.Count >=4)
+            if(client.userData.PersonaList.Count >=4)
             {
                 SubMessage = "maxp";
                 client.Broadcast(this);

@@ -92,8 +92,8 @@ namespace SSX3_Server.EAServer
             string Player1 = rankDataFile.NAME1;
             int Score0 = 0;
             int Score1 = 0;
-            string Version0 = Client0.VersionPrefix[Client0.VERS];
-            string Version1 = Client1.VersionPrefix[Client1.VERS];
+            string Version0 = EAClientManager.VersionPrefix[Client0.VERS];
+            string Version1 = EAClientManager.VersionPrefix[Client1.VERS];
 
             if (rankDataFile.RACEEVE0=="0")
             {
