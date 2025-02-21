@@ -1,9 +1,9 @@
 [SSX 3 Online Server Address]
 author=GlitcherOG(Archy)
-patch=0,EE,004807D8,word,322E3434
-patch=0,EE,004807DC,word,322E3232
-patch=0,EE,004807E0,word,31312E30
-patch=0,EE,004807E4,word,00000037
+patch=0,EE,004807D8,word,6F787373
+patch=0,EE,004807DC,word,726F2E72
+patch=0,EE,004807E0,word,00000067
+patch=0,EE,004807E4,word,00000000
 
 //[SSX 3 Online DNAS Check]
 //description=No DNAS for SLUS-20772 by VTSTech (DNAS Patcher 21/kHn)

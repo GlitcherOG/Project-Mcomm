@@ -1,6 +1,6 @@
 [SSX 3 PAL Online Server Address]
 author=Sly/GlitcherOG(Archy)
-patch=0,EE,00480148,word,322E3434
-patch=0,EE,0048014C,word,322E3232
-patch=0,EE,00480150,word,31312E30
-patch=0,EE,00480154,word,00000037
+patch=0,EE,00480148,word,6F787373
+patch=0,EE,0048014C,word,726F2E72
+patch=0,EE,00480150,word,00000067
+patch=0,EE,00480154,word,00000000
