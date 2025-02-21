@@ -407,7 +407,7 @@ namespace SSX3_Server.EAClient
 
             string Status = "DISC";
 
-            var UserClient = EAServerManager.Instance.GetUser(USER);
+            var UserClient = EAServerManager.Instance.GetUserPersona(USER);
             //DISC, CHAT, AWAY, XA, DND, PASS
             if (UserClient != null)
             {

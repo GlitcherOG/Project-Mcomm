@@ -63,8 +63,16 @@ namespace SSX3_Server.EAClient.Messages
             var UserData = EAClientManager.GetUserData(NAME);
             if (UserData != null)
             {
-                client.userData = UserData;
                 AuthMessageOut msg2 = new AuthMessageOut();
+                if (EAServerManager.Instance.GetUser(NAME)!=null)
+                {
+                    msg2.SubMessage = "logn";
+                    client.Broadcast(msg2);
+                    return;
+                }
+
+
+                client.userData = UserData;
 
                 ConsoleManager.WriteLine(ByteUtil.Decrypt(PASS.Replace("\"", ""), client.MASK));
 

@@ -251,7 +251,7 @@ namespace SSX3_Server.EAServer
                         msg = ConnectionMessage.GenerateData();
                         tcpNS.Write(msg, 0, msg.Length);
 
-                        var User = GetUser(ConnectionMessage.USER.Split("/")[0]);
+                        var User = GetUserPersona(ConnectionMessage.USER.Split("/")[0]);
 
                         if(User!=null)
                         {
@@ -323,10 +323,24 @@ namespace SSX3_Server.EAServer
 
         public EAClientManager GetUser(string Name)
         {
-            //if(Name.Contains("]"))
-            //{
-            //    Name = Name.Split("] ")[1];
-            //}
+            lock (clients)
+            {
+                for (int i = 0; i < clients.Count; i++)
+                {
+                    if (clients[i].userData != null)
+                    {
+                        if (clients[i].userData.Name == Name)
+                        {
+                            return clients[i];
+                        }
+                    }
+                }
+                return null;
+            }
+        }
+
+        public EAClientManager GetUserPersona(string Name)
+        {
             lock (clients)
             {
                 for (int i = 0; i < clients.Count; i++)
