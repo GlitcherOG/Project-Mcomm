@@ -91,8 +91,8 @@ namespace SSX3_Server.EAClient.Messages
                     {
                         string Seed = (new Random()).Next().ToString();
 
-                        var HostClient = EAServerManager.Instance.GetUser(HostEntry.FromPlayer);
-                        var OtherUser = EAServerManager.Instance.GetUser(OppoEntry.FromPlayer);
+                        var HostClient = EAServerManager.Instance.GetUserPersona(HostEntry.FromPlayer);
+                        var OtherUser = EAServerManager.Instance.GetUserPersona(OppoEntry.FromPlayer);
 
                         string HostIP = HostClient.IPAddress;
                         string OtherIP = OtherUser.IPAddress;

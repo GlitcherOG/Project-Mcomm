@@ -27,7 +27,7 @@ namespace SSX3_Server.EAClient.Messages
         {
             //NOTE FIX SO ITS PROPERLY GRABBING DETAILS
 
-            var TempUser = EAServerManager.Instance.GetUser(PERS);
+            var TempUser = EAServerManager.Instance.GetUserPersona(PERS);
 
             if (TempUser!=null)
             {

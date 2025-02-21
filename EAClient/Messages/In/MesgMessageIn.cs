@@ -71,7 +71,7 @@ namespace SSX3_Server.EAClient.Messages
 
                 if (TEXT.Contains("challenge"))
                 {
-                    var TempClient = EAServerManager.Instance.GetUser(PRIV);
+                    var TempClient = EAServerManager.Instance.GetUserPersona(PRIV);
 
                     if (TempClient != null)
                     {
@@ -115,7 +115,7 @@ namespace SSX3_Server.EAClient.Messages
                 }
                 else
                 {
-                    var TempClient = EAServerManager.Instance.GetUser(PRIV);
+                    var TempClient = EAServerManager.Instance.GetUserPersona(PRIV);
 
                     if (TempClient != null)
                     {

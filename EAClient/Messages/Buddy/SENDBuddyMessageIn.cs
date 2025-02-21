@@ -32,7 +32,7 @@ namespace SSX3_Server.EAClient.Messages
 
         public override void ProcessCommand(EAClientManager client, EAServerRoom room = null)
         {
-            var TempUser = EAServerManager.Instance.GetUser(USER);
+            var TempUser = EAServerManager.Instance.GetUserPersona(USER);
 
             if (USER == client.LoadedPersona.Name)
             {

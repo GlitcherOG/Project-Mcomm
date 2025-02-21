@@ -80,13 +80,13 @@ namespace SSX3_Server.EAServer
                 return;
             }
 
-            //Reported 1 Player Didnt Finish the race 
-            //if(rankDataFile.DIDQUIT0=="0"|| rankDataFile.DIDQUIT1 == "0" || rankDataFile1.DIDQUIT0=="0"|| rankDataFile1.DIDQUIT1 == "0")
-            //{
-                //return;
-            //}
-            var Client0 = EAServerManager.Instance.GetUser(rankDataFile.NAME0);
-            var Client1 = EAServerManager.Instance.GetUser(rankDataFile.NAME1);
+            //Reported 1 Player Didnt Finish the race
+            if (rankDataFile.QUIT0 != "0" || rankDataFile.QUIT1 != "0" || rankDataFile1.QUIT0 != "0" || rankDataFile1.QUIT1 != "0")
+            {
+                return;
+            }
+            var Client0 = EAServerManager.Instance.GetUserPersona(rankDataFile.NAME0);
+            var Client1 = EAServerManager.Instance.GetUserPersona(rankDataFile.NAME1);
 
             string Player0 = rankDataFile.NAME0;
             string Player1 = rankDataFile.NAME1;

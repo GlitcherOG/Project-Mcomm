@@ -64,7 +64,7 @@ namespace SSX3_Server.EAClient.Messages
             if (UserData != null)
             {
                 AuthMessageOut msg2 = new AuthMessageOut();
-                if (EAServerManager.Instance.GetUser(NAME)!=null)
+                if (EAServerManager.Instance.GetUserPersona(NAME) != null)
                 {
                     msg2.SubMessage = "logn";
                     client.Broadcast(msg2);
