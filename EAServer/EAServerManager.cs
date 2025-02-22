@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using SSX3_Server.DiscordBot;
 using SSX3_Server.EAClient;
 using SSX3_Server.EAClient.Messages;
+using SSX3_Server.Web;
 
 namespace SSX3_Server.EAServer
 {
@@ -35,6 +36,7 @@ namespace SSX3_Server.EAServer
         public Thread PALLoopThread;
         public Thread NTSCLoopThread;
         public Thread BuddyLoopThread;
+        public Thread WebThread;
 
         AppDomain currentDomain = AppDomain.CurrentDomain;
 
@@ -82,6 +84,13 @@ namespace SSX3_Server.EAServer
                 PALLoopThread = new Thread(NewClientListeningPAL);
                 PALLoopThread.Start();
             }
+
+            if(true)
+            {
+                WebThread = new Thread(WebServer.SimpleListenerExample);
+                WebThread.Start();
+            }
+
             ConsoleManager.WriteLine("Initalising Buddy Listener...");
             BuddyLoopThread = new Thread(NewBuddyListening);
             BuddyLoopThread.Start();
