@@ -16,12 +16,6 @@ namespace SSX3_Server.Web
             {
                 while (true)
                 {
-                    if (!HttpListener.IsSupported)
-                    {
-                        Console.WriteLine("Windows XP SP2 or Server 2003 is required to use the HttpListener class.");
-                        return;
-                    }
-
                     string[] prefixes = new string[2] { "http://" +EAServerManager.Instance.config.GameIP+ ":80/", "https://" +EAServerManager.Instance.config.GameIP+ ":8443/" };
 
                     // URI prefixes are required,
