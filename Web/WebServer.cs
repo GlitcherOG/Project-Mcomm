@@ -16,7 +16,7 @@ namespace SSX3_Server.Web
             {
                 while (true)
                 {
-                    string[] prefixes = new string[2] { "http://" +EAServerManager.Instance.config.GameIP+ ":80/", "https://" +EAServerManager.Instance.config.GameIP+ ":8443/" };
+                    string[] prefixes = new string[2] { "http://" +EAServerManager.Instance.config.WebpageURL + ":80/", "https://" +EAServerManager.Instance.config.WebpageURL + ":8443/" };
 
                     // URI prefixes are required,
                     // for example "http://contoso.com:8080/index/".
@@ -31,13 +31,13 @@ namespace SSX3_Server.Web
                         listener.Prefixes.Add(s);
                     }
                     listener.Start();
-                    Console.WriteLine("Listening...");
                     // Note: The GetContext method blocks while waiting for a request.
                     HttpListenerContext context = listener.GetContext();
                     HttpListenerRequest request = context.Request;
                     // Obtain a response object.
                     HttpListenerResponse response = context.Response;
                     // Construct a response.
+                    ConsoleManager.WriteLine("Webpage Generating Page...");
                     string responseString = WebpageGenerator(context.Request.RawUrl);
                     byte[] buffer = System.Text.Encoding.UTF8.GetBytes(responseString);
                     // Get a response stream and write the response to it.

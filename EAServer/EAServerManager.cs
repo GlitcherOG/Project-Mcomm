@@ -85,8 +85,9 @@ namespace SSX3_Server.EAServer
                 PALLoopThread.Start();
             }
 
-            if(true)
+            if(config.Webpage)
             {
+                ConsoleManager.WriteLine("Initalising Web Listener...");
                 WebThread = new Thread(WebServer.SimpleListenerExample);
                 WebThread.Start();
             }
