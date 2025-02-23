@@ -65,6 +65,12 @@ namespace SSX3_Server.EAClient.Messages
 
         public override void ProcessCommand(EAClientManager client, EAServerRoom room = null)
         {
+            //Get Password
+
+            //Compare against whats in file, If wrong disconnect
+            //If Blank Add
+
+
             client.BroadcastBuddy(this);
         }
     }

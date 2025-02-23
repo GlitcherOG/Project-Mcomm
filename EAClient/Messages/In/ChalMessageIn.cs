@@ -44,6 +44,11 @@ namespace SSX3_Server.EAClient.Messages
                         if (chalMessageIns[i].FromPlayer == FromPlayer)
                         {
                             chalMessageIns.RemoveAt(i);
+
+                            DQUEMessageout dQUEMessageout = new DQUEMessageout();
+
+                            client.Broadcast(this);
+
                             break;
                         }
                     }
