@@ -45,13 +45,12 @@ namespace SSX3_Server.EAClient.Messages
                         {
                             chalMessageIns.RemoveAt(i);
 
-                            DQUEMessageout dQUEMessageout = new DQUEMessageout();
-
-                            client.Broadcast(this);
-
                             break;
                         }
                     }
+                    DQUEMessageout dQUEMessageout = new DQUEMessageout();
+
+                    client.Broadcast(this);
                     return;
                 }
                 else
@@ -102,6 +101,9 @@ namespace SSX3_Server.EAClient.Messages
                         string HostIP = HostClient.IPAddress;
                         string OtherIP = OtherUser.IPAddress;
 
+                        string HostIPLocal = HostClient.LocalIP;
+                        string OtherIPLocal = HostClient.LocalIP;
+
                         bool IPTest = false;
                         if (HostIP == OtherIP)
                         {
@@ -123,8 +125,8 @@ namespace SSX3_Server.EAClient.Messages
 
                         plusSesMessageOut.P1 = HostClient.challange.TrackID; /*HostClient.ID.ToString();*/
                         plusSesMessageOut.P2 = HostClient.challange.Gamemode2; /*OtherUser.ID.ToString();*/
-                        plusSesMessageOut.P3 = "0"; //Not Used
-                        plusSesMessageOut.P4 = "0"; //Not Used
+                        plusSesMessageOut.P3 = "1"; //Not Used
+                        plusSesMessageOut.P4 = "1"; //Not Used
                         plusSesMessageOut.AUTH = HostClient.challange.Ranked; //Unknown
                         plusSesMessageOut.SEED = Seed;
                         plusSesMessageOut.WHEN = DateTime.Now.ToString("yyyy.MM.dd hh:mm:ss");
@@ -157,6 +159,7 @@ namespace SSX3_Server.EAClient.Messages
                         plusSesMessageOut.SELF = OtherUser.LoadedPersona.Name;
                         //plusSesMessageOut.OPPO = HostClient.LoadedPersona.Name;
                         //plusSesMessageOut.ADDR = HostIP;
+                        //plusSesMessageOut.FROM = HostIP;
 
                         OtherUser.Broadcast(plusSesMessageOut);
 
