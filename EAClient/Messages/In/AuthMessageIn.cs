@@ -64,17 +64,29 @@ namespace SSX3_Server.EAClient.Messages
             if (UserData != null)
             {
                 AuthMessageOut msg2 = new AuthMessageOut();
-                if (EAServerManager.Instance.GetUserPersona(NAME) != null)
+
+                var UserTest = EAServerManager.Instance.GetUserPersona(NAME);
+                if (UserTest != null)
                 {
-                    msg2.SubMessage = "logn";
-                    client.Broadcast(msg2);
-                    return;
+                    if(client.IPAddress== UserTest.IPAddress)
+                    {
+                        UserTest.CloseConnection();
+                        Thread.Sleep(1000);
+                    }
+                    else
+                    {
+                        msg2.SubMessage = "logn";
+                        client.Broadcast(msg2);
+                        Thread.Sleep(10000);
+                        client.CloseConnection();
+                        return;
+                    }
                 }
 
 
                 client.userData = UserData;
 
-                ConsoleManager.WriteLine(ByteUtil.Decrypt(PASS.Replace("\"", ""), client.MASK));
+                //ConsoleManager.WriteLine(ByteUtil.Decrypt(PASS.Replace("\"", ""), client.MASK));
 
                 if (((UserData.Name == NAME /*&& UserData.Pass == ByteUtil.CreateMD5(PASS)*/) || UserData.Bypass == true) && UserData.Banned == false)
                 {

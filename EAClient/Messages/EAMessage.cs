@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualBasic;
 using Newtonsoft.Json.Linq;
+using SSX3_Server.EAClient.Messages.In;
 using SSX3_Server.EAServer;
 using System;
 using System.Collections.Generic;
@@ -39,6 +40,7 @@ namespace SSX3_Server.EAClient.Messages
                 { "room", typeof(RoomMessageIn) }, //Create Room
                 { "rank", typeof(RankMessageIn) }, //Rank Details
                 { "rept", typeof(ReptMessageIn) }, //Report
+                { "edit", typeof(EditMessageIn) }, //Edit User
         };
 
         public static Dictionary<string, Type> BuddyInNameToClass { get; } =

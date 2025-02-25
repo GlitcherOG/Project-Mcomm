@@ -9,7 +9,7 @@ Accounts
   
 • Authentication & Account Creation: ✅  
 • Persona creation & Persona deletion: ✅  
-• Account Management:  
+• Account Management: ✅
 • Username & Password recovery:  
 
 Rooms  
@@ -48,14 +48,14 @@ News
 - Send Online Details before displaying Search
 - Patch Search so it gets offline personas
 - Find out Stat Struct
-- Add Edit user and lost user
+- Add lost user
 - Fix Quick Match So it Works
 - Persona Generator for Duplicate Personas
 - Fix Having to DQUE to leave room (Probably due to an issue with vc)
 - Mcomm Buddy for server commands
-- Fix Passwords
+- Fix Proper Passwords
 - Fix Title on rooms as it doesnt seem to be appearing
-- Tunneling Service (Temp Hide IPs as well)
+- Tunneling Service
 - PAL and NTSC Prefix for accounts
 
 # Todo Discord Bot
