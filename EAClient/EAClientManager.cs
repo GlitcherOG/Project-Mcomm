@@ -85,12 +85,28 @@ namespace SSX3_Server.EAClient
             LoopThread.Start();
         }
 
-        public void AddBuddy(TcpClient buddyClient, NetworkStream buddyNS)
+        public void AddBuddy(TcpClient buddyClient, NetworkStream buddyNS, byte[] msg)
         {
-            lock (_lock)
+            IPEndPoint remoteIpEndPoint = MainClient.Client.RemoteEndPoint as IPEndPoint;
+            var BuddyAddress = remoteIpEndPoint.Address.ToString();
+
+            if (BuddyAddress == IPAddress)
             {
-                BuddyClient = buddyClient;
-                BuddyNS = buddyNS;
+                lock (_lock)
+                {
+                    BuddyClient = buddyClient;
+                    BuddyNS = buddyNS;
+                }
+
+                ProcessBuddyMessage(msg);
+            }
+            else
+            {
+                ConsoleManager.WriteLine("Abort Connection from Buddy IP Incorrect " + BuddyAddress + " " + IPAddress);
+                buddyNS.Dispose();
+                buddyNS.Close();
+                buddyClient.Dispose();
+                buddyClient.Close();
             }
         }
 

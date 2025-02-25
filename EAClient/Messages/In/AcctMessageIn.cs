@@ -83,7 +83,7 @@ namespace SSX3_Server.EAClient.Messages
             {
                 Temp = new EAUserData();
                 Temp.Name = NAME;
-                Temp.Pass = ByteUtil.CreateSHA256(PASS);
+                Temp.Pass = "";//ByteUtil.CreateSHA256(PASS);
                 Temp.Spam = SPAM;
                 Temp.Mail = MAIL;
                 Temp.Gend = GEND;
@@ -99,6 +99,8 @@ namespace SSX3_Server.EAClient.Messages
 
                 Temp.Since = ClientTime;
                 Temp.Last = ClientTime;
+
+                Temp.IPApproved.Add(ByteUtil.CreateSHA256(client.IPAddress));
 
                 ConsoleManager.WriteLine(client.IPAddress +  "Created a new account " + NAME);
 

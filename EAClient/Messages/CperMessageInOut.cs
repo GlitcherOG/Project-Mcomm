@@ -38,6 +38,16 @@ namespace SSX3_Server.EAClient.Messages
 
         public override void ProcessCommand(EAClientManager client, EAServerRoom room = null)
         {
+            //Check IP To see if approved
+            if (!client.userData.IPApproved.Contains(ByteUtil.CreateSHA256(client.IPAddress)))
+            {
+                SubMessage = "maut";
+                client.Broadcast(this);
+                return;
+            }
+
+
+
             var TempPersona = EAClientManager.GetUserPersona(PERS);
             if (TempPersona != null || EAServerManager.Instance.BannedNames.Contains(PERS))
             {

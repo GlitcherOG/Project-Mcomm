@@ -247,7 +247,7 @@ namespace SSX3_Server.EAServer
                     //tcpClient.ReceiveTimeout = 20;
 
                     //Read Incomming Message
-                    byte[] msg = new byte[255];     //the messages arrive as byte array
+                    byte[] msg = new byte[512];     //the messages arrive as byte array
                     tcpNS.Read(msg, 0, msg.Length);
 
                     Thread.Sleep(1000);
@@ -255,17 +255,14 @@ namespace SSX3_Server.EAServer
                     if (EAMessage.MessageCommandType(msg, 0) == "AUTH")
                     {
                         AUTHBuddyMessageIn ConnectionMessage = new AUTHBuddyMessageIn();
-
-                        ConnectionMessage.PraseData(msg, config.VerboseBuddy, (client.Client.RemoteEndPoint as IPEndPoint).Address + " Buddy Server");
-
-                        msg = ConnectionMessage.GenerateData();
-                        tcpNS.Write(msg, 0, msg.Length);
+                        ConnectionMessage.PraseData(msg, true, "Buddy");
 
                         var User = GetUserPersona(ConnectionMessage.USER.Split("/")[0]);
 
                         if(User!=null)
                         {
-                            User.AddBuddy(client, tcpNS);
+                            User.AddBuddy(client, tcpNS, msg);
+
                             server.Stop();
                             GC.Collect();
                         }

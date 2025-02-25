@@ -32,6 +32,15 @@ namespace SSX3_Server.EAClient.Messages
         public override void ProcessCommand(EAClientManager client, EAServerRoom room = null)
         {
             //Create Persona
+            //Check IP To see if approved
+            //Check IP To see if approved
+            if (!client.userData.IPApproved.Contains(ByteUtil.CreateSHA256(client.IPAddress)))
+            {
+                SubMessage = "maut";
+                client.Broadcast(this);
+                return;
+            }
+
             bool Removed = false;
 
             for (int i = 0; i < client.userData.PersonaList.Count; i++)

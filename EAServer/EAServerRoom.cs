@@ -82,6 +82,8 @@ namespace SSX3_Server.EAServer
                 client.Broadcast(plusMSGMessageOuts[i]);
             }
 
+
+
             McommCommands.GenerateMcommMessage(client.LoadedPersona.Name + " Has Joined the Room", this);
         }
 
@@ -197,6 +199,15 @@ namespace SSX3_Server.EAServer
 
                 BroadcastAllUsers(TempUser);
             }
+
+            //for (int i = 0; i < Clients.Count; i++)
+            //{
+            //    PlusRNKMessageOut plus = new PlusRNKMessageOut();
+
+            //    plus.A = "0";
+
+            //    BroadcastAllUsers(plus);
+            //}
 
             for (int i = 0; i < Clients.Count; i++)
             {

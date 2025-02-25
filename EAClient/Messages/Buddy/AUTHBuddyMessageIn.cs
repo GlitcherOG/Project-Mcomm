@@ -1,4 +1,5 @@
-﻿using SSX3_Server.EAServer;
+﻿using DSharpPlus;
+using SSX3_Server.EAServer;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -66,10 +67,26 @@ namespace SSX3_Server.EAClient.Messages
         public override void ProcessCommand(EAClientManager client, EAServerRoom room = null)
         {
             //Get Password
+            //If Blank Add
+            if (client.userData.Pass == "")
+            {
+                client.userData.Pass = ByteUtil.CreateSHA256(PASS);
+            }
 
             //Compare against whats in file, If wrong disconnect
-            //If Blank Add
+            if(client.userData.Pass != ByteUtil.CreateSHA256(PASS))
+            {
+                client.CloseConnection();
+                return;
+            }
 
+            //Add IP To Approved IPS if not there
+            if (!client.userData.IPApproved.Contains(ByteUtil.CreateSHA256(client.IPAddress)))
+            {
+                client.userData.IPApproved.Add(ByteUtil.CreateSHA256(client.IPAddress));
+            }
+
+            client.SaveEAUserData();
 
             client.BroadcastBuddy(this);
         }

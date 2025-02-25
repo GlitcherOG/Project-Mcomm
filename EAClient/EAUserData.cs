@@ -24,6 +24,8 @@ namespace SSX3_Server.EAClient
         public string GameReg = "";
 
         public List<string> PersonaList = new List<string>();
+        public List<string> IPApproved = new List<string>();
+
 
         public string Since;
         public string Last;
