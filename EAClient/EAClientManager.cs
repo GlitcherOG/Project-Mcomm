@@ -117,26 +117,32 @@ namespace SSX3_Server.EAClient
             {
                 try
                 {
-                    //Read Main Network Stream
-                    if (MainClient.Available > 0)
+                    lock (_lock)
                     {
-                        byte[] Header = new byte[4];
-                        MainNS.Read(Header, 0, 4);
-
-                        if (System.Text.Encoding.UTF8.GetString(Header) == "rank")
+                        if (MainClient != null)
                         {
-                            Thread.Sleep(500);
-                        }
+                            //Read Main Network Stream
+                            if (MainClient.Available > 0)
+                            {
+                                byte[] Header = new byte[4];
+                                MainNS.Read(Header, 0, 4);
 
-                        byte[] msg = new byte[MainClient.ReceiveBufferSize];     //the messages arrive as byte array
+                                if (System.Text.Encoding.UTF8.GetString(Header) == "rank")
+                                {
+                                    Thread.Sleep(500);
+                                }
 
-                        Buffer.BlockCopy(Header, 0, msg, 0, 4);
+                                byte[] msg = new byte[MainClient.ReceiveBufferSize];     //the messages arrive as byte array
 
-                        MainNS.Read(msg, 4, MainClient.ReceiveBufferSize - 4);   //the same networkstream reads the message sent by the client
+                                Buffer.BlockCopy(Header, 0, msg, 0, 4);
 
-                        if (msg[0] != 0)
-                        {
-                            ProcessMessage(msg);
+                                MainNS.Read(msg, 4, MainClient.ReceiveBufferSize - 4);   //the same networkstream reads the message sent by the client
+
+                                if (msg[0] != 0)
+                                {
+                                    ProcessMessage(msg);
+                                }
+                            }
                         }
                     }
 
@@ -196,8 +202,7 @@ namespace SSX3_Server.EAClient
                     ConsoleManager.WriteLine(IPAddress + " Connection Ended, Disconnecting...");
                     SaveEAUserData();
                     SaveEAUserPersona();
-                    CloseConnection();
-                    EAServerManager.Instance.DestroyClient(ID);
+                    DestroyClient();
                 }
             }
 
@@ -207,8 +212,7 @@ namespace SSX3_Server.EAClient
                 ConsoleManager.WriteLine(IPAddress + " Client Disconnecting...");
                 SaveEAUserData();
                 SaveEAUserPersona();
-                CloseConnection();
-                EAServerManager.Instance.DestroyClient(ID);
+                DestroyClient();
             }
         }
 
@@ -229,6 +233,8 @@ namespace SSX3_Server.EAClient
                 {
                     LastRecive = DateTime.Now;
                     EnteringChal = false;
+                    PingTimeout = 60;
+                    TimeoutSeconds = 300;
                 }
 
                 Type c;
@@ -286,8 +292,7 @@ namespace SSX3_Server.EAClient
                     ConsoleManager.WriteLine(IPAddress + " Connection Ended, Disconnecting...");
                     SaveEAUserData();
                     SaveEAUserPersona();
-                    CloseConnection();
-                    EAServerManager.Instance.DestroyClient(ID);
+                    DestroyClient();
                 }
             }
         }
@@ -307,8 +312,7 @@ namespace SSX3_Server.EAClient
                     ConsoleManager.WriteLine(IPAddress + " Connection Ended, Disconnecting...");
                     SaveEAUserData();
                     SaveEAUserPersona();
-                    CloseConnection();
-                    EAServerManager.Instance.DestroyClient(ID);
+                    DestroyClient();
                 }
             }
         }
@@ -446,26 +450,52 @@ namespace SSX3_Server.EAClient
 
         }
 
+        public void DestroyClient()
+        {
+            //if (!EnteringChal || MainClient == null)
+            //{
+                EAServerManager.Instance.DestroyClient(ID);
+            //}
+            //else
+            //{
+            //    CloseConnection(1);
+            //}
+        }
+
         bool Closing = false;
 
-        public void CloseConnection()
+        public void CloseConnection(int CloseServer = 0)
         {
             if (!Closing)
             {
                 Closing = true;
-                if (MainClient.Connected)
+
+                if (CloseServer == 0 || CloseServer == 1)
                 {
-                    MainNS.Close();
-                    MainClient.Close();
-                }
-                if (BuddyClient != null)
-                {
-                    if (BuddyClient.Connected)
+                    if (MainClient != null)
                     {
-                        BuddyClient.Close();
-                        BuddyNS.Close();
+                        if (MainClient.Connected)
+                        {
+                            MainNS.Close();
+                            MainClient.Close();
+                            MainClient = null;
+                        }
                     }
                 }
+
+                if (CloseServer == 0 || CloseServer == 2)
+                {
+                    if (BuddyClient != null)
+                    {
+                        if (BuddyClient.Connected)
+                        {
+                            BuddyNS.Close();
+                            BuddyClient.Close();
+                            BuddyClient = null;
+                        }
+                    }
+                }
+
                 //Delete Room if in one
                 if (room != null)
                 {

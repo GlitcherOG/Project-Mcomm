@@ -62,7 +62,7 @@ namespace SSX3_Server.EAClient.Messages.In
                 {
                     if (client.userData.Pass != ByteUtil.CreateSHA256(PASS))
                     {
-                        client.CloseConnection();
+                        client.DestroyClient();
                         return;
                     }
                 }

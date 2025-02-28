@@ -76,7 +76,7 @@ namespace SSX3_Server.EAClient.Messages
             //Compare against whats in file, If wrong disconnect
             if(client.userData.Pass != ByteUtil.CreateSHA256(PASS))
             {
-                client.CloseConnection();
+                client.DestroyClient();
                 return;
             }
 

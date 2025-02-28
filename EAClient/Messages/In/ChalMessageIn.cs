@@ -125,8 +125,8 @@ namespace SSX3_Server.EAClient.Messages
 
                         plusSesMessageOut.P1 = HostClient.challange.TrackID; /*HostClient.ID.ToString();*/
                         plusSesMessageOut.P2 = HostClient.challange.Gamemode2; /*OtherUser.ID.ToString();*/
-                        plusSesMessageOut.P3 = "1"; //Not Used
-                        plusSesMessageOut.P4 = "1"; //Not Used
+                        plusSesMessageOut.P3 = "2"; //Not Used
+                        plusSesMessageOut.P4 = "2"; //Not Used
                         plusSesMessageOut.AUTH = HostClient.challange.Ranked; //Unknown
                         plusSesMessageOut.SEED = Seed;
                         plusSesMessageOut.WHEN = DateTime.Now.ToString("yyyy.MM.dd hh:mm:ss");
@@ -162,6 +162,11 @@ namespace SSX3_Server.EAClient.Messages
                         //plusSesMessageOut.FROM = HostIP;
 
                         OtherUser.Broadcast(plusSesMessageOut);
+
+                        OtherUser.TimeoutSeconds = 60 * 10;
+                        HostClient.TimeoutSeconds = 60 * 10;
+                        HostClient.PingTimeout = 60* 10;
+                        OtherUser.PingTimeout = 60 * 10;
 
                         chalMessageIns.Remove(HostEntry);
                         chalMessageIns.Remove(OppoEntry);

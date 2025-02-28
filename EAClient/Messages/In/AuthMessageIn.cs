@@ -70,7 +70,7 @@ namespace SSX3_Server.EAClient.Messages
                 {
                     if(client.IPAddress== UserTest.IPAddress)
                     {
-                        UserTest.CloseConnection();
+                        UserTest.DestroyClient();
                         Thread.Sleep(1000);
                     }
                     else
@@ -78,7 +78,7 @@ namespace SSX3_Server.EAClient.Messages
                         msg2.SubMessage = "logn";
                         client.Broadcast(msg2);
                         Thread.Sleep(10000);
-                        client.CloseConnection();
+                        client.DestroyClient();
                         return;
                     }
                 }
