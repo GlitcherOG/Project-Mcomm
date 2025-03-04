@@ -33,6 +33,15 @@ namespace SSX3_Server.EAClient.Messages
 
                 if (TempRoom != null)
                 {
+                    if (client.room != null)
+                    {
+                        //DQUE NEEDS TO BE FIXED
+                        client.Broadcast(new DQUEMessageout());
+                        room.RemoveUser(client);
+                        client.room = null;
+                        return;
+                    }
+
                     if (TempRoom.roomPassword == "" && PASS != "")
                     {
                         TempRoom.AddUser(client);
@@ -56,6 +65,12 @@ namespace SSX3_Server.EAClient.Messages
                         moveMessageIn.SubMessage = "pass";
                         client.Broadcast(moveMessageIn);
                     }
+                }
+                else
+                {
+                    MoveMessageIn moveMessageIn = new MoveMessageIn();
+                    moveMessageIn.SubMessage = "nrom";
+                    client.Broadcast(moveMessageIn);
                 }
             }
             else

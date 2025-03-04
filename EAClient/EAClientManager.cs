@@ -4,6 +4,7 @@ using System;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -59,6 +60,7 @@ namespace SSX3_Server.EAClient
         public int ForceGamemodeID = -1;
 
         public bool EnteringChal;
+        public bool Closing;
         private readonly static object _lock = new object();
 
         public EAClientManager(TcpClient tcpClient, NetworkStream NSClient, int InID, string SESSin, string MASKin, bool PAL)
@@ -194,17 +196,18 @@ namespace SSX3_Server.EAClient
                         //If no response from server for timeout break
                         break;
                     }
+
+                    if (Closing)
+                    {
+                        break;
+                    }
                 }
                 catch
                 {
-                    //Unknown Connection Error
-                    //Most Likely Game has crashed
-                    ConsoleManager.WriteLine(IPAddress + " Connection Ended, Disconnecting...");
-                    SaveEAUserData();
-                    SaveEAUserPersona();
-                    DestroyClient();
+                    break;
                 }
             }
+
 
             if (!Closing)
             {
@@ -328,7 +331,7 @@ namespace SSX3_Server.EAClient
             else
             {
                 plusUserMessageOut.I = index.ToString();
-            }    
+            }
             plusUserMessageOut.N = /*"["+VersionPrefix[VERS] +"] " + */LoadedPersona.Name;
             plusUserMessageOut.M = userData.Name;
             plusUserMessageOut.A = "0.0.0.0";//RealAddress;
@@ -365,9 +368,9 @@ namespace SSX3_Server.EAClient
 
             int Count = userData.PersonaList.Count;
 
-            if(Count>4)
+            if (Count > 4)
             {
-                Count=4;
+                Count = 4;
             }
 
             for (int i = 0; i < Count; i++)
@@ -452,58 +455,46 @@ namespace SSX3_Server.EAClient
 
         public void DestroyClient()
         {
-            //if (!EnteringChal || MainClient == null)
-            //{
-                EAServerManager.Instance.DestroyClient(ID);
-            //}
-            //else
-            //{
-            //    CloseConnection(1);
-            //}
+            Closing = true;
+            EAServerManager.Instance.DestroyClient(ID, true);
         }
-
-        bool Closing = false;
 
         public void CloseConnection(int CloseServer = 0)
         {
-            if (!Closing)
+            //Delete Room if in one
+            if (room != null)
             {
-                Closing = true;
-
-                if (CloseServer == 0 || CloseServer == 1)
-                {
-                    if (MainClient != null)
-                    {
-                        if (MainClient.Connected)
-                        {
-                            MainNS.Close();
-                            MainClient.Close();
-                            MainClient = null;
-                        }
-                    }
-                }
-
-                if (CloseServer == 0 || CloseServer == 2)
-                {
-                    if (BuddyClient != null)
-                    {
-                        if (BuddyClient.Connected)
-                        {
-                            BuddyNS.Close();
-                            BuddyClient.Close();
-                            BuddyClient = null;
-                        }
-                    }
-                }
-
-                //Delete Room if in one
-                if (room != null)
-                {
-                    room.RemoveUser(this, true);
-                }
-
-                ChalMessageIn.RemoveChallange(this);
+                room.RemoveUser(this, true);
             }
+
+            if (CloseServer == 0 || CloseServer == 1)
+            {
+                if (MainClient != null)
+                {
+                    if (MainClient.Connected)
+                    {
+                        MainNS.Close();
+                        MainClient.Close();
+                        MainClient = null;
+                    }
+                }
+            }
+
+            if (CloseServer == 0 || CloseServer == 2)
+            {
+                if (BuddyClient != null)
+                {
+                    if (BuddyClient.Connected)
+                    {
+                        BuddyNS.Close();
+                        BuddyClient.Close();
+                        BuddyClient = null;
+                    }
+                }
+            }
+
+            ChalMessageIn.RemoveChallange(this);
+
         }
 
         public static Dictionary<string, string> VersionCodes { get; } =

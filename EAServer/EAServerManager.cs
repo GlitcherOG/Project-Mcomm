@@ -414,10 +414,7 @@ namespace SSX3_Server.EAServer
                 {
                     if (clients[i].ID == ID)
                     {
-                        if (StopTCP)
-                        {
-                            clients[i].CloseConnection();
-                        }
+                        clients[i].CloseConnection();
                         clients[i] = null;
                         clients.RemoveAt(i);
                         break;
