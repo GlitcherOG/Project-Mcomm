@@ -283,6 +283,24 @@ namespace SSX3_Server.EAServer
             File.WriteAllText(path, serializer);
         }
 
+        public string CreateJsonText()
+        {
+            var TempFormating = Formatting.None;
+
+            var serializer = JsonConvert.SerializeObject(this, TempFormating);
+            return serializer.ToString();
+        }
+
+        public string CreateJsonCourseText(int ID)
+        {
+            var TempFormating = Formatting.None;
+
+            var Entry = courseEntries[ID];
+
+            var serializer = JsonConvert.SerializeObject(Entry, TempFormating);
+            return serializer.ToString();
+        }
+
         public static HighscoreDatabase Load(string path)
         {
             string paths = path;

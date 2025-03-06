@@ -105,6 +105,7 @@ namespace SSX3_Server.EAServer
             Directory.CreateDirectory(AppContext.BaseDirectory + "\\Personas");
             Directory.CreateDirectory(AppContext.BaseDirectory + "\\Races");
             Directory.CreateDirectory(AppContext.BaseDirectory + "\\Logs");
+            Directory.CreateDirectory(AppContext.BaseDirectory + "\\Web");
 
             if (config == null)
             {
