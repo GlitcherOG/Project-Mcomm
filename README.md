@@ -33,7 +33,7 @@ Buddies
 
 Statistics  
 
-• Leaderboards: ✅ (Overall score missing)
+• Leaderboards: ✅ (Overall score missing)  
 • Rider Stats:  
 • Ranked Play: ✅  
 
