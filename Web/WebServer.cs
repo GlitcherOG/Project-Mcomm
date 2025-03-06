@@ -79,7 +79,7 @@ namespace SSX3_Server.Web
 
         public static string WebpageGenerator(string URL)
         {
-            string[] SplitURL = URL.Split('/');
+            string[] SplitURL = URL.ToLower().Split('/');
 
             if (SplitCheck(SplitURL,1,"api"))
             {
@@ -152,12 +152,39 @@ namespace SSX3_Server.Web
                 {
                     for (int i = 0; i < 0; i++)
                     {
-                        
+                        //List out version
                     }
                 }
             }
 
-                return "NULL";
+            if (SplitCheck(SplitURL, 2, "room"))
+            {
+                for (int i = 0; i < 0; i++)
+                {
+                    //List rooms
+                }
+            }
+
+            if (SplitCheck(SplitURL, 2, "games"))
+            {
+                for (int i = 0; i < 0; i++)
+                {
+                    //List out last 50 or so games
+                }
+            }
+
+            if (SplitCheck(SplitURL, 2, "persona"))
+            {
+                //Return Persona Info
+            }
+
+
+            if (SplitCheck(SplitURL, 2, "online"))
+            {
+                //Return online persona list
+            }
+
+            return "NULL";
         }
     }
 }
