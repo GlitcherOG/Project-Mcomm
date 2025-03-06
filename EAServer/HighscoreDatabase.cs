@@ -27,7 +27,7 @@ namespace SSX3_Server.EAServer
                 { 9, "Happiness" }, //Race
                 { 10, "Ruthless" }, //Race
                 { 11, "The Throne" }, //Race
-                { 12, "R&N" },
+                { 12, "R&B" },
                 { 13, "Style Mile" },
                 { 14, "Kick Doubt" },
                 { 15, "Null" },
@@ -38,12 +38,12 @@ namespace SSX3_Server.EAServer
                 { 20, "Happiness" }, //Score
                 { 21, "Ruthless" },//Score
                 { 22, "The Throne" }, //Score
-                { 23, "Crows Nest" },
+                { 23, "Crow's Nest" },
                 { 24, "Launch Time" },
                 { 25, "Much-2-Much" },
                 { 26, "The Junction" },
                 { 27, "Schizophrenia" },
-                { 28, "Pernendiculous" },
+                { 28, "Perpendiculous" },
         };
 
         public static Dictionary<string, int> RankToHighscore { get; } =
