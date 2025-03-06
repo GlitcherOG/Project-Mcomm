@@ -10,6 +10,7 @@ namespace SSX3_Server.Web
 {
     internal class WebServer
     {
+        //Cache HTML, JS and CSS Pages
         public static void SimpleListenerExample(/*string[] prefixes*/)
         {
             try
@@ -57,6 +58,28 @@ namespace SSX3_Server.Web
 
         public static string WebpageGenerator(string URL)
         {
+            string[] SplitURL = URL.split('/')
+
+            try()
+            {
+                if(URL[0].ToLower().Contains("api"))
+                {
+                    if(URL[1].Contains("highscore"))
+                    {
+                        
+                    }
+                }
+            }
+            catch
+            {
+                
+            }
+
+            if(URL=="")
+            {
+
+            }
+
             return "<HTML><BODY>Under Construction, Please Connect using SSX 3 Online</BODY></HTML>";
         }
     }
