@@ -42,7 +42,7 @@ namespace SSX3_Server.EAServer
                 { 24, "Launch Time" },
                 { 25, "Much-2-Much" },
                 { 26, "The Junction" },
-                { 27, "Schiophrenia" },
+                { 27, "Schizophrenia" },
                 { 28, "Pernendiculous" },
         };
 
@@ -257,6 +257,8 @@ namespace SSX3_Server.EAServer
                 courseEntry.ID = i;
 
                 courseEntry.Name = IDToName[i];
+                courseEntry.Type = "Null";
+                courseEntry.Event = "Null";
 
                 courseEntry.Entries = new List<ScoreEntry>();
 
@@ -268,6 +270,66 @@ namespace SSX3_Server.EAServer
                 courseEntry.Entries.Add(TempEntry);
 
                 courseEntries.Add(courseEntry);
+            }
+
+            for (int i = 4; i < 9; i++)
+            {
+                var Temp = courseEntries[i];
+
+                Temp.Type = "Race";
+                Temp.Event = "Race";
+
+                courseEntries[i] = Temp;
+            }
+
+            for (int i = 9; i < 12; i++)
+            {
+                var Temp = courseEntries[i];
+
+                Temp.Type = "Race";
+                Temp.Event = "Backcountry";
+
+                courseEntries[i] = Temp;
+            }
+
+            for (int i = 12; i < 15; i++)
+            {
+                var Temp = courseEntries[i];
+
+                Temp.Type = "Freestyle";
+                Temp.Event = "Slope Style";
+
+                courseEntries[i] = Temp;
+            }
+
+            for (int i = 20; i < 23; i++)
+            {
+                var Temp = courseEntries[i];
+
+                Temp.Type = "Freestyle";
+                Temp.Event = "Backcountry";
+
+                courseEntries[i] = Temp;
+            }
+
+            for (int i = 23; i < 26; i++)
+            {
+                var Temp = courseEntries[i];
+
+                Temp.Type = "Freestyle";
+                Temp.Event = "Big Air";
+
+                courseEntries[i] = Temp;
+            }
+
+            for (int i = 26; i < 29; i++)
+            {
+                var Temp = courseEntries[i];
+
+                Temp.Type = "Freestyle";
+                Temp.Event = "Half Pipe";
+
+                courseEntries[i] = Temp;
             }
         }
 
@@ -320,6 +382,8 @@ namespace SSX3_Server.EAServer
         {
             public int ID;
             public string Name;
+            public string Type;
+            public string Event;
             public List<ScoreEntry> Entries;
         }
 

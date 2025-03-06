@@ -34,21 +34,41 @@ namespace SSX3_Server.Web
 
                 while (true)
                 {
-                    // Note: The GetContext method blocks while waiting for a request.
-                    HttpListenerContext context = listener.GetContext();
-                    HttpListenerRequest request = context.Request;
-                    // Obtain a response object.
-                    HttpListenerResponse response = context.Response;
-                    // Construct a response.
-                    ConsoleManager.WriteLine("Web Request Generating Page...");
-                    string responseString = WebpageGenerator(context.Request.RawUrl);
-                    byte[] buffer = System.Text.Encoding.ASCII.GetBytes(responseString);
-                    // Get a response stream and write the response to it.
-                    response.ContentLength64 = buffer.Length;
-                    System.IO.Stream output = response.OutputStream;
-                    output.Write(buffer, 0, buffer.Length);
-                    // You must close the output stream.
-                    output.Close();
+                    try
+                    {
+                        // Note: The GetContext method blocks while waiting for a request.
+                        HttpListenerContext context = listener.GetContext();
+                        HttpListenerRequest request = context.Request;
+                        // Obtain a response object.
+                        HttpListenerResponse response = context.Response;
+                        // Construct a response.
+                        string responseString = WebpageGenerator(context.Request.RawUrl);
+                        byte[] buffer = System.Text.Encoding.UTF8.GetBytes(responseString);
+                        // Get a response stream and write the response to it.
+
+                        //if (request.HttpMethod == "OPTIONS")
+                        //{
+                        //    response.AddHeader("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With");
+                        //    response.AddHeader("Access-Control-Allow-Methods", "GET, POST");
+                        //    response.AddHeader("Access-Control-Max-Age", "1728000");
+                        //}
+
+                        response.AppendHeader("Access-Control-Allow-Origin", "*");
+
+                        response.ContentLength64 = buffer.Length;
+                        if (context.Request.RawUrl.ToLower().StartsWith("/api"))
+                        {
+                            response.ContentType = "application/json";
+                        }
+                        System.IO.Stream output = response.OutputStream;
+                        output.Write(buffer, 0, buffer.Length);
+                        // You must close the output stream.
+                        output.Close();
+                    }
+                    catch
+                    {
+                        ConsoleManager.WriteLine("Error With Request.");
+                    }
                 }
             }
             catch
@@ -66,13 +86,18 @@ namespace SSX3_Server.Web
                 return APIReturn(SplitURL);
             }
 
-            if (File.Exists(AppContext.BaseDirectory + "\\Web\\" + URL))
+            string GenPath = Path.GetDirectoryName(AppContext.BaseDirectory + "\\Web\\" + URL);
+            if (GenPath.StartsWith(AppContext.BaseDirectory + "Web"))
             {
-                return File.ReadAllText(AppContext.BaseDirectory + "\\Web\\" + URL);
+                if (File.Exists(AppContext.BaseDirectory + "\\Web\\" + URL))
+                {
+                    return File.ReadAllText(AppContext.BaseDirectory + "\\Web\\" + URL);
+                }
             }
 
             if (File.Exists(AppContext.BaseDirectory + "\\Web\\index.html"))
             {
+                ConsoleManager.WriteLine("Web Request Generating Page...");
                 return File.ReadAllText(AppContext.BaseDirectory + "\\Web\\index.html");
             }
 
@@ -121,8 +146,18 @@ namespace SSX3_Server.Web
                 }
             }
 
+            if (SplitCheck(SplitURL, 2, "data"))
+            {
+                if(SplitCheck(SplitURL, 3, "version"))
+                {
+                    for (int i = 0; i < 0; i++)
+                    {
+                        
+                    }
+                }
+            }
 
-            return "NULL";
+                return "NULL";
         }
     }
 }
