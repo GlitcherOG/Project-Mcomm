@@ -53,7 +53,7 @@ namespace SSX3_Server.Web
                         //    response.AddHeader("Access-Control-Max-Age", "1728000");
                         //}
 
-                        response.AppendHeader("Access-Control-Allow-Origin", "*");
+                        //response.AppendHeader("Access-Control-Allow-Origin", "*");
 
                         response.ContentLength64 = buffer.Length;
                         if (context.Request.RawUrl.ToLower().StartsWith("/api"))
@@ -97,7 +97,7 @@ namespace SSX3_Server.Web
 
             if (File.Exists(AppContext.BaseDirectory + "\\Web\\index.html"))
             {
-                ConsoleManager.WriteLine("Web Request Generating Page...");
+                ConsoleManager.WriteLineVerbose("Web Request Generating Page...");
                 return File.ReadAllText(AppContext.BaseDirectory + "\\Web\\index.html");
             }
 
