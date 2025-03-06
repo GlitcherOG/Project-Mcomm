@@ -9,7 +9,7 @@ Accounts
   
 • Authentication & Account Creation: ✅  
 • Persona creation & Persona deletion: ✅  
-• Account Management: ✅
+• Account Management: ✅  
 • Username & Password recovery:  
 
 Rooms  
