@@ -89,6 +89,17 @@ Note: PCAP options treat PCSX2 as its own device on your network. So, we need to
 5. For the final section, enter any number 100 - 250
 Note: Choosing a high number will give you a better chance at avoiding conflict with existing devices.
 
+## Upnp (Alternative to Port forwarding)
+[Download PortMapper](https://github.com/kaklakariada/portmapper)
+Note: This may work as an aternative to port forwarding or may fail depending on router settings
+1. On the Router Page Click Connect
+2. If it fails to connect go to port mapper settings and try a different NPnP Library (Ignoring Dummy Router) and go to step 1
+3. Once Connected Create a Port Mapping Preset
+4. Name it SSX 3 and Add Port Range UDP 3658-3659 for Gameplay, UDP 6000-6001 for Voice Chat
+5. Untick Use Local Host and Put in PS2 Address
+6. Save and select the preset and click use
+7. If it appears in the port mappings at the top its worked otherwise you may need to review router settings
+
 ## Prevent Windows from messing with your connection (PCSX2 Only)  
 __Firewall Exception for PCSX2__  
 1. Control Panel -> System and Security -> Windows Defender Firewall  
