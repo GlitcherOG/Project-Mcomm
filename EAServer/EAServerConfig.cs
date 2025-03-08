@@ -26,6 +26,7 @@ namespace SSX3_Server.EAServer
         public bool DiscordBot = false;
         public string DiscordBotToken = "";
         public bool Webpage = false;
+        public bool Https = false;
         public string WebpageURL = "ssxor.org";
 
         public void CreateJson(string path, bool Inline = true)

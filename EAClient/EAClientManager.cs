@@ -515,5 +515,6 @@ namespace SSX3_Server.EAClient
                 { "PS2/Beta 1.04EU-Sep 21 2003", "PAL 2.0" }, //PAL 2.0
         };
 
+
     }
 }

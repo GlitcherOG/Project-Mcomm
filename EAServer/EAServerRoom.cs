@@ -263,5 +263,49 @@ namespace SSX3_Server.EAServer
             }
         }
 
+        public RoomInfo GenerateRoomInfo()
+        {
+            var RoomInfo = new RoomInfo();
+
+            RoomInfo.roomName = roomName;
+            RoomInfo.roomType = roomType;
+
+            RoomInfo.Players = new List<PlayerInfo>();
+
+            for (int i = 0; i < Clients.Count; i++)
+            {
+                var TempPlayer = new PlayerInfo();
+
+                TempPlayer.playerName = Clients[i].LoadedPersona.Name;
+                TempPlayer.playerVersion = EAClientManager.VersionPrefix[Clients[i].VERS];
+
+                RoomInfo.Players.Add(TempPlayer);
+            }
+
+            if(Clients.Count==0)
+            {
+                var TempPlayer = new PlayerInfo();
+
+                TempPlayer.playerName = "Empty";
+                TempPlayer.playerVersion = "NULL";
+
+                RoomInfo.Players.Add(TempPlayer);
+            }
+
+            return RoomInfo;
+        }
+
+        public struct RoomInfo
+        {
+            public string roomName;
+            public string roomType;
+            public List<PlayerInfo> Players;
+        }
+
+        public struct PlayerInfo
+        {
+            public string playerName;
+            public string playerVersion;
+        }
     }
 }

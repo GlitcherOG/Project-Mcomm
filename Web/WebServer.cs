@@ -1,4 +1,5 @@
-﻿using SSX3_Server.EAServer;
+﻿using Newtonsoft.Json;
+using SSX3_Server.EAServer;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +17,11 @@ namespace SSX3_Server.Web
         {
             try
             {
-                string[] prefixes = new string[2] { "http://" + EAServerManager.Instance.config.WebpageURL + ":80/", "https://" + EAServerManager.Instance.config.WebpageURL + ":8443/" };
+                string[] prefixes = new string[1] { "http://" + EAServerManager.Instance.config.WebpageURL + ":80/" };
+                if (EAServerManager.Instance.config.Https)
+                {
+                    prefixes = new string[2] { "http://" + EAServerManager.Instance.config.WebpageURL + ":80/", "https://" + EAServerManager.Instance.config.WebpageURL + ":4443/" };
+                }
 
                 // URI prefixes are required,
                 // for example "http://contoso.com:8080/index/".
@@ -159,10 +164,16 @@ namespace SSX3_Server.Web
 
             if (SplitCheck(SplitURL, 2, "room"))
             {
-                for (int i = 0; i < 0; i++)
+                List<EAServerRoom.RoomInfo> TempRooms = new List<EAServerRoom.RoomInfo>();
+
+                for (int i = 0; i < EAServerManager.Instance.rooms.Count; i++)
                 {
                     //List rooms
+                    TempRooms.Add(EAServerManager.Instance.rooms[i].GenerateRoomInfo());
                 }
+
+                var serializer = JsonConvert.SerializeObject(TempRooms);
+                return serializer.ToString();
             }
 
             if (SplitCheck(SplitURL, 2, "games"))
