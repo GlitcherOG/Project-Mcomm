@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using SSX3_Server.EAClient;
 using SSX3_Server.EAServer;
 using System;
 using System.Collections.Generic;
@@ -20,7 +21,7 @@ namespace SSX3_Server.Web
                 string[] prefixes = new string[1] { "http://" + EAServerManager.Instance.config.WebpageURL + ":80/" };
                 if (EAServerManager.Instance.config.Https)
                 {
-                    prefixes = new string[2] { "http://" + EAServerManager.Instance.config.WebpageURL + ":80/", "https://" + EAServerManager.Instance.config.WebpageURL + ":4443/" };
+                    prefixes = new string[2] { "http://" + EAServerManager.Instance.config.WebpageURL + ":80/", "https://" + EAServerManager.Instance.config.WebpageURL + ":443/" };
                 }
 
                 // URI prefixes are required,
@@ -176,21 +177,42 @@ namespace SSX3_Server.Web
                 return serializer.ToString();
             }
 
-            if (SplitCheck(SplitURL, 2, "games"))
+            if (SplitCheck(SplitURL, 2, "game"))
             {
-                for (int i = 0; i < 0; i++)
+                if(SplitURL.Length==4)
                 {
-                    //List out last 50 or so games
+                    if (SplitURL[4].Contains("&raw=1"))
+                    {
+                        string FileName = SplitURL[4].Replace("&raw=1","").Replace("%20", "");
+                        if(File.Exists(AppContext.BaseDirectory + "\\Races\\"+FileName))
+                        {
+                            return File.ReadAllText(AppContext.BaseDirectory + "\\Races\\" + FileName);
+                        }
+                        return "No File Found";
+                    }
                 }
             }
 
-            if (SplitCheck(SplitURL, 2, "persona"))
+            if (SplitCheck(SplitURL, 2, "online"))
             {
+                var PersonaList = new List<EAClientManager.OnlinePersonaInfo>();
                 //Return Persona Info
+                for (global::System.Int32 i = 0; i < EAServerManager.Instance.clients.Count; i++)
+                {
+                    var Temp = EAServerManager.Instance.clients[i];
+
+                    if (Temp.LoadedPersona.Name!="")
+                    {
+                        PersonaList.Add(Temp.ReturnOnlineInfo());
+                    }
+                }
+
+                var serializer = JsonConvert.SerializeObject(PersonaList);
+                return serializer.ToString();
             }
 
 
-            if (SplitCheck(SplitURL, 2, "online"))
+            if (SplitCheck(SplitURL, 2, "persona"))
             {
                 //Return online persona list
             }

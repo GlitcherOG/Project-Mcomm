@@ -268,7 +268,12 @@ namespace SSX3_Server.EAServer
             var RoomInfo = new RoomInfo();
 
             RoomInfo.roomName = roomName;
-            RoomInfo.roomType = roomType;
+            RoomInfo.roomType = roomType.Replace("Intermediate", "Voice");
+
+            if (roomPassword!="")
+            {
+                RoomInfo.password = true;
+            }
 
             RoomInfo.Players = new List<PlayerInfo>();
 
@@ -282,16 +287,6 @@ namespace SSX3_Server.EAServer
                 RoomInfo.Players.Add(TempPlayer);
             }
 
-            if(Clients.Count==0)
-            {
-                var TempPlayer = new PlayerInfo();
-
-                TempPlayer.playerName = "Empty";
-                TempPlayer.playerVersion = "NULL";
-
-                RoomInfo.Players.Add(TempPlayer);
-            }
-
             return RoomInfo;
         }
 
@@ -299,6 +294,7 @@ namespace SSX3_Server.EAServer
         {
             public string roomName;
             public string roomType;
+            public bool password;
             public List<PlayerInfo> Players;
         }
 

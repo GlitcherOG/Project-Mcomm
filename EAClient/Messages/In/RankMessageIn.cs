@@ -237,16 +237,16 @@ namespace SSX3_Server.EAClient.Messages
 
             RaceDataFile rankDataFile = new RaceDataFile();
             rankDataFile.AddData(this);
-            rankDataFile.CreateJson(AppContext.BaseDirectory + "\\Races\\"+client.LoadedPersona.Name+"."+WHEN.Replace(":",".")+".json");
+            rankDataFile.CreateJson(AppContext.BaseDirectory + "\\Races\\"+client.LoadedPersona.Name+"."+WHEN.Replace(" ", ".").Replace(":",".")+".json");
 
             //Check if other users race data is there if not dont process
             if(client.LoadedPersona.Name == rankDataFile.NAME0)
             { 
-                if(File.Exists(AppContext.BaseDirectory + "\\Races\\" + rankDataFile.NAME1 + "." + WHEN.Replace(":", ".") + ".json"))
+                if(File.Exists(AppContext.BaseDirectory + "\\Races\\" + rankDataFile.NAME1 + "." + WHEN.Replace(" ", ".").Replace(":", ".") + ".json"))
                 {
                     Thread.Sleep(1000);
 
-                    RaceDataFile raceDataFile1 = RaceDataFile.Load(AppContext.BaseDirectory + "\\Races\\" + rankDataFile.NAME1 + "." + WHEN.Replace(":", ".") + ".json");
+                    RaceDataFile raceDataFile1 = RaceDataFile.Load(AppContext.BaseDirectory + "\\Races\\" + rankDataFile.NAME1 + "." + WHEN.Replace(" ", ".").Replace(":", ".") + ".json");
                     lock (EAServerManager.Instance.highscoreDatabase)
                     {
                         EAServerManager.Instance.highscoreDatabase.AddScores(rankDataFile, raceDataFile1);
@@ -256,11 +256,11 @@ namespace SSX3_Server.EAClient.Messages
 
             if (client.LoadedPersona.Name == rankDataFile.NAME1)
             {
-                if (File.Exists(AppContext.BaseDirectory + "\\Races\\" + rankDataFile.NAME0 + "." + WHEN.Replace(":", ".") + ".json"))
+                if (File.Exists(AppContext.BaseDirectory + "\\Races\\" + rankDataFile.NAME0 + "." + WHEN.Replace(" ", ".").Replace(":", ".") + ".json"))
                 {
                     Thread.Sleep(1000);
 
-                    RaceDataFile raceDataFile1 = RaceDataFile.Load(AppContext.BaseDirectory + "\\Races\\" + rankDataFile.NAME0 + "." + WHEN.Replace(":", ".") + ".json");
+                    RaceDataFile raceDataFile1 = RaceDataFile.Load(AppContext.BaseDirectory + "\\Races\\" + rankDataFile.NAME0 + "." + WHEN.Replace(" ", ".").Replace(":", ".") + ".json");
 
                     lock (EAServerManager.Instance.highscoreDatabase)
                     {

@@ -497,6 +497,16 @@ namespace SSX3_Server.EAClient
 
         }
 
+        public OnlinePersonaInfo ReturnOnlineInfo()
+        {
+            OnlinePersonaInfo info = new OnlinePersonaInfo();
+
+            info.playerName = LoadedPersona.Name;
+            info.playerVersion = VersionPrefix[VERS];
+
+            return info;
+        }
+
         public static Dictionary<string, string> VersionCodes { get; } =
         new Dictionary<string, string>()
         {
@@ -515,6 +525,10 @@ namespace SSX3_Server.EAClient
                 { "PS2/Beta 1.04EU-Sep 21 2003", "PAL 2.0" }, //PAL 2.0
         };
 
-
+        public struct OnlinePersonaInfo
+        {
+            public string playerName;
+            public string playerVersion;
+        }
     }
 }
