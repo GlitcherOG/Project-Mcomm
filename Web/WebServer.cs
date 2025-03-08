@@ -13,11 +13,29 @@ namespace SSX3_Server.Web
     internal class WebServer
     {
         //Cache HTML, JS and CSS Pages
+        public static List<WebData> webDatas = new List<WebData>();
+
+        public static void CacheWebsite()
+        {
+            webDatas = new List<WebData>();
+            var Files = Directory.GetFiles(AppContext.BaseDirectory + "\\Web\\", "*" , SearchOption.AllDirectories);
+
+            for (int i = 0; i < Files.Length; i++)
+            {
+                WebData webData = new WebData();
+                webData.FileName = Files[i].Replace(AppContext.BaseDirectory + "\\Web", "");
+                webData.FileText = File.ReadAllText(Files[i]).Replace(".html", "");
+                webDatas.Add(webData);
+            }
+        }
+
 
         public static void SimpleListenerExample(/*string[] prefixes*/)
         {
             try
             {
+                CacheWebsite();
+
                 string[] prefixes = new string[1] { "http://" + EAServerManager.Instance.config.WebpageURL + ":80/" };
                 if (EAServerManager.Instance.config.Https)
                 {
@@ -92,19 +110,37 @@ namespace SSX3_Server.Web
                 return APIReturn(SplitURL);
             }
 
-            string GenPath = Path.GetDirectoryName(AppContext.BaseDirectory + "\\Web\\" + URL);
-            if (GenPath.StartsWith(AppContext.BaseDirectory + "Web"))
+            for (int i = 0; i < webDatas.Count; i++)
             {
-                if (File.Exists(AppContext.BaseDirectory + "\\Web\\" + URL))
+                if (webDatas[i].FileName == URL.Replace("/","\\"))
                 {
-                    return File.ReadAllText(AppContext.BaseDirectory + "\\Web\\" + URL);
+                    return webDatas[i].FileText;
+                }
+
+                if (webDatas[i].FileName.Split(".")[0] == URL.Replace("/", "\\"))
+                {
+                    return webDatas[i].FileText;
                 }
             }
 
-            if (File.Exists(AppContext.BaseDirectory + "\\Web\\index.html"))
+            //string GenPath = Path.GetDirectoryName(AppContext.BaseDirectory + "\\Web\\" + URL);
+            //if (GenPath.StartsWith(AppContext.BaseDirectory + "Web"))
+            //{
+            //    if (File.Exists(AppContext.BaseDirectory + "\\Web\\" + URL))
+            //    {
+            //        return File.ReadAllText(AppContext.BaseDirectory + "\\Web\\" + URL).Replace(".html","");
+            //    }
+
+            //    if (File.Exists(AppContext.BaseDirectory + "\\Web\\" + URL+".html"))
+            //    {
+            //        return File.ReadAllText(AppContext.BaseDirectory + "\\Web\\" + URL + ".html").Replace(".html", "");
+            //    }
+            //}
+
+            if (File.Exists(AppContext.BaseDirectory + "\\Web\\index.html") && URL != "/favicon.ico")
             {
                 ConsoleManager.WriteLineVerbose("Web Request Generating Page...");
-                return File.ReadAllText(AppContext.BaseDirectory + "\\Web\\index.html");
+                return File.ReadAllText(AppContext.BaseDirectory + "\\Web\\index.html").Replace(".html", "");
             }
 
             return "<HTML><BODY>Under Construction, Please Connect using SSX 3 Online</BODY></HTML>";
@@ -218,6 +254,12 @@ namespace SSX3_Server.Web
             }
 
             return "NULL";
+        }
+
+        public struct WebData
+        {
+            public string FileName;
+            public string FileText;
         }
     }
 }
