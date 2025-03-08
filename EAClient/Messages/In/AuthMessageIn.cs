@@ -65,7 +65,7 @@ namespace SSX3_Server.EAClient.Messages
             {
                 AuthMessageOut msg2 = new AuthMessageOut();
 
-                var UserTest = EAServerManager.Instance.GetUserPersona(NAME);
+                var UserTest = EAServerManager.Instance.GetUser(NAME);
                 if (UserTest != null)
                 {
                     if(client.IPAddress== UserTest.IPAddress)

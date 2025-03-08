@@ -158,7 +158,7 @@ namespace SSX3_Server.DiscordBot
                 if (EAServerManager.Instance.clients[i].userData.Name == ctx.RawArgumentString)
                 {
                     ClientID = EAServerManager.Instance.clients[i].ID;
-                    EAServerManager.Instance.DestroyClient(ClientID, true);
+                    EAServerManager.Instance.DestroyClient(ClientID);
                     await ctx.RespondAsync("Kicking User" + ctx.RawArgumentString);
                 }
             }
@@ -178,7 +178,7 @@ namespace SSX3_Server.DiscordBot
                 if (EAServerManager.Instance.clients[i].LoadedPersona.Name == ctx.RawArgumentString)
                 {
                     ClientID = EAServerManager.Instance.clients[i].ID;
-                    EAServerManager.Instance.DestroyClient(ClientID, true);
+                    EAServerManager.Instance.DestroyClient(ClientID);
                     await ctx.RespondAsync("Kicking Persona" + ctx.RawArgumentString);
                 }
             }
@@ -198,7 +198,7 @@ namespace SSX3_Server.DiscordBot
                 if (EAServerManager.Instance.clients[i].LoadedPersona.Name == ctx.RawArgumentString)
                 {
                     ClientID = EAServerManager.Instance.clients[i].ID;
-                    EAServerManager.Instance.DestroyClient(ClientID, true);
+                    EAServerManager.Instance.DestroyClient(ClientID);
                     await ctx.RespondAsync("Kicking Persona" + ctx.RawArgumentString);
                 }
             }

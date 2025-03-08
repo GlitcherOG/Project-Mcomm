@@ -159,7 +159,7 @@ namespace SSX3_Server.EAClient.Messages
                         sessionData.GUID = plusSesMessageOut.NAME;
                         sessionData.Player0 = HostClient.LoadedPersona.Name;
                         sessionData.Player1 = OtherUser.LoadedPersona.Name;
-                        sessionData.When = plusSesMessageOut.WHEN;
+                        sessionData.When = DateTime.Now.ToString("yyyy.M.d h:mm:ss");
                         sessionData.Auth = plusSesMessageOut.AUTH;
                         sessionData.Valid = false;
 

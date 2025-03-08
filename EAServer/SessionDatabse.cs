@@ -1,6 +1,8 @@
 ﻿using Newtonsoft.Json;
+using SSX3_Server.EAClient.Messages;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection.Metadata.Ecma335;
 using System.Text;
@@ -49,22 +51,6 @@ namespace SSX3_Server.EAServer
                 }
             }
             return "";
-        }
-
-        public void ReprocessOldDataFormat()
-        {
-            sessionDatas = new List<SessionData>();
-
-            string[] Files = Directory.GetFiles(AppContext.BaseDirectory + "\\Races\\");
-            bool[] Processed = new bool[Files.Length];
-
-            for (int i = 0; i < Files.Length; i++)
-            {
-                if (Processed[i])
-                {
-
-                }
-            }
         }
 
         public void CreateJson(string path, bool Inline = false)

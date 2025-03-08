@@ -252,7 +252,8 @@ new Dictionary<int, string>()
                 NewEntry.Name = Player0;
                 NewEntry.GameVersion = Version0;
                 NewEntry.Score = Score0;
-                NewEntry.RaceDataFile = rankDataFile.NAME0 + "." + rankDataFile.WHEN;
+                NewEntry.RaceDataFile = rankData.GUID;
+                NewEntry.When = rankData.raceData0.WHEN;
 
                 if (Index0 == -1)
                 {
@@ -273,7 +274,8 @@ new Dictionary<int, string>()
                 NewEntry.Name = Player1;
                 NewEntry.GameVersion = Version1;
                 NewEntry.Score = Score1;
-                NewEntry.RaceDataFile = Player1 + " " + rankDataFile.WHEN;
+                NewEntry.RaceDataFile = rankData.GUID;
+                NewEntry.When = rankData.raceData0.WHEN;
 
                 if (Index1 == -1)
                 {
@@ -457,6 +459,7 @@ new Dictionary<int, string>()
             public string Name;
             public int Score;
             public string RaceDataFile;
+            public string When;
         }
     }
 }

@@ -236,9 +236,9 @@ namespace SSX3_Server.EAClient.Messages
             client.Broadcast(rankMessageIn);
 
             RaceDataFile rankDataFile = new RaceDataFile();
-            var rankData = rankDataFile.ProcessToRaceData(rankMessageIn);
-            string GUID = EAServerManager.Instance.sessionDatabse.ReturnGUID(WHEN, NAME0, NAME1);
+            var rankData = rankDataFile.ProcessToRaceData(this);
 
+            string GUID = EAServerManager.Instance.sessionDatabse.ReturnGUID(WHEN, NAME0, NAME1);
             rankDataFile.GUID = GUID;
             if (File.Exists(AppContext.BaseDirectory + "\\Races\\" + GUID + ".json"))
             {
@@ -251,7 +251,7 @@ namespace SSX3_Server.EAClient.Messages
                 rankDataFile.ValidRace0 = true;
             }
 
-            if (client.LoadedPersona.Name == rankData.NAME0)
+            if (client.LoadedPersona.Name == rankData.NAME1)
             {
                 rankDataFile.raceData1 = rankData;
                 rankDataFile.ValidRace1 = true;

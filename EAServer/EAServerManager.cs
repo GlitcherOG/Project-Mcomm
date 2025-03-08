@@ -60,6 +60,8 @@ namespace SSX3_Server.EAServer
 
             BannedNames = File.ReadAllLines(AppContext.BaseDirectory + "\\Names.txt");
 
+            //sessionDatabse.ReprocessOldDataFormat();
+
             if (config.DiscordBot)
             {
                 Task.Run(() => MainBot.Main(config.DiscordBotToken));
@@ -415,7 +417,7 @@ namespace SSX3_Server.EAServer
             GC.Collect();
         }
 
-        public void DestroyClient(int ID, bool StopTCP = false)
+        public void DestroyClient(int ID)
         {
             lock (clients)
             {
@@ -423,7 +425,14 @@ namespace SSX3_Server.EAServer
                 {
                     if (clients[i].ID == ID)
                     {
-                        clients[i].CloseConnection();
+                        try
+                        {
+                            clients[i].CloseConnection();
+                        }
+                        catch
+                        {
+                            ConsoleManager.WriteLine("Error Closing Connection");
+                        }
                         clients[i] = null;
                         clients.RemoveAt(i);
                         break;

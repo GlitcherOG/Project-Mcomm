@@ -456,10 +456,10 @@ namespace SSX3_Server.EAClient
         public void DestroyClient()
         {
             Closing = true;
-            EAServerManager.Instance.DestroyClient(ID, true);
+            EAServerManager.Instance.DestroyClient(ID);
         }
 
-        public void CloseConnection(int CloseServer = 0)
+        public void CloseConnection()
         {
             //Delete Room if in one
             if (room != null)
@@ -467,7 +467,9 @@ namespace SSX3_Server.EAClient
                 room.RemoveUser(this, true);
             }
 
-            if (CloseServer == 0 || CloseServer == 1)
+            ChalMessageIn.RemoveChallange(this);
+
+            try
             {
                 if (MainClient != null)
                 {
@@ -478,10 +480,7 @@ namespace SSX3_Server.EAClient
                         MainClient = null;
                     }
                 }
-            }
 
-            if (CloseServer == 0 || CloseServer == 2)
-            {
                 if (BuddyClient != null)
                 {
                     if (BuddyClient.Connected)
@@ -492,9 +491,10 @@ namespace SSX3_Server.EAClient
                     }
                 }
             }
+            catch
+            {
 
-            ChalMessageIn.RemoveChallange(this);
-
+            }
         }
 
         public OnlinePersonaInfo ReturnOnlineInfo()
