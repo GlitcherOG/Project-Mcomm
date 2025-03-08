@@ -236,38 +236,36 @@ namespace SSX3_Server.EAClient.Messages
             client.Broadcast(rankMessageIn);
 
             RaceDataFile rankDataFile = new RaceDataFile();
-            rankDataFile.AddData(this);
-            rankDataFile.CreateJson(AppContext.BaseDirectory + "\\Races\\"+client.LoadedPersona.Name+"."+WHEN.Replace(" ", ".").Replace(":",".")+".json");
+            var rankData = rankDataFile.ProcessToRaceData(rankMessageIn);
+            string GUID = EAServerManager.Instance.sessionDatabse.ReturnGUID(WHEN, NAME0, NAME1);
 
-            //Check if other users race data is there if not dont process
-            if(client.LoadedPersona.Name == rankDataFile.NAME0)
-            { 
-                if(File.Exists(AppContext.BaseDirectory + "\\Races\\" + rankDataFile.NAME1 + "." + WHEN.Replace(" ", ".").Replace(":", ".") + ".json"))
-                {
-                    Thread.Sleep(1000);
-
-                    RaceDataFile raceDataFile1 = RaceDataFile.Load(AppContext.BaseDirectory + "\\Races\\" + rankDataFile.NAME1 + "." + WHEN.Replace(" ", ".").Replace(":", ".") + ".json");
-                    lock (EAServerManager.Instance.highscoreDatabase)
-                    {
-                        EAServerManager.Instance.highscoreDatabase.AddScores(rankDataFile, raceDataFile1);
-                    }
-                }
-            }
-
-            if (client.LoadedPersona.Name == rankDataFile.NAME1)
+            rankDataFile.GUID = GUID;
+            if (File.Exists(AppContext.BaseDirectory + "\\Races\\" + GUID + ".json"))
             {
-                if (File.Exists(AppContext.BaseDirectory + "\\Races\\" + rankDataFile.NAME0 + "." + WHEN.Replace(" ", ".").Replace(":", ".") + ".json"))
+                rankDataFile = RaceDataFile.Load(AppContext.BaseDirectory + "\\Races\\" + GUID + ".json");
+            }
+
+            if (client.LoadedPersona.Name == rankData.NAME0)
+            {
+                rankDataFile.raceData0 = rankData;
+                rankDataFile.ValidRace0 = true;
+            }
+
+            if (client.LoadedPersona.Name == rankData.NAME0)
+            {
+                rankDataFile.raceData1 = rankData;
+                rankDataFile.ValidRace1 = true;
+            }
+
+            if (rankDataFile.ValidRace1 && rankDataFile.ValidRace0)
+            {
+                lock (EAServerManager.Instance.highscoreDatabase)
                 {
-                    Thread.Sleep(1000);
-
-                    RaceDataFile raceDataFile1 = RaceDataFile.Load(AppContext.BaseDirectory + "\\Races\\" + rankDataFile.NAME0 + "." + WHEN.Replace(" ", ".").Replace(":", ".") + ".json");
-
-                    lock (EAServerManager.Instance.highscoreDatabase)
-                    {
-                        EAServerManager.Instance.highscoreDatabase.AddScores(rankDataFile, raceDataFile1);
-                    }
+                    EAServerManager.Instance.highscoreDatabase.AddScores(rankDataFile);
                 }
             }
+
+            rankDataFile.CreateJson(AppContext.BaseDirectory + "\\Races\\" + GUID + ".json");
         }
     }
 }

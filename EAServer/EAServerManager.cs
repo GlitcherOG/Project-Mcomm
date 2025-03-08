@@ -23,6 +23,7 @@ namespace SSX3_Server.EAServer
 
         public EAServerConfig config;
         public HighscoreDatabase highscoreDatabase;
+        public SessionDatabse sessionDatabse;
         public string[] BannedNames;
 
         public int IDCount = 1;
@@ -51,6 +52,7 @@ namespace SSX3_Server.EAServer
             ConsoleManager.WriteLine("Initalising Server...");
 
             highscoreDatabase = HighscoreDatabase.Load(AppContext.BaseDirectory + "\\Highscore.json");
+            sessionDatabse = SessionDatabse.Load(AppContext.BaseDirectory + "\\Session.json");
 
             GenerateRequiredFiles();
 
@@ -119,6 +121,12 @@ namespace SSX3_Server.EAServer
                 highscoreDatabase.CreateBlankDatabase();
             }
             highscoreDatabase.CreateJson(AppContext.BaseDirectory + "\\Highscore.json");
+
+            if (sessionDatabse == null)
+            {
+                sessionDatabse = new SessionDatabse();
+            }
+            sessionDatabse.CreateJson(AppContext.BaseDirectory + "\\Session.json");
 
             if (!File.Exists(AppContext.BaseDirectory + "\\News.txt"))
             {

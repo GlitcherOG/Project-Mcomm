@@ -121,11 +121,15 @@ new Dictionary<int, string>()
                 { "13,2", 28 }, //Pernendiculous Super Pipe
         };
 
-        public void AddScores(RaceDataFile rankDataFile, RaceDataFile rankDataFile1)
+        public void AddScores(RaceDataFile rankData)
         {
             //Check If Race
             //Note Replace
-            if(rankDataFile.AUTH!="1")
+
+            var rankDataFile = rankData.raceData0;
+            var rankDataFile1 = rankData.raceData1;
+
+            if (rankDataFile.AUTH!="1")
             {
                 return;
             }
@@ -296,6 +300,16 @@ new Dictionary<int, string>()
             courseEntries[HighscoreID] = TempEntry;
 
             CreateJson(AppContext.BaseDirectory + "\\Highscore.json");
+
+            int ID = EAServerManager.Instance.sessionDatabse.ReturnID(rankData.GUID);
+
+            var TempSession = EAServerManager.Instance.sessionDatabse.sessionDatas[ID];
+
+            TempSession.Valid = true;
+
+            EAServerManager.Instance.sessionDatabse.sessionDatas[ID] = TempSession;
+
+            EAServerManager.Instance.sessionDatabse.CreateJson(AppContext.BaseDirectory + "\\Session.json");
         }
 
         public void CreateBlankDatabase()

@@ -115,7 +115,8 @@ namespace SSX3_Server.EAClient.Messages
 
                         PlusSesMessageOut plusSesMessageOut = new PlusSesMessageOut();
 
-                        plusSesMessageOut.NAME = "session";
+                        Guid g = Guid.NewGuid();
+                        plusSesMessageOut.NAME = g.ToString();
                         plusSesMessageOut.SELF = HostClient.LoadedPersona.Name;
                         plusSesMessageOut.HOST = HostClient.LoadedPersona.Name;
                         plusSesMessageOut.FROM = HostIP;
@@ -152,6 +153,20 @@ namespace SSX3_Server.EAClient.Messages
 
                         HostClient.EnteringChal = true;
                         OtherUser.EnteringChal = true;
+
+                        SessionDatabse.SessionData sessionData = new SessionDatabse.SessionData();
+
+                        sessionData.GUID = plusSesMessageOut.NAME;
+                        sessionData.Player0 = HostClient.LoadedPersona.Name;
+                        sessionData.Player1 = OtherUser.LoadedPersona.Name;
+                        sessionData.When = plusSesMessageOut.WHEN;
+                        sessionData.Auth = plusSesMessageOut.AUTH;
+                        sessionData.Valid = false;
+
+                        EAServerManager.Instance.sessionDatabse.sessionDatas.Add(sessionData);
+
+                        EAServerManager.Instance.sessionDatabse.CreateJson(AppContext.BaseDirectory + "\\Session.json");
+
 
                         HostClient.Broadcast(plusSesMessageOut);
 
