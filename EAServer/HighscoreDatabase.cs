@@ -12,6 +12,22 @@ namespace SSX3_Server.EAServer
     public class HighscoreDatabase
     {
         public List<CourseEntry> courseEntries = new List<CourseEntry>();
+
+        public static Dictionary<int, string> IDToChar { get; } =
+new Dictionary<int, string>()
+{
+                { 0, "Moby" },
+                { 1, "Kaori" },
+                { 2, "Allegra" },
+                { 3, "Mac" },
+                { 4, "Zoe" },
+                { 5, "Griff" },
+                { 6, "Elise" },
+                { 7, "Nate" },
+                { 8, "Psymon" },
+                { 9, "Viggo" }, 
+};
+
         public static Dictionary<int, string> IDToName { get; } =
         new Dictionary<int, string>()
         {
@@ -45,6 +61,40 @@ namespace SSX3_Server.EAServer
                 { 27, "Schizophrenia" },
                 { 28, "Perpendiculous" },
         };
+
+        public static Dictionary<int, string> IDToEvent { get; } =
+new Dictionary<int, string>()
+{
+                { 0, "Overall" },
+                { 1, "Null" },
+                { 2, "Null" },
+                { 3, "Null" },
+                { 4, "Race" },
+                { 5, "Race" },
+                { 6, "Race" },
+                { 7, "Race" },
+                { 8, "Race" },
+                { 9, "Race" }, //Race
+                { 10, "Race" }, //Race
+                { 11, "Race" }, //Race
+                { 12, "Slope Style" },
+                { 13, "Slope Style" },
+                { 14, "Slope Style" },
+                { 15, "Null" },
+                { 16, "Null" },
+                { 17, "Null" },
+                { 18, "Null" },
+                { 19, "Null" },
+                { 20, "Slope Style" }, //Score
+                { 21, "Slope Style" },//Score
+                { 22, "Slope Style" }, //Score
+                { 23, "Big Air" },
+                { 24, "Big Air" },
+                { 25, "Big Air" },
+                { 26, "Half Pipe" },
+                { 27, "Half Pipe" },
+                { 28, "Half Pipe" },
+};
 
         public static Dictionary<string, int> RankToHighscore { get; } =
         new Dictionary<string, int>()
@@ -198,7 +248,7 @@ namespace SSX3_Server.EAServer
                 NewEntry.Name = Player0;
                 NewEntry.GameVersion = Version0;
                 NewEntry.Score = Score0;
-                NewEntry.RaceDataFile = rankDataFile.NAME0 + " " + rankDataFile.WHEN;
+                NewEntry.RaceDataFile = rankDataFile.NAME0 + "." + rankDataFile.WHEN;
 
                 if (Index0 == -1)
                 {

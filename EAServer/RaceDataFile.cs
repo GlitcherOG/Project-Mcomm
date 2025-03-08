@@ -243,5 +243,57 @@ namespace SSX3_Server.EAServer
                 return null;
             }
         }
+
+        public RankProcessed ProcessData()
+        {
+            RankProcessed rankProcessed = new RankProcessed();
+
+            int HighscoreID;
+            rankProcessed.Track = "Unknown";
+            rankProcessed.Event = "Unknown";
+            if (HighscoreDatabase.RankToHighscore.TryGetValue(RACETRA0 + "," + RACEEVE0, out HighscoreID))
+            {
+                rankProcessed.Track = HighscoreDatabase.IDToName[HighscoreID];
+                rankProcessed.Event = HighscoreDatabase.IDToEvent[HighscoreID];
+            }
+            rankProcessed.When = WHEN;
+
+            rankProcessed.Player0  = new RankedPlayer();
+
+            rankProcessed.Player0.Name = NAME0;
+            rankProcessed.Player0.DNF = (DNF0 == "1");
+            rankProcessed.Player0.Score = SCORE0;
+            rankProcessed.Player0.RaceTime = RACETIM0;
+            rankProcessed.Player0.Character = HighscoreDatabase.IDToChar[int.Parse(CHARACTER0)];
+
+            rankProcessed.Player1 = new RankedPlayer();
+
+            rankProcessed.Player1.Name = NAME1;
+            rankProcessed.Player1.DNF = (DNF1 == "1");
+            rankProcessed.Player1.Score = SCORE1;
+            rankProcessed.Player1.RaceTime = RACETIM1;
+            rankProcessed.Player1.Character = HighscoreDatabase.IDToChar[int.Parse(CHARACTER1)];
+
+            return rankProcessed;
+        }
+
+        public struct RankProcessed
+        {
+            public string Track;
+            public string Event;
+            public string When;
+
+            public RankedPlayer Player0;
+            public RankedPlayer Player1;
+        }
+
+        public struct RankedPlayer
+        {
+            public string Name;
+            public string Character;
+            public bool DNF;
+            public string Score;
+            public string RaceTime;
+        }
     }
 }

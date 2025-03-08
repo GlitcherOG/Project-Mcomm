@@ -190,12 +190,16 @@ namespace SSX3_Server.Web
 
             if (SplitCheck(SplitURL, 2, "data"))
             {
-                if(SplitCheck(SplitURL, 3, "version"))
+                if (SplitCheck(SplitURL, 3, "version"))
                 {
-                    for (int i = 0; i < 0; i++)
-                    {
-                        //List out version
-                    }
+                    List<WebVersion> Version = new List<WebVersion>();
+
+                    Version.Add(new WebVersion { Prefix = "NTSC", Description = "USA Version" });
+                    Version.Add(new WebVersion { Prefix = "PAL 1.0", Description = "EU 1.0 Version" });
+                    Version.Add(new WebVersion { Prefix = "PAL 2.0", Description = "EU 2.0 Version" });
+
+                    var serializer = JsonConvert.SerializeObject(Version);
+                    return serializer.ToString();
                 }
             }
 
@@ -217,14 +221,41 @@ namespace SSX3_Server.Web
             {
                 if(SplitURL.Length==4)
                 {
-                    if (SplitURL[4].Contains("&raw=1"))
+                    if (SplitURL[3].Contains("&raw=1"))
                     {
-                        string FileName = SplitURL[4].Replace("&raw=1","").Replace("%20", "");
+                        string FileName = SplitURL[3].Replace("&raw=1","").Replace("%20", " ");
                         if(File.Exists(AppContext.BaseDirectory + "\\Races\\"+FileName))
                         {
                             return File.ReadAllText(AppContext.BaseDirectory + "\\Races\\" + FileName);
                         }
+                        if (File.Exists(AppContext.BaseDirectory + "\\Races\\" + FileName + ".json"))
+                        {
+                            return File.ReadAllText(AppContext.BaseDirectory + "\\Races\\" + FileName + ".json");
+                        }
                         return "No File Found";
+                    }
+                    else
+                    {
+                        RaceDataFile raceDataFile = new RaceDataFile();
+                        string FileName = SplitURL[3].Replace("&raw=1", "").Replace("%20", " ");
+                        if (File.Exists(AppContext.BaseDirectory + "\\Races\\" + FileName))
+                        {
+                            raceDataFile = RaceDataFile.Load(AppContext.BaseDirectory + "\\Races\\" + FileName);
+                        }
+                        else
+                        if (File.Exists(AppContext.BaseDirectory + "\\Races\\" + FileName + ".json"))
+                        {
+                            raceDataFile = RaceDataFile.Load(AppContext.BaseDirectory + "\\Races\\" + FileName + ".json");
+                        }
+                        else
+                        {
+                            return "No File Found";
+                        }
+
+                        var Data = raceDataFile.ProcessData();
+
+                        var serializer = JsonConvert.SerializeObject(Data);
+                        return serializer.ToString();
                     }
                 }
             }
@@ -260,6 +291,12 @@ namespace SSX3_Server.Web
         {
             public string FileName;
             public string FileText;
+        }
+
+        public struct WebVersion
+        {
+            public string Prefix;
+            public string Description;
         }
     }
 }
