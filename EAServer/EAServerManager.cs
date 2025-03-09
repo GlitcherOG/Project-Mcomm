@@ -53,14 +53,12 @@ namespace SSX3_Server.EAServer
 
             highscoreDatabase = HighscoreDatabase.Load(AppContext.BaseDirectory + "\\Highscore.json");
             sessionDatabse = SessionDatabse.Load(AppContext.BaseDirectory + "\\Session.json");
-
+            //sessionDatabse.ReprocessDatabase();
             GenerateRequiredFiles();
 
             News = File.ReadAllText(AppContext.BaseDirectory + "\\News.txt");
 
             BannedNames = File.ReadAllLines(AppContext.BaseDirectory + "\\Names.txt");
-
-            //sessionDatabse.ReprocessOldDataFormat();
 
             if (config.DiscordBot)
             {
@@ -427,7 +425,7 @@ namespace SSX3_Server.EAServer
                     {
                         try
                         {
-                            clients[i].CloseConnection();
+                            //clients[i].CloseConnection();
                         }
                         catch
                         {
@@ -438,8 +436,22 @@ namespace SSX3_Server.EAServer
                         break;
                     }
                 }
+                //foreach (var client in clients)
+                //{
+                //    if (client.Closing == true)
+                //    {
+                //        try
+                //        {
+                //            client.CloseConnection();
+                //        }
+                //        catch
+                //        {
+                //            ConsoleManager.WriteLine("Error Closing Connection");
+                //        }
+                //        clients.Remove(client);
+                //    }
+                //}
             }
-
             GC.Collect();
         }
 

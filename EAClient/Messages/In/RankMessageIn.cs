@@ -259,9 +259,27 @@ namespace SSX3_Server.EAClient.Messages
 
             if (rankDataFile.ValidRace1 && rankDataFile.ValidRace0)
             {
-                lock (EAServerManager.Instance.highscoreDatabase)
+                int ID = EAServerManager.Instance.sessionDatabse.ReturnID(GUID);
+
+                var TempSession = EAServerManager.Instance.sessionDatabse.sessionDatas[ID];
+
+                if (rankDataFile.raceData0.AUTH != rankDataFile.raceData1.AUTH || rankDataFile.raceData0.AUTH != TempSession.Auth)
                 {
-                    EAServerManager.Instance.highscoreDatabase.AddScores(rankDataFile);
+                    return;
+                }
+
+                TempSession.Valid = true;
+
+                EAServerManager.Instance.sessionDatabse.sessionDatas[ID] = TempSession;
+
+                EAServerManager.Instance.sessionDatabse.CreateJson(AppContext.BaseDirectory + "\\Session.json");
+
+                if (TempSession.Ranked)
+                {
+                    lock (EAServerManager.Instance.highscoreDatabase)
+                    {
+                        EAServerManager.Instance.highscoreDatabase.AddScores(rankDataFile);
+                    }
                 }
             }
 

@@ -213,8 +213,6 @@ namespace SSX3_Server.EAClient
             {
                 //Disconnect and Destroy
                 ConsoleManager.WriteLine(IPAddress + " Client Disconnecting...");
-                SaveEAUserData();
-                SaveEAUserPersona();
                 DestroyClient();
             }
         }
@@ -282,40 +280,42 @@ namespace SSX3_Server.EAClient
 
         public void Broadcast(EAMessage msg)
         {
-            if (!Closing)
+            lock (this)
             {
-                try
+                if (!Closing)
                 {
-                    LastSend = DateTime.Now;
-                    byte[] bytes = msg.GenerateData(false, false, IPAddress + " Main Server");
-                    MainNS.Write(bytes, 0, bytes.Length);
-                }
-                catch
-                {
-                    ConsoleManager.WriteLine(IPAddress + " Connection Ended, Disconnecting...");
-                    SaveEAUserData();
-                    SaveEAUserPersona();
-                    DestroyClient();
+                    try
+                    {
+                        LastSend = DateTime.Now;
+                        byte[] bytes = msg.GenerateData(false, false, IPAddress + " Main Server");
+                        MainNS.Write(bytes, 0, bytes.Length);
+                    }
+                    catch
+                    {
+                        ConsoleManager.WriteLine(IPAddress + " Connection Ended, Disconnecting...");
+                        DestroyClient();
+                    }
                 }
             }
         }
 
         public void BroadcastBuddy(EAMessage msg)
         {
-            if (!Closing)
+            lock (this)
             {
-                try
+                if (!Closing)
                 {
-                    LastSend = DateTime.Now;
-                    byte[] bytes = msg.GenerateData(false, true, IPAddress + " Buddy Server");
-                    BuddyNS.Write(bytes, 0, bytes.Length);
-                }
-                catch
-                {
-                    ConsoleManager.WriteLine(IPAddress + " Connection Ended, Disconnecting...");
-                    SaveEAUserData();
-                    SaveEAUserPersona();
-                    DestroyClient();
+                    try
+                    {
+                        LastSend = DateTime.Now;
+                        byte[] bytes = msg.GenerateData(false, true, IPAddress + " Buddy Server");
+                        BuddyNS.Write(bytes, 0, bytes.Length);
+                    }
+                    catch
+                    {
+                        ConsoleManager.WriteLine(IPAddress + " Connection Ended, Disconnecting...");
+                        DestroyClient();
+                    }
                 }
             }
         }
@@ -455,12 +455,22 @@ namespace SSX3_Server.EAClient
 
         public void DestroyClient()
         {
-            Closing = true;
-            EAServerManager.Instance.DestroyClient(ID);
+            lock (this)
+            {
+                if (!Closing)
+                {
+                    Closing = true;
+                    SaveEAUserData();
+                    SaveEAUserPersona();
+                    CloseConnection();
+                    EAServerManager.Instance.DestroyClient(ID);
+                }
+            }
         }
 
         public void CloseConnection()
         {
+            Closing = true;
             //Delete Room if in one
             if (room != null)
             {
@@ -493,7 +503,7 @@ namespace SSX3_Server.EAClient
             }
             catch
             {
-
+                ConsoleManager.WriteLine("ERROR1");
             }
         }
 

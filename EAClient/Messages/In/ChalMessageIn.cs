@@ -159,11 +159,12 @@ namespace SSX3_Server.EAClient.Messages
                         sessionData.GUID = plusSesMessageOut.NAME;
                         sessionData.Player0 = HostClient.LoadedPersona.Name;
                         sessionData.Player1 = OtherUser.LoadedPersona.Name;
+                        sessionData.Ranked = (HostClient.challange.Ranked=="1");
                         sessionData.When = DateTime.Now.ToString("yyyy.M.d h:mm:ss");
                         sessionData.Auth = plusSesMessageOut.AUTH;
                         sessionData.Valid = false;
 
-                        EAServerManager.Instance.sessionDatabse.sessionDatas.Add(sessionData);
+                        EAServerManager.Instance.sessionDatabse.sessionDatas.Insert(0,sessionData);
 
                         EAServerManager.Instance.sessionDatabse.CreateJson(AppContext.BaseDirectory + "\\Session.json");
 

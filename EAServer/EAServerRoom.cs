@@ -231,8 +231,8 @@ namespace SSX3_Server.EAServer
 
                 //    message = (EAMessage)TempUser;
                 //}
-
                 Clients[i].Broadcast(message);
+
             }
         }
 

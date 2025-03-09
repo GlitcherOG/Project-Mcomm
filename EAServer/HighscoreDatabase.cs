@@ -129,10 +129,10 @@ new Dictionary<int, string>()
             var rankDataFile = rankData.raceData0;
             var rankDataFile1 = rankData.raceData1;
 
-            if (rankDataFile.AUTH!="1")
-            {
-                return;
-            }
+            //if (rankDataFile.AUTH!="1")
+            //{
+            //    return;
+            //}
 
             //Reported 1 Player Didnt Finish the race
             if (rankDataFile.QUIT0 != "0" || rankDataFile.QUIT1 != "0" || rankDataFile1.QUIT0 != "0" || rankDataFile1.QUIT1 != "0")
@@ -240,7 +240,7 @@ new Dictionary<int, string>()
                 }
             }
 
-            if(!Add1&&!Add0)
+            if (!Add1&&!Add0)
             {
                 return;
             }
@@ -275,7 +275,7 @@ new Dictionary<int, string>()
                 NewEntry.GameVersion = Version1;
                 NewEntry.Score = Score1;
                 NewEntry.RaceDataFile = rankData.GUID;
-                NewEntry.When = rankData.raceData0.WHEN;
+                NewEntry.When = rankData.raceData1.WHEN;
 
                 if (Index1 == -1)
                 {
@@ -302,16 +302,6 @@ new Dictionary<int, string>()
             courseEntries[HighscoreID] = TempEntry;
 
             CreateJson(AppContext.BaseDirectory + "\\Highscore.json");
-
-            int ID = EAServerManager.Instance.sessionDatabse.ReturnID(rankData.GUID);
-
-            var TempSession = EAServerManager.Instance.sessionDatabse.sessionDatas[ID];
-
-            TempSession.Valid = true;
-
-            EAServerManager.Instance.sessionDatabse.sessionDatas[ID] = TempSession;
-
-            EAServerManager.Instance.sessionDatabse.CreateJson(AppContext.BaseDirectory + "\\Session.json");
         }
 
         public void CreateBlankDatabase()

@@ -14,6 +14,43 @@ namespace SSX3_Server.EAServer
     {
         public List<SessionData> sessionDatas = new List<SessionData>();
 
+        public void ReOrderDataBasse()
+        {
+            for (int i = 0; i < sessionDatas.Count; i++)
+            {
+                var Count = sessionDatas[i];
+
+                if (Count.When==null || Count.When == "")
+                { 
+                    Count.When = DateTime.Now.ToString("yyyy.M.d h:mm:ss");
+                }
+
+                sessionDatas[i] = Count;
+            }
+
+
+            sessionDatas = sessionDatas.OrderByDescending(x => DateTime.Parse(x.When)).ToList();
+        }
+
+        public void ReprocessDatabase()
+        {
+            for (int i = 0; i < sessionDatas.Count; i++)
+            {
+                var Temp = sessionDatas[i];
+
+                Temp.Ranked = (Temp.Auth == "1");
+
+                if (File.Exists(AppContext.BaseDirectory + "\\Races\\" + Temp.GUID + ".json"))
+                {
+                    var rankDataFile = RaceDataFile.Load(AppContext.BaseDirectory + "\\Races\\" + Temp.GUID + ".json");
+
+                    Temp.Valid = (rankDataFile.ValidRace0 && rankDataFile.ValidRace1);
+                }
+
+                sessionDatas[i] = Temp;
+            }
+        }
+
         public SessionData ReturnData(string GUID)
         {
             for (int i = 0; i < sessionDatas.Count; i++)
@@ -85,6 +122,7 @@ namespace SSX3_Server.EAServer
             public string GUID;
             public string Player0;
             public string Player1;
+            public bool Ranked;
             public string Auth;
             public string When;
             public bool Valid;

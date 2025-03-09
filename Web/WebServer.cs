@@ -1,7 +1,9 @@
-﻿using Newtonsoft.Json;
+﻿using DSharpPlus.Interactivity;
+using Newtonsoft.Json;
 using SSX3_Server.EAClient;
 using SSX3_Server.EAServer;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -148,7 +150,7 @@ namespace SSX3_Server.Web
 
         public static bool SplitCheck(string[] Split, int Check, string CheckAgainst = "")
         {
-            if(Split.Length>=Check-1)
+            if(Split.Length-1>=Check)
             {
                 if (CheckAgainst != "")
                 {
@@ -266,15 +268,47 @@ namespace SSX3_Server.Web
                 //Return Persona Info
                 for (global::System.Int32 i = 0; i < EAServerManager.Instance.clients.Count; i++)
                 {
-                    var Temp = EAServerManager.Instance.clients[i];
-
-                    if (Temp.LoadedPersona.Name!="")
+                    lock (EAServerManager.Instance.clients)
                     {
-                        PersonaList.Add(Temp.ReturnOnlineInfo());
+                        var Temp = EAServerManager.Instance.clients[i];
+
+                        if (Temp.LoadedPersona.Name != "")
+                        {
+                            PersonaList.Add(Temp.ReturnOnlineInfo());
+                        }
                     }
                 }
 
                 var serializer = JsonConvert.SerializeObject(PersonaList);
+                return serializer.ToString();
+            }
+
+            if (SplitCheck(SplitURL, 2, "session"))
+            {
+                int Page = 1;
+                if(SplitCheck(SplitURL, 3, "page") && SplitURL.Length>=5)
+                {
+                    Page = int.Parse(SplitURL[4]);
+                }
+
+                Page -= 1;
+
+                int Range = 100;
+                int Start = Page * Range;
+
+                if (Range + Start > EAServerManager.Instance.sessionDatabse.sessionDatas.Count - Start)
+                {
+                    Range = EAServerManager.Instance.sessionDatabse.sessionDatas.Count;
+                }
+
+                List<SessionDatabse.SessionData> sessionData = new List<SessionDatabse.SessionData>();
+                for (global::System.Int32 i = Start; i < Range; i++)
+                {
+                    sessionData.Add(EAServerManager.Instance.sessionDatabse.sessionDatas[i]);
+                }
+
+
+                var serializer = JsonConvert.SerializeObject(sessionData);
                 return serializer.ToString();
             }
 
