@@ -267,10 +267,19 @@ namespace SSX3_Server.EAServer
 
             var TempData = raceData0;
 
-            if (raceData0.WHEN == "")
+            if (!ValidRace0)
             {
                 TempData = raceData1;
             }
+            if(!ValidRace0 && !ValidRace1)
+            {
+                rankProcessed.Track = "Error";
+                rankProcessed.Player0.Name = "Error";
+                rankProcessed.Player1.Name = "Error";
+
+                return rankProcessed;
+            }
+            
 
             int HighscoreID;
             rankProcessed.Track = "Unknown";

@@ -127,5 +127,15 @@ namespace SSX3_Server.EAServer
             public string When;
             public bool Valid;
         }
+
+        public struct SessionInfoData
+        {
+            public List<SessionData> SessionDatas;
+
+            public int pageNumber;
+            public int pageSize;
+            public int totalCount;
+            public int totalPages;
+        }
     }
 }

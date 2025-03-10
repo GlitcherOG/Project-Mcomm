@@ -238,52 +238,53 @@ namespace SSX3_Server.EAClient.Messages
             RaceDataFile rankDataFile = new RaceDataFile();
             var rankData = rankDataFile.ProcessToRaceData(this);
 
-            string GUID = EAServerManager.Instance.sessionDatabse.ReturnGUID(WHEN, NAME0, NAME1);
-            rankDataFile.GUID = GUID;
-            if (File.Exists(AppContext.BaseDirectory + "\\Races\\" + GUID + ".json"))
+            lock (EAServerManager.Instance.highscoreDatabase)
             {
-                rankDataFile = RaceDataFile.Load(AppContext.BaseDirectory + "\\Races\\" + GUID + ".json");
-            }
-
-            if (client.LoadedPersona.Name == rankData.NAME0)
-            {
-                rankDataFile.raceData0 = rankData;
-                rankDataFile.ValidRace0 = true;
-            }
-
-            if (client.LoadedPersona.Name == rankData.NAME1)
-            {
-                rankDataFile.raceData1 = rankData;
-                rankDataFile.ValidRace1 = true;
-            }
-
-            if (rankDataFile.ValidRace1 && rankDataFile.ValidRace0)
-            {
-                int ID = EAServerManager.Instance.sessionDatabse.ReturnID(GUID);
-
-                var TempSession = EAServerManager.Instance.sessionDatabse.sessionDatas[ID];
-
-                if (rankDataFile.raceData0.AUTH != rankDataFile.raceData1.AUTH || rankDataFile.raceData0.AUTH != TempSession.Auth)
+                string GUID = EAServerManager.Instance.sessionDatabse.ReturnGUID(WHEN, NAME0, NAME1);
+                rankDataFile.GUID = GUID;
+                if (File.Exists(AppContext.BaseDirectory + "\\Races\\" + GUID + ".json"))
                 {
-                    return;
+                    Thread.Sleep(1000);
+                    rankDataFile = RaceDataFile.Load(AppContext.BaseDirectory + "\\Races\\" + GUID + ".json");
                 }
 
-                TempSession.Valid = true;
-
-                EAServerManager.Instance.sessionDatabse.sessionDatas[ID] = TempSession;
-
-                EAServerManager.Instance.sessionDatabse.CreateJson(AppContext.BaseDirectory + "\\Session.json");
-
-                if (TempSession.Ranked)
+                if (client.LoadedPersona.Name == rankData.NAME0)
                 {
-                    lock (EAServerManager.Instance.highscoreDatabase)
+                    rankDataFile.raceData0 = rankData;
+                    rankDataFile.ValidRace0 = true;
+                }
+
+                if (client.LoadedPersona.Name == rankData.NAME1)
+                {
+                    rankDataFile.raceData1 = rankData;
+                    rankDataFile.ValidRace1 = true;
+                }
+
+                if (rankDataFile.ValidRace1 && rankDataFile.ValidRace0)
+                {
+                    int ID = EAServerManager.Instance.sessionDatabse.ReturnID(GUID);
+
+                    var TempSession = EAServerManager.Instance.sessionDatabse.sessionDatas[ID];
+
+                    if (rankDataFile.raceData0.AUTH != rankDataFile.raceData1.AUTH || rankDataFile.raceData0.AUTH != TempSession.Auth)
+                    {
+                        return;
+                    }
+
+                    TempSession.Valid = true;
+
+                    EAServerManager.Instance.sessionDatabse.sessionDatas[ID] = TempSession;
+
+                    EAServerManager.Instance.sessionDatabse.CreateJson(AppContext.BaseDirectory + "\\Session.json");
+
+                    if (TempSession.Ranked)
                     {
                         EAServerManager.Instance.highscoreDatabase.AddScores(rankDataFile);
                     }
                 }
-            }
 
-            rankDataFile.CreateJson(AppContext.BaseDirectory + "\\Races\\" + GUID + ".json");
+                rankDataFile.CreateJson(AppContext.BaseDirectory + "\\Races\\" + GUID + ".json");
+            }
         }
     }
 }

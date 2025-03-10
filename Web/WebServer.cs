@@ -109,17 +109,24 @@ namespace SSX3_Server.Web
 
             if (SplitCheck(SplitURL,1,"api"))
             {
-                return APIReturn(SplitURL);
+                try
+                {
+                    return APIReturn(SplitURL);
+                }
+                catch
+                {
+                    return "Null";
+                }
             }
 
             for (int i = 0; i < webDatas.Count; i++)
             {
-                if (webDatas[i].FileName == URL.Replace("/","\\"))
+                if (webDatas[i].FileName == URL.Replace("/", "\\").Split('?')[0])
                 {
                     return webDatas[i].FileText;
                 }
 
-                if (webDatas[i].FileName.Split(".")[0] == URL.Replace("/", "\\"))
+                if (webDatas[i].FileName.Split(".")[0] == URL.Replace("/", "\\").Split('?')[0])
                 {
                     return webDatas[i].FileText;
                 }
@@ -291,22 +298,27 @@ namespace SSX3_Server.Web
                     Page = int.Parse(SplitURL[4]);
                 }
 
+                SessionDatabse.SessionInfoData sessionData = new SessionDatabse.SessionInfoData();
+                sessionData.SessionDatas = new List<SessionDatabse.SessionData>();
+                sessionData.pageNumber = Page;
+                sessionData.totalCount = EAServerManager.Instance.sessionDatabse.sessionDatas.Count;
+
                 Page -= 1;
 
                 int Range = 100;
                 int Start = Page * Range;
+                sessionData.pageSize = Range;
+                sessionData.totalPages = (int)Math.Ceiling( (float)sessionData.totalCount/ (float)sessionData.pageSize );
 
                 if (Range + Start > EAServerManager.Instance.sessionDatabse.sessionDatas.Count - Start)
                 {
                     Range = EAServerManager.Instance.sessionDatabse.sessionDatas.Count;
                 }
 
-                List<SessionDatabse.SessionData> sessionData = new List<SessionDatabse.SessionData>();
                 for (global::System.Int32 i = Start; i < Range; i++)
                 {
-                    sessionData.Add(EAServerManager.Instance.sessionDatabse.sessionDatas[i]);
+                    sessionData.SessionDatas.Add(EAServerManager.Instance.sessionDatabse.sessionDatas[i]);
                 }
-
 
                 var serializer = JsonConvert.SerializeObject(sessionData);
                 return serializer.ToString();
