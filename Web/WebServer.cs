@@ -26,7 +26,14 @@ namespace SSX3_Server.Web
             {
                 WebData webData = new WebData();
                 webData.FileName = Files[i].Replace(AppContext.BaseDirectory + "\\Web", "");
-                webData.FileText = File.ReadAllText(Files[i]).Replace(".html", "");
+                if (webData.FileName.Contains(".ico"))
+                {
+                    webData.FileBytes = File.ReadAllBytes(Files[i]);
+                }
+                else
+                {
+                    webData.FileBytes = System.Text.Encoding.UTF8.GetBytes(File.ReadAllText(Files[i]).Replace(".html", ""));
+                }
                 webDatas.Add(webData);
             }
         }
@@ -68,8 +75,7 @@ namespace SSX3_Server.Web
                         // Obtain a response object.
                         HttpListenerResponse response = context.Response;
                         // Construct a response.
-                        string responseString = WebpageGenerator(context.Request.RawUrl);
-                        byte[] buffer = System.Text.Encoding.UTF8.GetBytes(responseString);
+                        byte[] buffer = WebpageGenerator(context.Request.RawUrl);
                         // Get a response stream and write the response to it.
 
                         //if (request.HttpMethod == "OPTIONS")
@@ -103,7 +109,7 @@ namespace SSX3_Server.Web
             }
         }
 
-        public static string WebpageGenerator(string URL)
+        public static byte[] WebpageGenerator(string URL)
         {
             string[] SplitURL = URL.ToLower().Split('/');
 
@@ -111,11 +117,11 @@ namespace SSX3_Server.Web
             {
                 try
                 {
-                    return APIReturn(SplitURL);
+                    return System.Text.Encoding.UTF8.GetBytes(APIReturn(SplitURL));
                 }
                 catch
                 {
-                    return "Null";
+                    return System.Text.Encoding.UTF8.GetBytes("Null");
                 }
             }
 
@@ -123,12 +129,12 @@ namespace SSX3_Server.Web
             {
                 if (webDatas[i].FileName == URL.Replace("/", "\\").Split('?')[0])
                 {
-                    return webDatas[i].FileText;
+                    return webDatas[i].FileBytes;
                 }
 
                 if (webDatas[i].FileName.Split(".")[0] == URL.Replace("/", "\\").Split('?')[0])
                 {
-                    return webDatas[i].FileText;
+                    return webDatas[i].FileBytes;
                 }
             }
 
@@ -149,10 +155,10 @@ namespace SSX3_Server.Web
             if (File.Exists(AppContext.BaseDirectory + "\\Web\\index.html") && URL != "/favicon.ico")
             {
                 ConsoleManager.WriteLineVerbose("Web Request Generating Page...");
-                return File.ReadAllText(AppContext.BaseDirectory + "\\Web\\index.html").Replace(".html", "");
+                return System.Text.Encoding.UTF8.GetBytes(File.ReadAllText(AppContext.BaseDirectory + "\\Web\\index.html").Replace(".html", ""));
             }
 
-            return "<HTML><BODY>Under Construction, Please Connect using SSX 3 Online</BODY></HTML>";
+            return System.Text.Encoding.UTF8.GetBytes("<HTML><BODY>Under Construction, Please Connect using SSX 3 Online</BODY></HTML>");
         }
 
         public static bool SplitCheck(string[] Split, int Check, string CheckAgainst = "")
@@ -256,10 +262,10 @@ namespace SSX3_Server.Web
                         {
                             raceDataFile = RaceDataFile.Load(AppContext.BaseDirectory + "\\Races\\" + FileName + ".json");
                         }
-                        else
-                        {
-                            return "No File Found";
-                        }
+                        //else
+                        //{
+                        //    return "No File Found";
+                        //}
 
                         var Data = raceDataFile.ProcessData();
 
@@ -336,7 +342,7 @@ namespace SSX3_Server.Web
         public struct WebData
         {
             public string FileName;
-            public string FileText;
+            public byte[] FileBytes;
         }
 
         public struct WebVersion

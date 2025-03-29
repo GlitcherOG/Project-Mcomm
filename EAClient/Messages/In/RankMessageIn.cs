@@ -1,6 +1,7 @@
 ﻿using SSX3_Server.EAServer;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -244,21 +245,22 @@ namespace SSX3_Server.EAClient.Messages
                 rankDataFile.GUID = GUID;
                 if (File.Exists(AppContext.BaseDirectory + "\\Races\\" + GUID + ".json"))
                 {
-                    Thread.Sleep(1000);
                     rankDataFile = RaceDataFile.Load(AppContext.BaseDirectory + "\\Races\\" + GUID + ".json");
                 }
 
-                if (client.LoadedPersona.Name == rankData.NAME0)
+                if (rankData.REPT == rankData.NAME0)
                 {
                     rankDataFile.raceData0 = rankData;
                     rankDataFile.ValidRace0 = true;
                 }
 
-                if (client.LoadedPersona.Name == rankData.NAME1)
+                if (rankData.REPT == rankData.NAME1)
                 {
                     rankDataFile.raceData1 = rankData;
                     rankDataFile.ValidRace1 = true;
                 }
+
+                rankDataFile.CreateJson(AppContext.BaseDirectory + "\\Races\\" + GUID + ".json");
 
                 if (rankDataFile.ValidRace1 && rankDataFile.ValidRace0)
                 {
@@ -266,24 +268,20 @@ namespace SSX3_Server.EAClient.Messages
 
                     var TempSession = EAServerManager.Instance.sessionDatabse.sessionDatas[ID];
 
-                    if (rankDataFile.raceData0.AUTH != rankDataFile.raceData1.AUTH || rankDataFile.raceData0.AUTH != TempSession.Auth)
+                    if (rankDataFile.raceData0.AUTH == rankDataFile.raceData1.AUTH && rankDataFile.raceData0.AUTH == TempSession.Auth)
                     {
-                        return;
-                    }
+                        TempSession.Valid = true;
 
-                    TempSession.Valid = true;
+                        if (TempSession.Ranked)
+                        {
+                            EAServerManager.Instance.highscoreDatabase.AddScores(rankDataFile);
+                        }
+                    }
 
                     EAServerManager.Instance.sessionDatabse.sessionDatas[ID] = TempSession;
 
                     EAServerManager.Instance.sessionDatabse.CreateJson(AppContext.BaseDirectory + "\\Session.json");
-
-                    if (TempSession.Ranked)
-                    {
-                        EAServerManager.Instance.highscoreDatabase.AddScores(rankDataFile);
-                    }
                 }
-
-                rankDataFile.CreateJson(AppContext.BaseDirectory + "\\Races\\" + GUID + ".json");
             }
         }
     }

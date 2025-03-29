@@ -271,11 +271,24 @@ namespace SSX3_Server.EAServer
             {
                 TempData = raceData1;
             }
+
             if(!ValidRace0 && !ValidRace1)
             {
                 rankProcessed.Track = "Error";
+                rankProcessed.Event = "Race";
+                rankProcessed.When = "1/1/2025, 1:00:00 AM";
                 rankProcessed.Player0.Name = "Error";
                 rankProcessed.Player1.Name = "Error";
+                rankProcessed.Player0.Character = "Error";
+                rankProcessed.Player1.Character = "Error";
+
+                rankProcessed.Player0.DNF = true;
+                rankProcessed.Player0.Score = "0";
+                rankProcessed.Player0.RaceTime = "0";
+
+                rankProcessed.Player1.DNF = true;
+                rankProcessed.Player1.Score = "0";
+                rankProcessed.Player1.RaceTime = "0";
 
                 return rankProcessed;
             }
@@ -306,6 +319,20 @@ namespace SSX3_Server.EAServer
             rankProcessed.Player1.Score = TempData.SCORE1;
             rankProcessed.Player1.RaceTime = TempData.RACETIM1;
             rankProcessed.Player1.Character = HighscoreDatabase.IDToChar[int.Parse(TempData.CHARACTER1)];
+
+            if(TempData.QUIT0 != "0")
+            {
+                rankProcessed.Player0.DNF = true;
+                rankProcessed.Player0.Score = "0";
+                rankProcessed.Player0.RaceTime = "0";
+            }
+
+            if (TempData.QUIT1 != "0")
+            {
+                rankProcessed.Player1.DNF = true;
+                rankProcessed.Player1.Score = "0";
+                rankProcessed.Player1.RaceTime = "0";
+            }
 
             return rankProcessed;
         }
