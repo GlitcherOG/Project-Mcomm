@@ -194,15 +194,22 @@ namespace SSX3_Server.EAServer
 
                         if (TCPWait.Wait(5000))
                         {
-                            TcpClient MainClient = client;
-                            NetworkStream MainNS = tcpNS;
-                            MainClient = /*server1.AcceptTcpClient();*/ TCPWait.Result;
-                            MainNS = MainClient.GetStream();
-                            ConsoleManager.WriteLine("Accepted Connection From: " + client.Client.RemoteEndPoint.ToString());
+                            if (TCPWait.IsCompletedSuccessfully)
+                            {
+                                TcpClient MainClient = client;
+                                NetworkStream MainNS = tcpNS;
+                                MainClient = /*server1.AcceptTcpClient();*/ TCPWait.Result;
+                                MainNS = MainClient.GetStream();
+                                ConsoleManager.WriteLine("Accepted Connection From: " + client.Client.RemoteEndPoint.ToString());
 
-                            //Rewrork Threading
-                            clients.Add(new EAClientManager(MainClient, MainNS, IDCount, ReturnMessage.SESS, ReturnMessage.MASK, PAL));
-                            IDCount++;
+                                //Rewrork Threading
+                                clients.Add(new EAClientManager(MainClient, MainNS, IDCount, ReturnMessage.SESS, ReturnMessage.MASK, PAL));
+                                IDCount++;
+                            }
+                            else
+                            {
+                                ConsoleManager.WriteLine("Timed Out Connection From: " + client.Client.RemoteEndPoint.ToString());
+                            }
                         }
                         else
                         {

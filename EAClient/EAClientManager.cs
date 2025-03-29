@@ -202,8 +202,9 @@ namespace SSX3_Server.EAClient
                         break;
                     }
                 }
-                catch
+                catch (Exception e)
                 {
+                    ConsoleManager.WriteLine(e.ToString());
                     break;
                 }
             }
