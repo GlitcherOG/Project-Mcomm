@@ -45,6 +45,8 @@ namespace SSX3_Server.EAServer
                     var rankDataFile = RaceDataFile.Load(AppContext.BaseDirectory + "\\Races\\" + Temp.GUID + ".json");
 
                     Temp.Valid = (rankDataFile.ValidRace0 && rankDataFile.ValidRace1);
+                    Temp.Valid0 = rankDataFile.ValidRace0;
+                    Temp.Valid1 = rankDataFile.ValidRace1;
                 }
 
                 sessionDatas[i] = Temp;
@@ -126,6 +128,8 @@ namespace SSX3_Server.EAServer
             public string Auth;
             public string When;
             public bool Valid;
+            public bool Valid0;
+            public bool Valid1;
         }
 
         public struct SessionInfoData

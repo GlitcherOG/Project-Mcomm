@@ -16,7 +16,8 @@ namespace SSX3_Server.Web
     {
         //Cache HTML, JS and CSS Pages
         public static List<WebData> webDatas = new List<WebData>();
-
+        public static List<SessionDatabse.SessionData> sessionDatasCache = new List<SessionDatabse.SessionData>();
+        public static int SessionList = 0;
         public static void CacheWebsite()
         {
             webDatas = new List<WebData>();
@@ -298,6 +299,20 @@ namespace SSX3_Server.Web
 
             if (SplitCheck(SplitURL, 2, "session"))
             {
+                //sessionDatasCache = EAServerManager.Instance.sessionDatabse.sessionDatas;
+                if (SessionList != EAServerManager.Instance.sessionDatabse.sessionDatas.Count)
+                {
+                    for (global::System.Int32 i = 0; i < EAServerManager.Instance.sessionDatabse.sessionDatas.Count; i++)
+                    {
+                        if (EAServerManager.Instance.sessionDatabse.sessionDatas[i].Valid0 || EAServerManager.Instance.sessionDatabse.sessionDatas[i].Valid1)
+                        {
+                            sessionDatasCache.Add(EAServerManager.Instance.sessionDatabse.sessionDatas[i]);
+                        }
+                    }
+                    SessionList = EAServerManager.Instance.sessionDatabse.sessionDatas.Count;
+                }
+
+
                 int Page = 1;
                 if(SplitCheck(SplitURL, 3, "page") && SplitURL.Length>=5)
                 {
@@ -307,7 +322,7 @@ namespace SSX3_Server.Web
                 SessionDatabse.SessionInfoData sessionData = new SessionDatabse.SessionInfoData();
                 sessionData.SessionDatas = new List<SessionDatabse.SessionData>();
                 sessionData.pageNumber = Page;
-                sessionData.totalCount = EAServerManager.Instance.sessionDatabse.sessionDatas.Count;
+                sessionData.totalCount = sessionDatasCache.Count;
 
                 Page -= 1;
 
@@ -316,14 +331,14 @@ namespace SSX3_Server.Web
                 sessionData.pageSize = Range;
                 sessionData.totalPages = (int)Math.Ceiling( (float)sessionData.totalCount/ (float)sessionData.pageSize );
 
-                if (Range + Start > EAServerManager.Instance.sessionDatabse.sessionDatas.Count - Start)
+                if (Range + Start > sessionDatasCache.Count - Start)
                 {
-                    Range = EAServerManager.Instance.sessionDatabse.sessionDatas.Count;
+                    Range = sessionDatasCache.Count;
                 }
 
                 for (global::System.Int32 i = Start; i < Range; i++)
                 {
-                    sessionData.SessionDatas.Add(EAServerManager.Instance.sessionDatabse.sessionDatas[i]);
+                    sessionData.SessionDatas.Add(sessionDatasCache[i]);
                 }
 
                 var serializer = JsonConvert.SerializeObject(sessionData);
