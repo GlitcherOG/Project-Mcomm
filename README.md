@@ -1,6 +1,7 @@
 ﻿# Mcomm Project Server (SSX3 Online Server)
-For Live Server Info: http://ssxor.org
+For Live Server Info: http://ssxor.org  
 For Setup Guide: http://ssxor.org/Guide
+
 ## Status
 General  
 • Challenging Player: ✅  
