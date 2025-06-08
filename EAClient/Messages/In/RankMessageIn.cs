@@ -248,40 +248,41 @@ namespace SSX3_Server.EAClient.Messages
                     rankDataFile = RaceDataFile.Load(AppContext.BaseDirectory + "\\Races\\" + GUID + ".json");
                 }
 
+                int ID = EAServerManager.Instance.sessionDatabse.ReturnID(GUID);
+
+                var TempSession = EAServerManager.Instance.sessionDatabse.sessionDatas[ID];
+
                 if (rankData.REPT == rankData.NAME0)
                 {
                     rankDataFile.raceData0 = rankData;
                     rankDataFile.ValidRace0 = true;
+                    TempSession.Valid0 = true;
                 }
 
                 if (rankData.REPT == rankData.NAME1)
                 {
                     rankDataFile.raceData1 = rankData;
                     rankDataFile.ValidRace1 = true;
+                    TempSession.Valid1 = true;
                 }
 
                 rankDataFile.CreateJson(AppContext.BaseDirectory + "\\Races\\" + GUID + ".json");
 
                 if (rankDataFile.ValidRace1 && rankDataFile.ValidRace0)
                 {
-                    int ID = EAServerManager.Instance.sessionDatabse.ReturnID(GUID);
-
-                    var TempSession = EAServerManager.Instance.sessionDatabse.sessionDatas[ID];
-
+                    TempSession.Valid = true;
                     if (rankDataFile.raceData0.AUTH == rankDataFile.raceData1.AUTH && rankDataFile.raceData0.AUTH == TempSession.Auth)
                     {
-                        TempSession.Valid = true;
-
                         if (TempSession.Ranked)
                         {
                             EAServerManager.Instance.highscoreDatabase.AddScores(rankDataFile);
                         }
                     }
-
-                    EAServerManager.Instance.sessionDatabse.sessionDatas[ID] = TempSession;
-
-                    EAServerManager.Instance.sessionDatabse.CreateJson(AppContext.BaseDirectory + "\\Session.json");
                 }
+
+                EAServerManager.Instance.sessionDatabse.sessionDatas[ID] = TempSession;
+
+                EAServerManager.Instance.sessionDatabse.CreateJson(AppContext.BaseDirectory + "\\Session.json");
             }
         }
     }
