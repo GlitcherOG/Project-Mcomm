@@ -339,6 +339,7 @@ namespace SSX3_Server.EAClient
             plusUserMessageOut.X = "";
             plusUserMessageOut.G = "0";
             plusUserMessageOut.P = Ping.ToString();
+            plusUserMessageOut.S = LoadedPersona.GenerateStat();
 
             return plusUserMessageOut;
         }

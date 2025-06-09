@@ -126,8 +126,8 @@ namespace SSX3_Server.EAClient.Messages
 
                         plusSesMessageOut.P1 = HostClient.challange.TrackID; /*HostClient.ID.ToString();*/
                         plusSesMessageOut.P2 = HostClient.challange.Gamemode2; /*OtherUser.ID.ToString();*/
-                        plusSesMessageOut.P3 = "2"; //Not Used
-                        plusSesMessageOut.P4 = "2"; //Not Used
+                        plusSesMessageOut.P3 = "2"; //Unknown
+                        plusSesMessageOut.P4 = "2"; //Unknown
                         plusSesMessageOut.AUTH = HostClient.challange.Ranked; //Unknown
                         plusSesMessageOut.SEED = Seed;
                         plusSesMessageOut.WHEN = DateTime.Now.ToString("yyyy.MM.dd hh:mm:ss");

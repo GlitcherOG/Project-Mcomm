@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -18,6 +19,10 @@ namespace SSX3_Server.EAClient.Messages
         public bool BigAir;
         public bool SuperPipe;
         public bool Slopestyle;//
+
+        public string FromPlayer;
+
+        public static List<QuikMessageIn> quikMessageIn = new List<QuikMessageIn>();
 
         public override void AssignValues()
         {
@@ -97,23 +102,49 @@ namespace SSX3_Server.EAClient.Messages
                 }
 
 
-                AddStringData("QMFT", TempString);
+                AddStringData("QMFP", TempString);
             }
 
         }
 
         public override void ProcessCommand(EAClientManager client, EAServerRoom room = null)
         {
+            FromPlayer = client.LoadedPersona.Name;
+            client.Broadcast(this);
             if (KIND == "DeathRace")
             {
-                //quick match search
+                ////quick match search
+                //for (global::System.Int32 i = 0; i < quikMessageIn.Count; i++)
+                //{
+                //    var OtherClient = EAServerManager.Instance.GetUserPersona(quikMessageIn[i].FromPlayer);
+
+                //    PlusMSGMessageOut plusMSGMessageOut = new PlusMSGMessageOut();
+
+                //    //TODO Check Modes
+
+                //    //client.Broadcast(plusSesMessageOut);
+
+                //    //ChalMessageIn chalMessageIn = new ChalMessageIn();
+                //    //chalMessageIn.MODE = "idle";
+                //    //client.Broadcast(chalMessageIn);
+
+                //    break;
+                //}
+                quikMessageIn.Add(this);
             }
             else if (KIND == "*")
             {
+                for (int i = 0; i < quikMessageIn.Count; i++)
+                {
+                    if (quikMessageIn[i].FromPlayer == FromPlayer)
+                    {
+                        quikMessageIn.RemoveAt(i);
+
+                        break;
+                    }
+                }
                 //stop quick match search
             }
-
-            client.Broadcast(this);
         }
     }
 }
