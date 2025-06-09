@@ -53,6 +53,25 @@ namespace SSX3_Server.EAServer
             }
         }
 
+        public void ReprocessStats()
+        {
+            for (int i = 0; i < sessionDatas.Count; i++)
+            {
+                var Temp = sessionDatas[i];
+
+                Temp.Ranked = (Temp.Auth == "1");
+
+                if (File.Exists(AppContext.BaseDirectory + "\\Races\\" + Temp.GUID + ".json"))
+                {
+                    var rankDataFile = RaceDataFile.Load(AppContext.BaseDirectory + "\\Races\\" + Temp.GUID + ".json");
+
+                    Temp.Valid = (rankDataFile.ValidRace0 && rankDataFile.ValidRace1);
+                    Temp.Valid0 = rankDataFile.ValidRace0;
+                    Temp.Valid1 = rankDataFile.ValidRace1;
+                }
+            }
+        }
+
         public SessionData ReturnData(string GUID)
         {
             for (int i = 0; i < sessionDatas.Count; i++)

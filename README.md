@@ -36,7 +36,7 @@ Buddies
 Statistics  
 
 • Leaderboards: ✅ (Overall score missing)  
-• Rider Stats:  
+• Rider Stats:  ✅ (Sending Not Generating)
 • Ranked Play: ✅  
 
 News  
@@ -49,22 +49,13 @@ News
 - Add Remove Buddy
 - Send Online Details before displaying Search
 - Patch Search so it gets offline personas
-- Find out Stat Struct
 - Add lost user
 - Fix Quick Match So it Works
 - Persona Generator for Duplicate Personas
-- Fix Having to DQUE to leave room (Probably due to an issue with vc)
-- Mcomm Buddy for server commands
 - Fix Proper Passwords
 - Fix Title on rooms as it doesnt seem to be appearing
 - Tunneling Service
 - PAL and NTSC Prefix for accounts
-
-# Todo Discord Bot
-- Discord bot able to send messages in game and to rooms
-- Set Rooms to Global
-- Discord Bot Fix Kick Messages
-- Link Ingame Account To Discord Account
 
 ## Setting Up Server (Not Required Unless hosting a server)
 1. Run Server to generate config file and nessasary files
