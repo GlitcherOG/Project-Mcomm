@@ -302,6 +302,7 @@ namespace SSX3_Server.Web
                 //sessionDatasCache = EAServerManager.Instance.sessionDatabse.sessionDatas;
                 if (SessionList != EAServerManager.Instance.sessionDatabse.sessionDatas.Count)
                 {
+                    sessionDatasCache = new List<SessionDatabse.SessionData>();
                     for (global::System.Int32 i = 0; i < EAServerManager.Instance.sessionDatabse.sessionDatas.Count; i++)
                     {
                         if (EAServerManager.Instance.sessionDatabse.sessionDatas[i].Valid0 || EAServerManager.Instance.sessionDatabse.sessionDatas[i].Valid1)
@@ -314,7 +315,7 @@ namespace SSX3_Server.Web
 
 
                 int Page = 1;
-                if(SplitCheck(SplitURL, 3, "page") && SplitURL.Length>=5)
+                if (SplitCheck(SplitURL, 3, "page") && SplitURL.Length >= 5)
                 {
                     Page = int.Parse(SplitURL[4]);
                 }
@@ -329,11 +330,16 @@ namespace SSX3_Server.Web
                 int Range = 100;
                 int Start = Page * Range;
                 sessionData.pageSize = Range;
-                sessionData.totalPages = (int)Math.Ceiling( (float)sessionData.totalCount/ (float)sessionData.pageSize );
+                sessionData.totalPages = (int)Math.Ceiling((float)sessionData.totalCount / (float)sessionData.pageSize);
 
-                if (Range + Start > sessionDatasCache.Count - Start)
+                if (Range + Start > sessionDatasCache.Count)
                 {
                     Range = sessionDatasCache.Count;
+                    sessionData.pageSize = sessionDatasCache.Count - Start;
+                }
+                else
+                {
+                    Range = Range + Start;
                 }
 
                 for (global::System.Int32 i = Start; i < Range; i++)
@@ -344,6 +350,7 @@ namespace SSX3_Server.Web
                 var serializer = JsonConvert.SerializeObject(sessionData);
                 return serializer.ToString();
             }
+            
 
 
             if (SplitCheck(SplitURL, 2, "persona"))
