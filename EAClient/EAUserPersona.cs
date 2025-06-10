@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using SSX3_Server.EAServer;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,24 +17,12 @@ namespace SSX3_Server.EAClient
         public string Since = "";
         public string Last = "";
 
-        public int Rank;
-
-        public int Unknown0;
-        public int Unknown1;
-        public int Wins;
-        public int Loss;
-        public int Loss1;
-        public int Unknown2;
-        public int Disconnects;
-        public int Unknown3;
-        public int Unknown4;
-        public int Unknown5;
-        public int Unknown6;
-        public int Unknown7;
-        public int Unknown8;
-        public int Unknown9;
-        public int Unknown10;
-        public int Unknown11;
+        public int CasualWin;
+        public int CasualLoss;
+        public int CasualDisconnect;
+        public int RankWin;
+        public int RankLoss;
+        public int RankDisconnect;
 
         public List<FriendEntry> friendEntries = new List<FriendEntry>();
 
@@ -66,22 +55,22 @@ namespace SSX3_Server.EAClient
 
         public string GenerateStat()
         {
-            //Unknown
-            //Unknown
-            //Win
-            //Lose?
-            //Lose?
-            //Unknown
-            //Disconnects
-            //Unknown
-            //Unknown
-            //Unknown
-            //Unknown
-            //Unknown
-            //Unknown
-            //Unknown
-            //Unknown
-            //Unknown
+            int Unknown0 = 0;
+            int Unknown1 = 0;
+            int Wins = CasualWin + RankWin;
+            int Loss = CasualLoss + RankLoss;
+            int Loss1 = 0;
+            int Unknown2 = 0;
+            int Disconnects = CasualDisconnect + RankDisconnect;
+            int Unknown3 = 0;
+            int Unknown4 = 0;
+            int Unknown5 = 0;
+            int Unknown6 = 0;
+            int Unknown7 = 0;
+            int Unknown8 = 0;
+            int Unknown9 = 0;
+            int Unknown10 = 0;
+            int Unknown11 = 0;
 
             return Unknown0 + "," + Unknown1 + "," + Wins + "," + Loss + "," + Loss1 + "," + Unknown2 + "," + Disconnects + "," + Unknown3 + "," + Unknown4 + "," + Unknown5
                 + "," + Unknown6 + "," + Unknown7 + "," + Unknown8 + "," + Unknown9 + "," + Unknown10 + "," + Unknown11;
@@ -89,12 +78,36 @@ namespace SSX3_Server.EAClient
 
         public string GenerateRank()
         {
-            return Rank.ToString();
+            //Pull From Rank Database
+
+            for (int i = 0; i < EAServerManager.Instance.highscoreDatabase.courseEntries[0].Entries.Count; i++)
+            {
+                var Temp = EAServerManager.Instance.highscoreDatabase.courseEntries[0].Entries[i];
+
+                if(Temp.Name == Name)
+                {
+                    return i.ToString();
+                }
+            }
+
+            return "0";
         }
 
         public struct FriendEntry
         {
             public string Name;
+        }
+
+        public struct WebPersonaEntry
+        {
+            public string Name;
+
+            public int CasualWin;
+            public int CasualLoss;
+            public int CasualDisconnect;
+            public int RankWin;
+            public int RankLoss;
+            public int RankDisconnect;
         }
     }
 }

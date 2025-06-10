@@ -350,12 +350,20 @@ namespace SSX3_Server.Web
                 var serializer = JsonConvert.SerializeObject(sessionData);
                 return serializer.ToString();
             }
-            
-
 
             if (SplitCheck(SplitURL, 2, "persona"))
             {
-                //Return online persona list
+                if (SplitCheck(SplitURL, 3))
+                {
+                    string Name = SplitURL[3];
+
+                    var User = EAServerManager.Instance.GetUserPersona(Name);
+
+                    if(User != null)
+                    {
+
+                    }
+                }
             }
 
             return "NULL";

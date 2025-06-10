@@ -380,7 +380,7 @@ namespace SSX3_Server.EAServer
                 {
                     if (clients[i].LoadedPersona != null)
                     {
-                        if (clients[i].LoadedPersona.Name == Name)
+                        if (clients[i].LoadedPersona.Name.ToLower() == Name.ToLower())
                         {
                             return clients[i];
                         }
