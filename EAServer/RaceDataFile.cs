@@ -295,12 +295,21 @@ namespace SSX3_Server.EAServer
             
 
             int HighscoreID;
+            string Fallback;
             rankProcessed.Track = "Unknown";
             rankProcessed.Event = "Unknown";
             if (HighscoreDatabase.RankToHighscore.TryGetValue(TempData.RACETRA0 + "," + TempData.RACEEVE0, out HighscoreID))
             {
                 rankProcessed.Track = HighscoreDatabase.IDToName[HighscoreID];
                 rankProcessed.Event = HighscoreDatabase.IDToEvent[HighscoreID];
+            }
+            else if (HighscoreDatabase.TrackIDToName.TryGetValue(TempData.RACETRA0, out Fallback))
+            {
+                rankProcessed.Track = Fallback;
+                if(HighscoreDatabase.TrackIDToName.TryGetValue(TempData.RACETRA0, out Fallback))
+                {
+                    rankProcessed.Event = Fallback + " (Hacked)";
+                }
             }
             rankProcessed.When = TempData.WHEN;
 

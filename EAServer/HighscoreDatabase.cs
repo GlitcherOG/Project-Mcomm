@@ -25,7 +25,38 @@ new Dictionary<int, string>()
                 { 6, "Elise" },
                 { 7, "Nate" },
                 { 8, "Psymon" },
-                { 9, "Viggo" }, 
+                { 9, "Viggo" },
+};
+
+        public static Dictionary<string, string> TrackIDToName { get; } =
+new Dictionary<string, string>()
+{
+                { "0", "Snow Jam" }, //Snow Jam
+                { "1", "Metro City" }, //Metro Race
+                { "2", "Ruthless Ridge" }, //Ruthless Ridge Race
+                { "3", "Intimidator" },
+                { "4", "Gravitude" },
+                { "5", "R&B" },
+                { "6", "Style Mile" },
+                { "7", "Kick Doubt" },
+                { "8", "Crow's Nest" },
+                { "9", "Launch Time" },
+                { "10", "Much-2-Much" },
+                { "11", "The Junction" },
+                { "12", "Schizophrenia" },
+                { "13", "Perpendiculous" },
+                { "14", "Happiness" },
+                { "15", "Ruthless" },
+                { "16", "The Throne" },
+};
+
+        public static Dictionary<string, string> EventIDToName { get; } =
+new Dictionary<string, string>()
+{
+                { "0", "Race" }, //Snow Jam
+                { "1", "Slope Style" }, //Metro Race
+                { "2", "Big Air" }, //Ruthless Ridge Race
+                { "3", "Super Pipe" },
 };
 
         public static Dictionary<int, string> IDToName { get; } =
