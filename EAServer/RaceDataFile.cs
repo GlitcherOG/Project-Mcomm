@@ -306,7 +306,7 @@ namespace SSX3_Server.EAServer
             else if (HighscoreDatabase.TrackIDToName.TryGetValue(TempData.RACETRA0, out Fallback))
             {
                 rankProcessed.Track = Fallback;
-                if(HighscoreDatabase.TrackIDToName.TryGetValue(TempData.RACETRA0, out Fallback))
+                if(HighscoreDatabase.EventIDToName.TryGetValue(TempData.RACEEVE0, out Fallback))
                 {
                     rankProcessed.Event = Fallback + " (Hacked)";
                 }
