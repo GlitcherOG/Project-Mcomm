@@ -195,7 +195,7 @@ namespace SSX3_Server.EAClient.Messages
             {
                 if (stringDatas[i].Type==Type)
                 {
-                    return stringDatas[i].Value;
+                    return stringDatas[i].Value.Replace("\"","");
                 }
             }
 

@@ -25,7 +25,7 @@ namespace SSX3_Server.EAClient.Messages
 
         public override void AssignValues()
         {
-            NAME = stringDatas[0].Value;
+            NAME = GetStringData("NAME");
             PASS = stringDatas[1].Value;
             TOS = stringDatas[2].Value;
             MID = stringDatas[3].Value;
@@ -33,7 +33,7 @@ namespace SSX3_Server.EAClient.Messages
             HWFLAG = stringDatas[5].Value;
             HWMASK = stringDatas[6].Value;
             PROD = stringDatas[7].Value;
-            VERS = stringDatas[8].Value;
+            VERS = GetStringData("VERS");
             LANG = stringDatas[9].Value;
             SLUS = stringDatas[10].Value;
         }

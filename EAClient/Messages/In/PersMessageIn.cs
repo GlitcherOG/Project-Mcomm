@@ -18,7 +18,7 @@ namespace SSX3_Server.EAClient.Messages
 
         public override void AssignValues()
         {
-            PERS = stringDatas[0].Value;
+            PERS = GetStringData("PERS");
             MID = stringDatas[1].Value;
             PID = stringDatas[2].Value;
         }

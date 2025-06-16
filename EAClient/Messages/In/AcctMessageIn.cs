@@ -28,7 +28,7 @@ namespace SSX3_Server.EAClient.Messages
 
         public override void AssignValues()
         {
-            NAME = stringDatas[0].Value;
+            NAME = GetStringData("NAME");
             PASS = stringDatas[1].Value;
             SPAM = stringDatas[2].Value;
             MAIL = stringDatas[3].Value;
