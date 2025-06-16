@@ -53,6 +53,20 @@ namespace SSX3_Server.EAServer
             }
         }
 
+        public void ReprocessDatabase1()
+        {
+            for (int i = 0; i < sessionDatas.Count; i++)
+            {
+                var Temp = sessionDatas[i];
+
+                if (Temp.Player0 == Temp.Player1)
+                {
+                    sessionDatas.RemoveAt(i);
+                    i--;
+                }    
+            }
+        }
+
         public void ReprocessStats()
         {
             for (int i = 0; i < sessionDatas.Count; i++)

@@ -513,7 +513,14 @@ namespace SSX3_Server.EAClient
         {
             OnlinePersonaInfo info = new OnlinePersonaInfo();
 
-            info.playerName = LoadedPersona.Name;
+            if (LoadedPersona != null)
+            {
+                info.playerName = LoadedPersona.Name;
+            }
+            else
+            {
+                info.playerName = userData.Name;
+            }
             info.playerVersion = VersionPrefix[VERS];
 
             return info;
