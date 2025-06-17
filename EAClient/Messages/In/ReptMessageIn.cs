@@ -16,7 +16,8 @@ namespace SSX3_Server.EAClient.Messages
 
         public override void AssignValues()
         {
- 
+            PERS = GetStringData("PERS");
+            LANG = GetStringData("LANG");
         }
 
         public override void AssignValuesToString()

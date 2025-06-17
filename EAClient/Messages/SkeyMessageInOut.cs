@@ -16,7 +16,7 @@ namespace SSX3_Server.EAClient.Messages
 
         public override void AssignValues()
         {
-            SKEY = stringDatas[0].Value;
+            SKEY = GetStringData(SKEY);
         }
 
         public override void AssignValuesToString()

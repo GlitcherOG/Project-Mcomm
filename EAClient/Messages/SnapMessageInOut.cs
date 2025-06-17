@@ -19,11 +19,11 @@ namespace SSX3_Server.EAClient.Messages
 
         public override void AssignValues()
         {
-            INDEX = stringDatas[0].Value;
-            CHAN = stringDatas[1].Value;
-            START = stringDatas[2].Value;
-            RANGE = stringDatas[3].Value;
-            SEQN = stringDatas[4].Value;
+            INDEX = GetStringData("INDEX");
+            CHAN = GetStringData("CHAN");
+            START = GetStringData("START");
+            RANGE = GetStringData("RANGE");
+            SEQN = GetStringData("SEQN");
         }
 
         public override void AssignValuesToString()

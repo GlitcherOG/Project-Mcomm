@@ -23,10 +23,8 @@ namespace SSX3_Server.EAClient.Messages
             RoomType = Temp[0];
             NAME = Temp[1];
 
-            if (stringDatas.Count > 1)
-            {
-                PASS = stringDatas[1].Value;
-            }
+
+            PASS = GetStringData("PASS");
         }
 
         public override void AssignValuesToString()

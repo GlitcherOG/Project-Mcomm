@@ -16,7 +16,7 @@ namespace SSX3_Server.EAClient.Messages
 
         public override void AssignValues()
         {
-            NAME = stringDatas[0].Value;
+            NAME = GetStringData("NAME");
         }
 
         public override void AssignValuesToString()
