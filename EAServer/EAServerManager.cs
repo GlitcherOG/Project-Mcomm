@@ -54,7 +54,7 @@ namespace SSX3_Server.EAServer
             highscoreDatabase = HighscoreDatabase.Load(AppContext.BaseDirectory + "\\Highscore.json");
             sessionDatabse = SessionDatabse.Load(AppContext.BaseDirectory + "\\Session.json");
 
-            sessionDatabse.ReprocessDatabase();
+            //sessionDatabse.ReprocessDatabase1();
 
             GenerateRequiredFiles();
 

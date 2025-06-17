@@ -19,16 +19,9 @@ namespace SSX3_Server.EAClient.Messages
 
         public override void AssignValues()
         {
-            if (stringDatas.Count == 1)
-            {
-                TEXT = stringDatas[0].Value;
-            }
-            else 
-            {
-                PRIV = stringDatas[0].Value;
-                TEXT = stringDatas[1].Value;
-                ATTR = stringDatas[2].Value;
-            }
+            PRIV = GetStringData("PRIV");
+            TEXT = GetStringData("TEXT");
+            ATTR = GetStringData("ATTR");
         }
 
         public override void AssignValuesToString()

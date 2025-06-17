@@ -15,10 +15,7 @@ namespace SSX3_Server.EAClient.Messages
 
         public override void AssignValues()
         {
-            if (stringDatas.Count==1)
-            {
-                TIME = stringDatas[0].Value;
-            }
+            TIME = GetStringData("TIME");
         }
 
         public override void ProcessCommand(EAClientManager client, EAServerRoom room = null)

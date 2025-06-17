@@ -26,16 +26,16 @@ namespace SSX3_Server.EAClient.Messages
         public override void AssignValues()
         {
             NAME = GetStringData("NAME");
-            PASS = stringDatas[1].Value;
-            TOS = stringDatas[2].Value;
-            MID = stringDatas[3].Value;
-            PID = stringDatas[4].Value;
-            HWFLAG = stringDatas[5].Value;
-            HWMASK = stringDatas[6].Value;
-            PROD = stringDatas[7].Value;
+            PASS = GetStringData("PASS");
+            TOS = GetStringData("TOS");
+            MID = GetStringData("MID");
+            PID = GetStringData("PID");
+            HWFLAG = GetStringData("HWFLAG");
+            HWMASK = GetStringData("HWMASK");
+            PROD = GetStringData("PROD");
             VERS = GetStringData("VERS");
-            LANG = stringDatas[9].Value;
-            SLUS = stringDatas[10].Value;
+            LANG = GetStringData("LANG");
+            SLUS = GetStringData("SLUS");
         }
 
         public override void AssignValuesToString()

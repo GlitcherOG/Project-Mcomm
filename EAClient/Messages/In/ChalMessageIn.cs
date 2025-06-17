@@ -16,14 +16,8 @@ namespace SSX3_Server.EAClient.Messages
 
         public override void AssignValues()
         {
-            if (stringDatas.Count > 0)
-            {
-                PERS = stringDatas[0].Value;
-            }
-            if (stringDatas.Count > 1)
-            {
-                HOST = stringDatas[1].Value;
-            }
+            PERS = GetStringData("PERS");
+            HOST = GetStringData("HOST");
         }
 
         public override void AssignValuesToString()

@@ -29,18 +29,18 @@ namespace SSX3_Server.EAClient.Messages
         public override void AssignValues()
         {
             NAME = GetStringData("NAME");
-            PASS = stringDatas[1].Value;
-            SPAM = stringDatas[2].Value;
-            MAIL = stringDatas[3].Value;
-            GEND = stringDatas[4].Value;
-            BORN = stringDatas[5].Value;
-            DEFPER = stringDatas[6].Value;
-            ALTS = stringDatas[7].Value;
-            MINAGE = stringDatas[8].Value;
-            LANG = stringDatas[9].Value;
-            PROD = stringDatas[10].Value;
-            VERS = stringDatas[11].Value;
-            SLUS = stringDatas[12].Value;
+            PASS = GetStringData("PASS");
+            SPAM = GetStringData("SPAM");
+            MAIL = GetStringData("MAIL");
+            GEND = GetStringData("GEND");
+            BORN = GetStringData("BORN");
+            DEFPER = GetStringData("DEFPER");
+            ALTS = GetStringData("ALTS");
+            MINAGE = GetStringData("MINAGE");
+            LANG = GetStringData("LANG");
+            PROD = GetStringData("PROD");
+            VERS = GetStringData("VERS");
+            SLUS = GetStringData("SLUS");
         }
 
         public override void AssignValuesToString()

@@ -16,8 +16,8 @@ namespace SSX3_Server.EAClient.Messages
 
         public override void AssignValues()
         {
-            ADDR = stringDatas[0].Value;
-            PORT = stringDatas[1].Value;
+            ADDR = GetStringData("ADDR");
+            PORT = GetStringData("PORT");
         }
 
         public override void AssignValuesToString()
