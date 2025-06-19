@@ -93,6 +93,24 @@ namespace SSX3_Server.EAClient
             return "0";
         }
 
+        public string GenerateWebStruct()
+        {
+            WebPersonaEntry webPersonaEntry = new WebPersonaEntry();
+
+            webPersonaEntry.Name = Name;
+            webPersonaEntry.Rank = int.Parse(GenerateRank());
+
+            webPersonaEntry.CasualWin = CasualWin;
+            webPersonaEntry.CasualLoss = CasualLoss;
+            webPersonaEntry.CasualDisconnect = CasualDisconnect;
+
+            webPersonaEntry.RankWin = RankWin;
+            webPersonaEntry.RankLoss = RankLoss;
+            webPersonaEntry.RankDisconnect = RankDisconnect;
+
+            return JsonConvert.SerializeObject(webPersonaEntry);
+        }
+
         public struct FriendEntry
         {
             public string Name;
@@ -101,6 +119,7 @@ namespace SSX3_Server.EAClient
         public struct WebPersonaEntry
         {
             public string Name;
+            public int Rank;
 
             public int CasualWin;
             public int CasualLoss;
@@ -108,6 +127,9 @@ namespace SSX3_Server.EAClient
             public int RankWin;
             public int RankLoss;
             public int RankDisconnect;
+
+            //Race Entries only last 100
+            //Rival
         }
     }
 }

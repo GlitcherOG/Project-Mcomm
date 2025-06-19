@@ -182,6 +182,15 @@ namespace SSX3_Server.Web
             return false;
         }
 
+        //http://[IPaddress]/api/highscore
+        //http://[IPaddress]/api/data/version
+        //http://[IPaddress]/api/room
+        //http://[IPaddress]/api/online
+        //http://[IPaddress]/api/game/[GUID]
+        //http://[IPaddress]/api/game/[GUID]&raw=1
+        //http://[IPaddress]/api/session
+        //http://[IPaddress]/api/session/page/[PageNumber]
+        //http://[IPaddress]/api/persona/[PersonaName]
         public static string APIReturn(string[] SplitURL)
         {
             if (SplitCheck(SplitURL, 2, "highscore"))
@@ -358,11 +367,22 @@ namespace SSX3_Server.Web
                     string Name = SplitURL[3];
 
                     var User = EAServerManager.Instance.GetUserPersona(Name);
-
+                    EAUserPersona persona = new EAUserPersona();
                     if(User != null)
                     {
-
+                        persona = User.LoadedPersona;
                     }
+                    else
+                    {
+                        persona = EAClientManager.GetUserPersona(Name);
+                    }
+
+                    if(persona == null)
+                    {
+                        return "Null";
+                    }
+
+                    return persona.GenerateWebStruct();
                 }
             }
 
