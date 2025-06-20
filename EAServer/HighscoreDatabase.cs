@@ -226,6 +226,15 @@ new Dictionary<int, string>()
                 Add1 = false;
             }
 
+            //Check DSYNC
+            //Check DISC
+
+            //Calculate Rank Point
+
+
+
+
+
             for (int i = 0; i < TempEntry.Entries.Count; i++)
             {
                 if (TempEntry.Entries[i].Name==Player0 && Add0 == true)

@@ -94,7 +94,7 @@ namespace SSX3_Server.EAServer
 
             string DIDQUIT;
             string FINISH;
-            string DNF;
+            bool DNF;
             string NAME;
             string QUIT;
             string CHEAT;
@@ -139,7 +139,7 @@ namespace SSX3_Server.EAServer
 
             string DIDQUIT0;
             string FINISH0;
-            string DNF0;
+            bool DNF0;
             string NAME0;
             string QUIT0;
             string CHEAT0;
@@ -186,7 +186,7 @@ namespace SSX3_Server.EAServer
             {
                 DIDQUIT = raceDataFile.raceData0.DIDQUIT0;
                 FINISH = raceDataFile.raceData0.FINISH0;
-                DNF = raceDataFile.raceData0.DNF0;
+                DNF = (raceDataFile.raceData0.DNF0 == "1");
                 NAME = raceDataFile.raceData0.NAME0;
                 QUIT = raceDataFile.raceData0.QUIT0;
                 CHEAT = raceDataFile.raceData0.CHEAT0;
@@ -231,7 +231,7 @@ namespace SSX3_Server.EAServer
 
                 DIDQUIT0 = raceDataFile.raceData0.DIDQUIT1;
                 FINISH0 = raceDataFile.raceData0.FINISH1;
-                DNF0 = raceDataFile.raceData0.DNF1;
+                DNF0 = (raceDataFile.raceData0.DNF1 == "1");
                 NAME0 = raceDataFile.raceData0.NAME1;
                 QUIT0 = raceDataFile.raceData0.QUIT1;
                 CHEAT0 = raceDataFile.raceData0.CHEAT1;
@@ -278,7 +278,7 @@ namespace SSX3_Server.EAServer
             {
                 DIDQUIT = raceDataFile.raceData0.DIDQUIT1;
                 FINISH = raceDataFile.raceData0.FINISH1;
-                DNF = raceDataFile.raceData0.DNF1;
+                DNF = (raceDataFile.raceData0.DNF1 == "1");
                 NAME = raceDataFile.raceData0.NAME1;
                 QUIT = raceDataFile.raceData0.QUIT1;
                 CHEAT = raceDataFile.raceData0.CHEAT1;
@@ -323,7 +323,7 @@ namespace SSX3_Server.EAServer
 
                 DIDQUIT0 = raceDataFile.raceData0.DIDQUIT0;
                 FINISH0 = raceDataFile.raceData0.FINISH0;
-                DNF0 = raceDataFile.raceData0.DNF0;
+                DNF0 = (raceDataFile.raceData0.DNF0 == "1");
                 NAME0 = raceDataFile.raceData0.NAME0;
                 QUIT0 = raceDataFile.raceData0.QUIT0;
                 CHEAT0 = raceDataFile.raceData0.CHEAT0;
@@ -367,7 +367,7 @@ namespace SSX3_Server.EAServer
                 PLOSTRE0 = raceDataFile.raceData0.PLOSTRE0;
             }
 
-            if(DNF!="0")
+            if(DNF)
             {
                 return 0;
             }
