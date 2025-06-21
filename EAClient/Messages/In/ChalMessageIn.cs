@@ -111,17 +111,17 @@ namespace SSX3_Server.EAClient.Messages
 
                         Guid g = Guid.NewGuid();
                         plusSesMessageOut.NAME = g.ToString();
-                        plusSesMessageOut.SELF = HostClient.LoadedPersona.Name;
+                        plusSesMessageOut.SELF = OtherUser.LoadedPersona.Name;//HostClient.LoadedPersona.Name;
                         plusSesMessageOut.HOST = HostClient.LoadedPersona.Name;
                         plusSesMessageOut.FROM = HostIP;
 
                         plusSesMessageOut.OPPO = OtherUser.LoadedPersona.Name;
                         plusSesMessageOut.ADDR = OtherIP;
 
-                        plusSesMessageOut.P1 = HostClient.challange.TrackID; /*HostClient.ID.ToString();*/
+                        plusSesMessageOut.P1 = HostClient.challange.TrackID.ToString();
                         plusSesMessageOut.P2 = HostClient.challange.Gamemode2; /*OtherUser.ID.ToString();*/
-                        plusSesMessageOut.P3 = "2"; //Unknown
-                        plusSesMessageOut.P4 = "2"; //Unknown
+                        plusSesMessageOut.P3 = ""; //Unknown
+                        plusSesMessageOut.P4 = ""; //Unknown
                         plusSesMessageOut.AUTH = HostClient.challange.Ranked; //Unknown
                         plusSesMessageOut.SEED = Seed;
                         plusSesMessageOut.WHEN = DateTime.Now.ToString("yyyy.MM.dd hh:mm:ss");
@@ -163,15 +163,15 @@ namespace SSX3_Server.EAClient.Messages
                         EAServerManager.Instance.sessionDatabse.CreateJson(AppContext.BaseDirectory + "\\Session.json");
 
 
-                        HostClient.Broadcast(plusSesMessageOut);
+                        OtherUser.Broadcast(plusSesMessageOut);
 
                         //Double Check This Data Something might be wrong to cause a abort
-                        plusSesMessageOut.SELF = OtherUser.LoadedPersona.Name;
+                        plusSesMessageOut.SELF = HostClient.LoadedPersona.Name;//OtherUser.LoadedPersona.Name;
                         //plusSesMessageOut.OPPO = HostClient.LoadedPersona.Name;
                         //plusSesMessageOut.ADDR = HostIP;
                         //plusSesMessageOut.FROM = HostIP;
 
-                        OtherUser.Broadcast(plusSesMessageOut);
+                        HostClient.Broadcast(plusSesMessageOut);
 
                         OtherUser.TimeoutSeconds = 60 * 10;
                         HostClient.TimeoutSeconds = 60 * 10;

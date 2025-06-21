@@ -32,38 +32,18 @@ namespace SSX3_Server.EAServer
             sessionDatas = sessionDatas.OrderByDescending(x => DateTime.Parse(x.When)).ToList();
         }
 
-        public void ReprocessDatabase()
+        public void ReprocessDatabaseOverall()
         {
+            //Clear Overall Highscore
+
             for (int i = 0; i < sessionDatas.Count; i++)
             {
-                var Temp = sessionDatas[i];
+                //Check if Valid for both
+                //If valid add 100 points for winning ranked
+                //20 points for finishing without failing
+                //0 points for DNF
 
-                Temp.Ranked = (Temp.Auth == "1");
-
-                if (File.Exists(AppContext.BaseDirectory + "\\Races\\" + Temp.GUID + ".json"))
-                {
-                    var rankDataFile = RaceDataFile.Load(AppContext.BaseDirectory + "\\Races\\" + Temp.GUID + ".json");
-
-                    Temp.Valid = (rankDataFile.ValidRace0 && rankDataFile.ValidRace1);
-                    Temp.Valid0 = rankDataFile.ValidRace0;
-                    Temp.Valid1 = rankDataFile.ValidRace1;
-                }
-
-                sessionDatas[i] = Temp;
-            }
-        }
-
-        public void ReprocessDatabase1()
-        {
-            for (int i = 0; i < sessionDatas.Count; i++)
-            {
-                var Temp = sessionDatas[i];
-
-                if (Temp.Player0 == Temp.Player1)
-                {
-                    sessionDatas.RemoveAt(i);
-                    i--;
-                }    
+                //If ranked and not ranked count calcualte wins, loss, other disconnects and disconnects
             }
         }
 
