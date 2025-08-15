@@ -28,6 +28,7 @@ namespace SSX3_Server.EAServer
         public bool Webpage = false;
         public bool Https = false;
         public string WebpageURL = "ssxor.org";
+        public string ResetPassword = "";
 
         public void CreateJson(string path, bool Inline = true)
         {

@@ -386,6 +386,18 @@ namespace SSX3_Server.Web
                 }
             }
 
+            if(SplitCheck(SplitURL, 2, "reset") && EAServerManager.Instance.config.ResetPassword != "")
+            {
+                if(SplitCheck(SplitURL, 3))
+                {
+                    if (SplitURL[3] == EAServerManager.Instance.config.ResetPassword)
+                    {
+                        System.Environment.Exit(1);
+                        return "Closing Server";
+                    }
+                }
+            }
+
             return "NULL";
         }
 
