@@ -128,31 +128,38 @@ namespace SSX3_Server.EAClient.Messages
                         plusSesMessageOut.OPPO = OtherUser.LoadedPersona.Name;
                         plusSesMessageOut.ADDR = OtherIP;
 
-                        plusSesMessageOut.P1 = HostClient.challange.TrackID.ToString();
-                        plusSesMessageOut.P2 = HostClient.challange.Gamemode2; /*OtherUser.ID.ToString();*/
-                        plusSesMessageOut.P3 = "0"; //Unknown
-                        plusSesMessageOut.P4 = "0"; //Unknown
-                        plusSesMessageOut.AUTH = HostClient.challange.Ranked; //Unknown
+                        // Empty P1 makes the game keep the settings applied from the challenge text; a set P1 resets AI/options.
+                        plusSesMessageOut.P1 = "";
+                        plusSesMessageOut.P2 = "";
+                        plusSesMessageOut.P3 = "";
+                        plusSesMessageOut.P4 = "";
+                        plusSesMessageOut.AUTH = HostClient.challange.Ranked;
                         plusSesMessageOut.SEED = Seed;
                         plusSesMessageOut.WHEN = DateTime.Now.ToString("yyyy.MM.dd hh:mm:ss");
 
-                        if(HostClient.challange.Gamemode2==4.ToString())
+                        if (HostClient.ForceTrackID != -1 || HostClient.ForceGamemodeID != -1)
                         {
-                            plusSesMessageOut.P2 = 0.ToString();
-                        }
-                        if (HostClient.challange.Gamemode2 == 5.ToString())
-                        {
-                            plusSesMessageOut.P2 = 1.ToString();
-                        }
+                            plusSesMessageOut.P1 = HostClient.challange.TrackID;
+                            plusSesMessageOut.P2 = HostClient.challange.Gamemode2;
 
-                        if (HostClient.ForceGamemodeID != -1)
-                        {
-                            plusSesMessageOut.P2 = HostClient.ForceGamemodeID.ToString();
-                        }
+                            if (HostClient.challange.Gamemode2 == "4")
+                            {
+                                plusSesMessageOut.P2 = "0";
+                            }
+                            if (HostClient.challange.Gamemode2 == "5")
+                            {
+                                plusSesMessageOut.P2 = "1";
+                            }
 
-                        if (HostClient.ForceTrackID != -1)
-                        {
-                            plusSesMessageOut.P1 = HostClient.ForceTrackID.ToString();
+                            if (HostClient.ForceGamemodeID != -1)
+                            {
+                                plusSesMessageOut.P2 = HostClient.ForceGamemodeID.ToString();
+                            }
+
+                            if (HostClient.ForceTrackID != -1)
+                            {
+                                plusSesMessageOut.P1 = HostClient.ForceTrackID.ToString();
+                            }
                         }
 
                         HostClient.EnteringChalAt = DateTime.Now;
