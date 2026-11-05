@@ -1,7 +1,7 @@
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace SSX3_Server
+namespace SSX3_Server.EAServer
 {
     // Port of the game's DirtySock password scramble (SLUS_207.72 func_003F35D0 / func_003F3748).
     // The client keys it with the binary SKEY the server returned in the skey exchange.
