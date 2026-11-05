@@ -39,9 +39,10 @@ namespace SSX3_Server.EAClient.Messages
         public override void AssignValuesToString()
         {
             AddStringData("I", I);
-            AddStringData("N", N);
+            // A +usr without N removes slot I; sending N= keeps the slot as a blank entry.
             if (N != "")
             {
+                AddStringData("N", N);
                 AddStringData("M", M);
                 AddStringData("F", F);
                 AddStringData("A", A);
