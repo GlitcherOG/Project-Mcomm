@@ -84,12 +84,17 @@ namespace SSX3_Server.EAClient.Messages
                 }
 
 
-                client.userData = UserData;
+                string PassHash = ByteUtil.CreateSHA256(LobbyPassword.Decode(PASS, SkeyMessageInOut.ServerKeyBytes));
 
-                //ConsoleManager.WriteLine(ByteUtil.Decrypt(PASS.Replace("\"", ""), client.MASK));
-
-                if (((UserData.Name == NAME /*&& UserData.Pass == ByteUtil.CreateMD5(PASS)*/) || UserData.Bypass == true) && UserData.Banned == false)
+                // Accounts created before passwords were stored adopt the first password they log in with.
+                if (UserData.Pass == "")
                 {
+                    UserData.Pass = PassHash;
+                }
+
+                if ((UserData.Pass == PassHash || UserData.Bypass == true) && UserData.Banned == false)
+                {
+                    client.userData = UserData;
                     client.userData.Last = DateTime.Now.ToString("yyyy.MM.dd hh:mm:ss");
 
                     client.SaveEAUserData();
@@ -115,7 +120,7 @@ namespace SSX3_Server.EAClient.Messages
                 else
                 {
                     ConsoleManager.WriteLine(client.IPAddress + " Sent a Invalid Login");
-                    msg2.SubMessage = "imst";
+                    msg2.SubMessage = "pass";
                     client.Broadcast(msg2);
                 }
 
@@ -123,7 +128,7 @@ namespace SSX3_Server.EAClient.Messages
             else
             {
                 AuthMessageOut msg2 = new AuthMessageOut();
-                msg2.SubMessage = "imst";
+                msg2.SubMessage = "uusr";
                 client.Broadcast(msg2);
             }
         }

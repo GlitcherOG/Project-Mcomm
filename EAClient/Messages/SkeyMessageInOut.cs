@@ -12,11 +12,14 @@ namespace SSX3_Server.EAClient.Messages
     {
         public override string MessageType { get { return "skey"; } }
 
+        public const string ServerKey = "$37940faf2a8d1381a3b7d0d2f570e6a7";
+        public static readonly byte[] ServerKeyBytes = LobbyPassword.ParseBinary(ServerKey);
+
         public string SKEY;
 
         public override void AssignValues()
         {
-            SKEY = GetStringData(SKEY);
+            SKEY = GetStringData("SKEY");
         }
 
         public override void AssignValuesToString()
@@ -29,7 +32,7 @@ namespace SSX3_Server.EAClient.Messages
             client.SKEY = SKEY;
 
             //Send SKEY Back
-            SKEY = "$37940faf2a8d1381a3b7d0d2f570e6a7";
+            SKEY = ServerKey;
 
             client.Broadcast(this);
         }

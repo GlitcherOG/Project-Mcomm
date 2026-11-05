@@ -68,12 +68,9 @@ namespace SSX3_Server.EAClient.Messages.In
                 }
                 else
                 {
-                    if (!client.userData.IPApproved.Contains(ByteUtil.CreateSHA256(client.IPAddress)))
-                    {
-                        SubMessage = "maut";
-                        client.Broadcast(this);
-                        return;
-                    }
+                    SubMessage = "maut";
+                    client.Broadcast(this);
+                    return;
                 }
 
                 if(CHNG!="")

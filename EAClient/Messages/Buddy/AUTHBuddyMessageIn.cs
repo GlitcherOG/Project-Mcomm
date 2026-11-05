@@ -97,6 +97,12 @@ namespace SSX3_Server.EAClient.Messages
 
         public override void ProcessCommand(EAClientManager client, EAServerRoom room = null)
         {
+            if (client.userData == null)
+            {
+                client.DestroyClient();
+                return;
+            }
+
             //Get Password
             //If Blank Add
             if (client.userData.Pass == "")
@@ -109,17 +115,6 @@ namespace SSX3_Server.EAClient.Messages
             {
                 client.DestroyClient();
                 return;
-            }
-
-            //Add IP To Approved IPS if not there
-            if (!client.userData.IPApproved.Contains(ByteUtil.CreateSHA256(client.IPAddress)))
-            {
-                if(client.userData.IPApproved.Count>=3)
-                {
-                    client.userData.IPApproved.RemoveAt(0);
-                }
-
-                client.userData.IPApproved.Add(ByteUtil.CreateSHA256(client.IPAddress));
             }
 
             client.SaveEAUserData();
