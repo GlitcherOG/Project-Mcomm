@@ -236,6 +236,8 @@ namespace SSX3_Server.EAClient.Messages
             RankMessageIn rankMessageIn = new RankMessageIn();
             client.Broadcast(rankMessageIn);
 
+            client.EnteringChalAt = null;
+
             RaceDataFile rankDataFile = new RaceDataFile();
             var rankData = rankDataFile.ProcessToRaceData(this);
 

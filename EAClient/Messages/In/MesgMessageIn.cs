@@ -87,6 +87,8 @@ namespace SSX3_Server.EAClient.Messages
                         TempChallange.U4 = TempString[13];
 
                         client.challange = TempChallange;
+                        client.EnteringChalAt = null;
+                        TempClient.EnteringChalAt = null;
 
                         PlusMSGMessageOut plusMSGMessageOut = new PlusMSGMessageOut();
 
@@ -118,9 +120,13 @@ namespace SSX3_Server.EAClient.Messages
                         plusMSGMessageOut.T = TEXT;
                         plusMSGMessageOut.F = "P3";
 
-                        bool RecentlyStartedChal = client.EnteringChalAt.HasValue && (DateTime.Now - client.EnteringChalAt.Value).TotalSeconds < 5;
-
-                        if (!(TEXT == "decline" && RecentlyStartedChal))
+                        // After +ses the game sends "decline" when tidying up the challenge, including when the
+                        // connection fails; forwarding it shows "Challenge Declined" instead of the game's own error.
+                        if (TEXT == "decline" && client.InStartedChallenge())
+                        {
+                            LogSuppressedDecline(client);
+                        }
+                        else
                         {
                             TempClient.Broadcast(plusMSGMessageOut);
                         }
@@ -191,6 +197,8 @@ namespace SSX3_Server.EAClient.Messages
                         //TempChallange.U4 = TempString[13];
 
                         client.challange = TempChallange;
+                        client.EnteringChalAt = null;
+                        TempClient.EnteringChalAt = null;
 
                         PlusMSGMessageOut plusMSGMessageOut = new PlusMSGMessageOut();
 
@@ -220,9 +228,11 @@ namespace SSX3_Server.EAClient.Messages
                         plusMSGMessageOut.T = TEXT;
                         plusMSGMessageOut.F = "P3";
 
-                        bool RecentlyStartedChal = client.EnteringChalAt.HasValue && (DateTime.Now - client.EnteringChalAt.Value).TotalSeconds < 5;
-
-                        if (!(TEXT == "decline" && RecentlyStartedChal))
+                        if (TEXT == "decline" && client.InStartedChallenge())
+                        {
+                            LogSuppressedDecline(client);
+                        }
+                        else
                         {
                             TempClient.Broadcast(plusMSGMessageOut);
                         }
@@ -255,6 +265,15 @@ namespace SSX3_Server.EAClient.Messages
                 {
                     client.room.ProcessMessage(this, client);
                 }
+            }
+        }
+
+        void LogSuppressedDecline(EAClientManager client)
+        {
+            // The routine decline arrives within a second of +ses; a later one means the connection attempt failed.
+            if ((DateTime.Now - client.EnteringChalAt!.Value).TotalSeconds > 5)
+            {
+                ConsoleManager.WriteLine(client.LoadedPersona.Name + " could not connect to " + PRIV + ", held back their decline");
             }
         }
 

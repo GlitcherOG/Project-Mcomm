@@ -61,6 +61,12 @@ namespace SSX3_Server.EAClient
         public string OverrideIP = "";
 
         public DateTime? EnteringChalAt;
+
+        // From +ses until the race result or a new challenge; capped in case neither arrives.
+        public bool InStartedChallenge()
+        {
+            return EnteringChalAt.HasValue && (DateTime.Now - EnteringChalAt.Value).TotalSeconds < 120;
+        }
         public bool Closing;
         private readonly static object _lock = new object();
 
