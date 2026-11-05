@@ -48,7 +48,7 @@ namespace SSX3_Server.EAClient.Messages
             }
             else
             {
-                //SWAP TO LOAD WHEN OFFLINE
+                var OfflinePersona = EAClientManager.GetUserPersona(PERS);
 
                 UserMessageOut userMessageOut = new UserMessageOut();
 
@@ -57,6 +57,14 @@ namespace SSX3_Server.EAClient.Messages
                 userMessageOut.RANK = "";
                 userMessageOut.ADDR = "";
                 userMessageOut.ROOM = "";
+
+                if (OfflinePersona != null)
+                {
+                    userMessageOut.PERS = OfflinePersona.Name;
+                    userMessageOut.STAT = OfflinePersona.GenerateStat();
+                    userMessageOut.RANK = OfflinePersona.GenerateRank();
+                    userMessageOut.ADDR = "0.0.0.0";
+                }
 
                 client.Broadcast(userMessageOut);
             }

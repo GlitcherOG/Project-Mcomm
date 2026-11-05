@@ -71,6 +71,8 @@ namespace SSX3_Server.EAClient.Messages
             msg2.PLAST = client.LoadedPersona.Last;
             msg2.SINCE = client.userData.Since;
             msg2.LKEY = "3fcf27540c92935b0a66fd3b0000283c";
+            msg2.STAT = client.LoadedPersona.GenerateStat();
+            msg2.R = client.LoadedPersona.GenerateRank();
             client.Broadcast(msg2);
 
             ConsoleManager.WriteLine(client.userData.Name + " Has Logged in with Persona " + client.LoadedPersona.Name);

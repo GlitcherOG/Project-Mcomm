@@ -53,6 +53,22 @@ namespace SSX3_Server.EAClient
             }
         }
 
+        public void AddResult(PersonaStatRules.RaceResult result, bool ranked)
+        {
+            switch (result)
+            {
+                case PersonaStatRules.RaceResult.Win:
+                    if (ranked) RankWin++; else CasualWin++;
+                    break;
+                case PersonaStatRules.RaceResult.Loss:
+                    if (ranked) RankLoss++; else CasualLoss++;
+                    break;
+                case PersonaStatRules.RaceResult.Disconnect:
+                    if (ranked) RankDisconnect++; else CasualDisconnect++;
+                    break;
+            }
+        }
+
         public string GenerateStat()
         {
             int Unknown0 = 0;
@@ -72,8 +88,11 @@ namespace SSX3_Server.EAClient
             int Unknown10 = 0;
             int Unknown11 = 0;
 
-            return Unknown0 + "," + Unknown1 + "," + Wins + "," + Loss + "," + Loss1 + "," + Unknown2 + "," + Disconnects + "," + Unknown3 + "," + Unknown4 + "," + Unknown5
-                + "," + Unknown6 + "," + Unknown7 + "," + Unknown8 + "," + Unknown9 + "," + Unknown10 + "," + Unknown11;
+            // The game parses this list as hexadecimal (decimal 80 wins showed as 128).
+            int[] Values = { Unknown0, Unknown1, Wins, Loss, Loss1, Unknown2, Disconnects, Unknown3, Unknown4, Unknown5,
+                Unknown6, Unknown7, Unknown8, Unknown9, Unknown10, Unknown11 };
+
+            return string.Join(",", Values.Select(Value => Value.ToString("x")));
         }
 
         public string GenerateRank()

@@ -20,6 +20,7 @@ namespace SSX3_Server.EAClient.Messages
         public string X;
         public string G;
         public string T = "2";
+        public string R = "0";
 
         public override void AssignValues()
         {
@@ -49,6 +50,7 @@ namespace SSX3_Server.EAClient.Messages
                 AddStringData("X", X);
                 AddStringData("G", G);
                 AddStringData("T", T);
+                AddStringData("R", R);
             }
         }
     }

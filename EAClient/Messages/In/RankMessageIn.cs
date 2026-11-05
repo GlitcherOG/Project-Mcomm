@@ -248,6 +248,8 @@ namespace SSX3_Server.EAClient.Messages
                     rankDataFile = RaceDataFile.Load(AppContext.BaseDirectory + "\\Races\\" + GUID + ".json");
                 }
 
+                bool AlreadyCounted = rankDataFile.ValidRace0 || rankDataFile.ValidRace1;
+
                 int ID = EAServerManager.Instance.sessionDatabse.ReturnID(GUID);
 
                 var TempSession = EAServerManager.Instance.sessionDatabse.sessionDatas[ID];
@@ -268,6 +270,11 @@ namespace SSX3_Server.EAClient.Messages
 
                 rankDataFile.CreateJson(AppContext.BaseDirectory + "\\Races\\" + GUID + ".json");
 
+                if (!AlreadyCounted && (rankDataFile.ValidRace0 || rankDataFile.ValidRace1))
+                {
+                    ApplyPersonaStats(rankData);
+                }
+
                 if (rankDataFile.ValidRace1 && rankDataFile.ValidRace0)
                 {
                     TempSession.Valid = true;
@@ -283,6 +290,42 @@ namespace SSX3_Server.EAClient.Messages
                 EAServerManager.Instance.sessionDatabse.sessionDatas[ID] = TempSession;
 
                 EAServerManager.Instance.sessionDatabse.CreateJson(AppContext.BaseDirectory + "\\Session.json");
+            }
+        }
+
+        static void ApplyPersonaStats(RaceDataFile.RaceData report)
+        {
+            var outcome = PersonaStatRules.Evaluate(Newtonsoft.Json.Linq.JObject.FromObject(report));
+            if (outcome == null)
+            {
+                return;
+            }
+
+            ApplyResult(outcome.Value.Name0, outcome.Value.Result0, outcome.Value.Ranked);
+            ApplyResult(outcome.Value.Name1, outcome.Value.Result1, outcome.Value.Ranked);
+        }
+
+        static void ApplyResult(string name, PersonaStatRules.RaceResult result, bool ranked)
+        {
+            if (result == PersonaStatRules.RaceResult.None)
+            {
+                return;
+            }
+
+            // Online players keep their persona in memory and save over the file, so update that copy.
+            var online = EAServerManager.Instance.GetUserPersona(name);
+            if (online != null && online.LoadedPersona != null)
+            {
+                online.LoadedPersona.AddResult(result, ranked);
+                online.SaveEAUserPersona();
+                return;
+            }
+
+            var persona = EAClientManager.GetUserPersona(name);
+            if (persona != null)
+            {
+                persona.AddResult(result, ranked);
+                persona.CreateJson(AppContext.BaseDirectory + "\\Personas\\" + persona.Name.ToLower() + ".json");
             }
         }
     }

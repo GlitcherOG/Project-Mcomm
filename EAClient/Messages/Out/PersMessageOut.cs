@@ -23,6 +23,8 @@ namespace SSX3_Server.EAClient.Messages
         public string PLAST;
         public string SINCE;
         public string LKEY;
+        public string STAT = "";
+        public string R = "0";
 
         public override void AssignValues()
         {
@@ -56,6 +58,8 @@ namespace SSX3_Server.EAClient.Messages
                 AddStringData("PLAST", PLAST);
                 AddStringData("SINCE", SINCE);
                 AddStringData("LKEY", LKEY);
+                AddStringData("STAT", STAT);
+                AddStringData("R", R);
             }
         }
     }
