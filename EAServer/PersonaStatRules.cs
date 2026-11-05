@@ -55,10 +55,22 @@ namespace SSX3_Server.EAServer
             };
 
             // A dropped connection is a disconnect and a quit is a loss; either way the opponent gets nothing.
-            outcome.Result0 = LeftResult(report, "0");
-            outcome.Result1 = LeftResult(report, "1");
-            if (outcome.Result0 != RaceResult.None || outcome.Result1 != RaceResult.None)
+            // When one player drops, the report stamps QUIT on both players, so the other player's quit is ignored.
+            bool disc0 = Left(Field(report, "DISC0"));
+            bool disc1 = Left(Field(report, "DISC1"));
+            if (disc0 || disc1)
             {
+                outcome.Result0 = disc0 ? RaceResult.Disconnect : RaceResult.None;
+                outcome.Result1 = disc1 ? RaceResult.Disconnect : RaceResult.None;
+                return outcome;
+            }
+
+            bool quit0 = Left(Field(report, "QUIT0"));
+            bool quit1 = Left(Field(report, "QUIT1"));
+            if (quit0 || quit1)
+            {
+                outcome.Result0 = quit0 ? RaceResult.Loss : RaceResult.None;
+                outcome.Result1 = quit1 ? RaceResult.Loss : RaceResult.None;
                 return outcome;
             }
 
@@ -98,21 +110,6 @@ namespace SSX3_Server.EAServer
                 RaceResult.Disconnect => prefix + "Disconnect",
                 _ => null,
             };
-        }
-
-        static RaceResult LeftResult(JObject report, string player)
-        {
-            if (Left(Field(report, "DISC" + player)))
-            {
-                return RaceResult.Disconnect;
-            }
-
-            if (Left(Field(report, "QUIT" + player)))
-            {
-                return RaceResult.Loss;
-            }
-
-            return RaceResult.None;
         }
 
         static bool Left(string value)
