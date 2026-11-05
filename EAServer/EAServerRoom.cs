@@ -137,7 +137,7 @@ namespace SSX3_Server.EAServer
             {
                 _RomMessage.F = "P";
             }
-            _RomMessage.T = Clients.Count.ToString() + 1;
+            _RomMessage.T = Clients.Count.ToString();
 
             return _RomMessage;
         }
@@ -211,7 +211,14 @@ namespace SSX3_Server.EAServer
 
             for (int i = 0; i < Clients.Count; i++)
             {
-                BroadcastAllUsers(Clients[i].GeneratePlusUser(i+1));
+                var TempUser = Clients[i].GeneratePlusUser(i + 1);
+
+                for (int j = 0; j < Clients.Count; j++)
+                {
+                    // U marks the recipient's own entry; the game sets the room title and hides self-actions from it.
+                    TempUser.F = i == j ? "HU" : "H";
+                    Clients[j].Broadcast(TempUser);
+                }
             }
             prevListCount = Clients.Count;
         }
